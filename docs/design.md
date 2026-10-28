@@ -72,7 +72,7 @@ The owner asked for a different palette on every page so they can pick the best 
 The owner found the first build too plain and asked for animation, a fitting background and varied hover effects.
 
 - **Intro curtain:** on the home page only, a short curtain with the gold star plays once, then lifts to show the page. It sits outside the animated page wrapper (see Learning.md: transforms create a containing block).
-- **Hero background:** a three.js scene of floating rice grains and stars (`HeroScene`). It loads lazily in its own chunk and draws all grains with one instanced mesh. With reduced motion it shows a still frame.
+- **Hero background:** `HeroBackdrop`, plain CSS and SVG: two large blurred colour fields drift slowly, a faint grid of logo stars fades in toward the right, and an SVG grain sits on top. It replaced the three.js scene on 2026-10-29 at the owner's request; no WebGL means no extra 490 kB chunk and no load on cheap phones. With reduced motion the colour fields stand still.
 - **Scroll reveal:** the `Reveal` component adds `is-visible` when an element enters the viewport (IntersectionObserver). Lists stagger by `index`.
 - **Headline:** `SplitWords` rises word by word. The full sentence is in an `sr-only` copy and the animated words are `aria-hidden`, so screen readers read one normal sentence.
 - **Hover effects, by job:**
@@ -84,12 +84,13 @@ The owner found the first build too plain and asked for animation, a fitting bac
 - **Reduced motion:** every animation stops under `prefers-reduced-motion: reduce` (`prefersReducedMotion()` in `lib/motion.ts` for JavaScript effects).
 
 ### 1.3 Typography
-- **Headings + body:** Archivo, a variable font served from our own build (no Google Fonts request). Headings use the wide width (`font-wide`); prices use the narrow width (`font-narrow`) with tabular numbers so columns of prices line up. Decided 2026-10-28.
+- **Headings + body:** Bricolage Grotesque, a variable font served from our own build (no Google Fonts request). Big headings use `font-display` (optical sizing, tighter letter spacing); prices use `font-narrow` (75% width) with tabular numbers so columns of prices line up. Replaced Archivo on 2026-10-29 at the owner's request.
 - **Urdu (later):** "Noto Nastaliq Urdu" or "Noto Naskh Arabic" (Naskh is easier to read at small sizes).
 - Base size 16px; line-height 1.5; prices in semibold with tabular numbers.
 
 ### 1.4 Logo usage
-- Header: logo left on mobile and desktop, at most 40px tall on mobile.
+- Header: spans the full window width (not the page container). Logo left, main links centred, search and cart right on desktop. Logo at most 40px tall on mobile.
+- Page content: `Container` is at most 88rem wide, so wide screens show less empty margin.
 - Needs a version that reads on both light and dark backgrounds and a square icon for the favicon/social share.
 - The received logo is green `#035A3A` and gold `#CAA753`. It is shown as an image; site colours stay on the owner palette (§1.2). If the logo and sage look wrong together, the fallback is to move the dark shades (`primary-900`) toward the logo green.
 - Home hero signature element: the "Today's rates" board, a price list with dotted leaders like a shop's rate board. Only one orange call to action per screen.

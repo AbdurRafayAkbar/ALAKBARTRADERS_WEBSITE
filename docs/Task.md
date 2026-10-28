@@ -68,7 +68,7 @@
 - **Acceptance:** `npm run dev` shows the home page in brand colours and reads `/api/v1/health/` through the proxy; `npm run build` passes.
 - **Mode:** 🤖
 - **Concepts:** Vite dev server vs build, SPA routing, components and props, proxy, CSRF with fetch.
-- **Progress (2026-10-28):** Done ahead of the backend, on mock data: Tailwind tokens, router, TanStack Query hooks, API client with `X-CSRFToken`, layout, home, shop, product, cart, delivery areas and 404 pages, tests. Redesign done: motion, three.js hero, hover effects, per-page palette trial (design.md §1.2a–b). Left: owner picks one palette; Vite proxy check against a real `/api/v1/health/` once Django exists.
+- **Progress (2026-10-28):** Done ahead of the backend, on mock data: Tailwind tokens, router, TanStack Query hooks, API client with `X-CSRFToken`, layout, home, shop, product, cart, delivery areas and 404 pages, tests. Redesign done: motion, CSS hero backdrop (three.js removed 2026-10-29), hover effects, per-page palette trial (design.md §1.2a–b). Left: owner picks one palette; Vite proxy check against a real `/api/v1/health/` once Django exists.
 
 ### [ ] T1.7 Django serves the SPA shell
 - **Description:** Django view returns the built `index.html` for page routes, with `<title>` and meta tags filled in per URL; static files from the Vite build.

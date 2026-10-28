@@ -52,7 +52,7 @@ Time: about 4 hours per day. Preferred start mode: mostly 🤖, moving toward �
 | TanStack Query | Caches server data by key; after add-to-cart we write the new cart into the cache so the header count updates | frontend/src/api/hooks.ts | 🔴 |
 | Code splitting | `React.lazy` loads a page's code only when someone visits it, so the first load is smaller | frontend/src/routes/routes.tsx | 🔴 |
 | Prices as strings | Money comes from the server as text like `"450.00"` and is only formatted, never calculated, in the browser | frontend/src/lib/money.ts | 🔴 |
-| Instanced mesh | three.js draws hundreds of copies of one shape in a single GPU call; each copy only has its own position and rotation | frontend/src/pages/home/HeroScene.tsx | 🔴 |
+| SVG pattern | One small shape is defined once inside `<pattern>` and the browser tiles it to fill any area; `useId` keeps the pattern id unique on the page | frontend/src/pages/home/HeroBackdrop.tsx | 🔴 |
 | Palette as CSS variables | A `data-palette` attribute swaps a block of CSS variables; components use tokens and never know which palette is active | frontend/src/styles/index.css | 🔴 |
 | IntersectionObserver | The browser tells us when an element scrolls into view, without listening to every scroll event | frontend/src/components/motion/Reveal.tsx | 🔴 |
 | Transform containing block | An element with `transform` becomes the reference box for `position: fixed` children, so overlays must live outside animated wrappers | Layout, IntroCurtain | 🔴 |

@@ -43,6 +43,9 @@ with the AI as architect and mentor following the teaching rules in `rules.md` ย
 | 2026-10-28 | Build the frontend first against mock data in `frontend/src/api/`; build the backend in the next phase | Owner request. The mock layer has the same shapes as the planned DRF API, so only `src/api/` changes later |
 | 2026-10-28 | Step 3 quiz postponed; default questions stay in Learning.md and the owner will change them later | Owner request |
 | 2026-10-28 | Font: Archivo (variable, self-hosted). Wide width for headings, narrow width for prices | One family, legible on cheap phones, no Google Fonts request |
+| 2026-10-29 | Font changed to Bricolage Grotesque (variable, self-hosted); `font-wide` renamed `font-display` | Owner asked for a different font. Same rules: one family, self-hosted |
+| 2026-10-29 | Hero background is CSS/SVG (`HeroBackdrop`); three.js removed | Owner asked to change it. Lighter on cheap phones, about 490 kB less JavaScript |
+| 2026-10-29 | Header spans the full window: logo left, nav centred, search and cart right. `Container` widened to 88rem | Owner said the nav should fill the screen, not sit in the middle |
 | 2026-10-28 | Logo (green `#035A3A` + gold `#CAA753`) is used as an image; the site keeps the owner palette | Owner said to try their palette first; revisit if the two clash |
 | 2026-10-28 | Phone layout: swipe row for featured products, compact category rows, two-row cart lines, smaller section padding below `sm` | Owner said cards looked bad on phones |
 | 2026-10-28 | Frontend preview hosted on Cloudflare Pages (Git integration: root `frontend`, build `npm run build`, output `dist`). SPA fallback via `public/_redirects`. Backend hosting still decided at Phase 14 | Owner request. Free static hosting; mock data is bundled, so no API is needed yet |
@@ -62,6 +65,11 @@ See `Architecture.md` ยง10. Q1 and Q12 are decided (see the log above). Still op
 - **Step:** Frontend redesigned with motion and a per-page palette trial. Phone layout fixed. Preview deploy on Cloudflare Pages. Waiting for the owner to pick a palette.
 
 ## 5. Last completed step
+
+- 2026-10-29: Font, hero background and header changed after owner feedback.
+  - Font is Bricolage Grotesque; three.js hero replaced by a CSS/SVG backdrop; header is full width with centred nav.
+  - Removed packages: `three`, `@types/three`, `@fontsource-variable/archivo`.
+  - Checks: typecheck, tests (6), build and lint pass. Lint shows only the existing fast-refresh warnings.
 
 - 2026-10-28: Phone layout pass after owner feedback ("not responsive, cards don't look good on phone").
   - Header top bar no longer wraps; palette switcher is a small round button on phones.
