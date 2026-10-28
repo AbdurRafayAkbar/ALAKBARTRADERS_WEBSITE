@@ -66,16 +66,6 @@ export function Hero() {
           <RateBoard />
         </div>
       </Container>
-
-      <div
-        aria-hidden
-        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs text-primary-100 md:flex"
-      >
-        <span className="h-10 w-6 rounded-full border-2 border-white/30 p-1">
-          <span className="animate-float block h-2 w-full rounded-full bg-accent" />
-        </span>
-        Scroll
-      </div>
     </section>
   )
 }
