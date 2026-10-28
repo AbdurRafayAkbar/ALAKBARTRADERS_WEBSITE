@@ -1,22 +1,10 @@
-import { lazy, Suspense, useState } from 'react'
 import { Link } from 'react-router'
 import { SplitWords } from '../../components/motion/SplitWords'
 import { ButtonLink } from '../../components/ui/Button'
 import { Container } from '../../components/ui/Container'
 import { site } from '../../config/site'
-import { prefersReducedMotion } from '../../lib/motion'
+import { HeroBackdrop } from './HeroBackdrop'
 import { RateBoard } from './RateBoard'
-
-const HeroScene = lazy(() => import('./HeroScene'))
-
-function canRunScene() {
-  if (prefersReducedMotion()) return false
-  try {
-    return Boolean(document.createElement('canvas').getContext('webgl2'))
-  } catch {
-    return false
-  }
-}
 
 const promises = [
   { title: 'Cash on delivery', detail: 'No card needed' },
@@ -25,28 +13,11 @@ const promises = [
 ]
 
 export function Hero() {
-  const [scene] = useState(canRunScene)
-
   return (
     <section className="relative isolate overflow-hidden bg-primary-900 text-white">
-      {/* Background: three.js rice when possible, a soft glow otherwise. */}
-      <div aria-hidden className="absolute inset-0 -z-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(60rem 40rem at 85% 10%, color-mix(in oklab, var(--color-accent) 22%, transparent), transparent 60%), radial-gradient(50rem 40rem at 0% 100%, color-mix(in oklab, var(--color-primary) 45%, transparent), transparent 60%)',
-          }}
-        />
-        {scene && (
-          <Suspense fallback={null}>
-            <HeroScene />
-          </Suspense>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-900/85 via-primary-900/40 to-transparent" />
-      </div>
+      <HeroBackdrop />
 
-      <Container className="grid items-center gap-10 py-10 sm:min-h-[calc(100dvh-4.5rem)] sm:gap-12 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+      <Container className="grid items-center gap-10 py-10 sm:min-h-[calc(100dvh-6.75rem)] sm:gap-12 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
         <div>
           <p
             className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm text-primary-100 backdrop-blur"
@@ -55,7 +26,7 @@ export function Hero() {
             <span aria-hidden className="size-2 animate-pulse rounded-full bg-accent" />
             Taking orders today in {site.city}
           </p>
-          <h1 className="mt-6 font-wide text-4xl leading-[1.02] font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="mt-6 font-display text-4xl leading-[1.02] font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
             <SplitWords text={`Rice, dry fruits and fresh cream, at your door in ${site.city}.`} delay={150} />
           </h1>
           <p
