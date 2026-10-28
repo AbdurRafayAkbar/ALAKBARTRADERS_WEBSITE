@@ -21,7 +21,7 @@ beforeEach(() => resetMockCart())
 describe('home page', () => {
   it('shows the hero and the shop CTA', async () => {
     renderAt('/')
-    expect(screen.getByRole('heading', { level: 1, name: /at your door in Chashma/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /to your door/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Shop all products' })).toHaveAttribute('href', '/shop/')
     expect((await screen.findAllByRole('link', { name: /Super Kernel Basmati/i })).length).toBeGreaterThan(0)
   })

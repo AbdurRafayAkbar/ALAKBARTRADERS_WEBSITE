@@ -26,15 +26,16 @@ export function Hero() {
             <span aria-hidden className="size-2 animate-pulse rounded-full bg-accent" />
             Taking orders today in {site.city}
           </p>
-          <h1 className="mt-6 font-display text-4xl leading-[1.02] font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
-            <SplitWords text={`Rice, dry fruits and fresh cream, at your door in ${site.city}.`} delay={150} />
+          {/* The headline names where the food comes from; the line below says what it is. */}
+          <h1 className="mt-6 font-display text-[clamp(2rem,10vw,3rem)] leading-[1.02] font-extrabold tracking-tight text-balance sm:text-6xl lg:text-7xl">
+            <SplitWords text="From the paddy, the orchard and the dairy, to your door." delay={150} />
           </h1>
           <p
             className="mt-6 max-w-xl text-primary-100 sm:mt-7 sm:text-lg"
             style={{ animation: 'fade-up 0.9s var(--ease-out-expo) 0.9s both' }}
           >
-            Order online and pay cash when it arrives. We call to confirm every order before our rider leaves the
-            shop.
+            Basmati rice, dry fruits and fresh milk cream, delivered in {site.city}. Order online and pay cash when it
+            arrives.
           </p>
           <div
             className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 sm:mt-9"
@@ -47,11 +48,11 @@ export function Hero() {
               See delivery areas
             </Link>
           </div>
-          <ul className="mt-10 grid max-w-xl grid-cols-3 gap-2 sm:mt-12 sm:gap-3">
+          <ul className="mt-10 flex max-w-xl flex-wrap gap-2 sm:mt-12 sm:gap-3">
             {promises.map((item, i) => (
               <li
                 key={item.title}
-                className="group rounded-xl border border-white/10 bg-white/5 px-2.5 py-2.5 leading-snug backdrop-blur sm:px-4 sm:py-3 transition-colors duration-300 hover:border-accent/60 hover:bg-white/10"
+                className="group min-w-0 flex-1 basis-[6.5rem] rounded-xl border border-white/10 bg-white/5 px-2.5 py-2.5 leading-snug backdrop-blur sm:px-4 sm:py-3 transition-colors duration-300 hover:border-accent/60 hover:bg-white/10"
                 style={{ animation: `fade-up 0.8s var(--ease-out-expo) ${1.2 + i * 0.1}s both` }}
               >
                 <span className="block text-sm font-semibold transition-colors group-hover:text-accent sm:text-base">
