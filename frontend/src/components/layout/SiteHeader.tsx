@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
 import { useCart } from '../../api/hooks'
-import logo from '../../assets/brand/logo-full.jpg'
+import logo from '../../assets/brand/logo-full.png'
 import { site } from '../../config/site'
 
 const nav = [
@@ -45,9 +45,9 @@ export function SiteHeader() {
           <img
             src={logo}
             alt=""
-            width={150}
-            height={40}
-            className="h-9 w-auto transition-transform sm:h-10 duration-300 group-hover:scale-105"
+            width={140}
+            height={48}
+            className="h-10 w-auto transition-transform sm:h-12 duration-300 group-hover:scale-105"
           />
         </Link>
 
