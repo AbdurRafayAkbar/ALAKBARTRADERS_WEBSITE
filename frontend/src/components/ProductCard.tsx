@@ -18,11 +18,11 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article
       {...pointerGlow()}
-      className="spotlight lift group flex h-full flex-col rounded-card border border-secondary/40 bg-card p-5"
+      className="spotlight lift group flex h-full flex-col rounded-card border border-secondary/40 bg-card p-4 sm:p-5"
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="grid size-14 shrink-0 place-items-center rounded-xl bg-primary-100 text-primary-900 transition-[transform,background-color,color] duration-500 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary-900 group-hover:text-primary-50">
-          <CategoryIcon slug={product.category} className="size-8" />
+        <div className="grid size-12 shrink-0 sm:size-14 place-items-center rounded-xl bg-primary-100 text-primary-900 transition-[transform,background-color,color] duration-500 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary-900 group-hover:text-primary-50">
+          <CategoryIcon slug={product.category} className="size-7 sm:size-8" />
         </div>
         {product.is_perishable && (
           <span className="flex items-center gap-1.5 rounded-full bg-primary-50 px-3 py-1 text-sm font-medium text-primary-900">
@@ -67,7 +67,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </fieldset>
 
-      <div className="mt-auto flex items-end justify-between gap-3 pt-5">
+      <div className="mt-auto flex items-end justify-between gap-3 pt-4 sm:pt-5">
         {variant && (
           <p className="leading-tight">
             {/* Keyed by variant so the price pops when the pack size changes. */}

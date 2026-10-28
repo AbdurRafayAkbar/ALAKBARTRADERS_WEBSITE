@@ -104,13 +104,21 @@ export function IntroCurtain() {
               />
             </svg>
             <p className="mt-6 font-wide text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
-              {[...'ALAKBAR TRADERS'].map((ch, i) => (
-                <span
-                  key={i}
-                  className="inline-block whitespace-pre"
-                  style={{ animation: `letter-in 0.7s cubic-bezier(0.16,1,0.3,1) ${900 + i * 45}ms both` }}
-                >
-                  {ch}
+              {/* Letters animate one by one, but each word stays whole so phones break between words. */}
+              {['ALAKBAR', 'TRADERS'].map((word, w) => (
+                <span key={word}>
+                  {w > 0 && ' '}
+                  <span className="inline-block whitespace-nowrap">
+                  {[...word].map((ch, i) => (
+                    <span
+                      key={i}
+                      className="inline-block"
+                      style={{ animation: `letter-in 0.7s cubic-bezier(0.16,1,0.3,1) ${900 + (w * 8 + i) * 45}ms both` }}
+                    >
+                      {ch}
+                    </span>
+                  ))}
+                  </span>
                 </span>
               ))}
             </p>

@@ -34,16 +34,17 @@ export default function CartPage() {
       )}
 
       {cart && cart.items.length > 0 && (
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_22rem]">
+        <div className="mt-6 grid gap-6 sm:mt-8 lg:grid-cols-[1fr_22rem] lg:gap-10">
           <ul className="grid gap-3">
             {cart.items.map((line, i) => (
               <Reveal
                 as="li"
                 key={line.id}
                 index={i}
-                className="flex flex-wrap items-center gap-4 rounded-card border border-secondary/40 bg-card px-5 py-4 transition-[border-color,box-shadow] hover:border-primary hover:shadow-lg"
+                // Phones: name and total on top, quantity and remove below. Wider: one row.
+                className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-3 rounded-card border border-secondary/40 bg-card p-4 transition-[border-color,box-shadow] hover:border-primary hover:shadow-lg sm:flex sm:px-5"
               >
-                <div className="min-w-48 flex-1">
+                <div className="min-w-0 sm:flex-1">
                   <Link to={`/p/${line.product_slug}/`} className="link-grow font-semibold">
                     {line.product_name}
                   </Link>
@@ -51,7 +52,10 @@ export default function CartPage() {
                     {line.variant_label}, {formatPrice(line.unit_price)} each
                   </p>
                 </div>
-                <div className="flex items-center rounded-full border border-secondary" role="group" aria-label={`Quantity of ${line.product_name}`}>
+                <span key={line.line_total} className="animate-pop font-narrow text-right text-xl font-bold tabular-nums sm:order-last sm:w-28">
+                  {formatPrice(line.line_total)}
+                </span>
+                <div className="flex w-fit items-center rounded-full border border-secondary" role="group" aria-label={`Quantity of ${line.product_name}`}>
                   <button
                     type="button"
                     className={stepClass}
@@ -72,12 +76,9 @@ export default function CartPage() {
                     +
                   </button>
                 </div>
-                <span key={line.line_total} className="animate-pop font-narrow w-28 text-right text-xl font-bold tabular-nums">
-                  {formatPrice(line.line_total)}
-                </span>
                 <button
                   type="button"
-                  className="link-grow text-sm text-muted transition-colors hover:text-danger"
+                  className="link-grow justify-self-end text-sm sm:order-last text-muted transition-colors hover:text-danger"
                   onClick={() => update.mutate({ lineId: line.id, quantity: 0 })}
                 >
                   Remove<span className="sr-only"> {line.product_name}</span>
@@ -86,13 +87,13 @@ export default function CartPage() {
             ))}
           </ul>
 
-          <aside className="h-fit rounded-card border-t-4 border-accent bg-card p-6 shadow-lg lg:sticky lg:top-32">
+          <aside className="h-fit rounded-card border-t-4 border-accent bg-card p-5 shadow-lg sm:p-6 lg:sticky lg:top-32">
             <h2 className="font-wide text-xl font-bold">Order summary</h2>
-            <dl className="mt-4 grid grid-cols-[1fr_auto] gap-y-2">
+            <dl className="mt-4 grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2">
               <dt>Subtotal</dt>
-              <dd className="font-narrow text-xl font-bold tabular-nums">{formatPrice(cart.subtotal)}</dd>
+              <dd className="text-right font-narrow text-xl font-bold tabular-nums">{formatPrice(cart.subtotal)}</dd>
               <dt className="text-muted">Delivery</dt>
-              <dd className="text-muted">Set by your area</dd>
+              <dd className="text-right text-muted">Set by your area</dd>
             </dl>
             {delivery && (
               <p className="mt-4 text-sm text-muted">

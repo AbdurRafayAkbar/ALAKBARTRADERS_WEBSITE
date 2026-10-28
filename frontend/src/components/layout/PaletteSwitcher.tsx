@@ -16,11 +16,12 @@ export function PaletteSwitcher({
   const panelId = useId()
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 text-sm">
+    // On phones it sits bottom-right as a small round button, away from text.
+    <div className="fixed right-3 bottom-3 z-50 flex flex-col items-end text-sm sm:right-auto sm:bottom-4 sm:left-4 sm:items-start">
       {open && (
         <div
           id={panelId}
-          className="animate-page-in mb-3 w-64 rounded-card border border-secondary/60 bg-card/95 p-3 shadow-2xl backdrop-blur"
+          className="animate-page-in mb-3 w-64 max-w-[calc(100vw-1.5rem)] rounded-card border border-secondary/60 bg-card/95 p-3 shadow-2xl backdrop-blur"
         >
           <p className="px-2 pb-2 font-semibold text-ink">Palette preview</p>
           <ul className="grid gap-1">
@@ -51,7 +52,8 @@ export function PaletteSwitcher({
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen(!open)}
-        className="group flex h-11 items-center gap-2 rounded-full border border-secondary/60 bg-card/90 pl-2 pr-4 font-semibold text-ink shadow-lg backdrop-blur transition-transform hover:-translate-y-0.5"
+        aria-label="Palette"
+        className="group flex size-11 items-center justify-center gap-2 rounded-full border border-secondary/60 bg-card/90 font-semibold text-ink shadow-lg backdrop-blur transition-transform hover:-translate-y-0.5 sm:w-auto sm:justify-start sm:pr-4 sm:pl-2"
       >
         <span
           aria-hidden
@@ -61,7 +63,7 @@ export function PaletteSwitcher({
               'conic-gradient(var(--color-primary-900) 0 33%, var(--color-accent) 0 66%, var(--color-primary) 0)',
           }}
         />
-        Palette
+        <span aria-hidden className="hidden sm:inline">Palette</span>
       </button>
     </div>
   )

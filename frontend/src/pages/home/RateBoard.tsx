@@ -13,7 +13,7 @@ export function RateBoard() {
     <section
       aria-labelledby="rates-title"
       {...pointerGlow()}
-      className="spotlight relative overflow-hidden rounded-card border border-white/15 bg-white/5 p-6 text-primary-50 shadow-2xl backdrop-blur-md sm:p-8"
+      className="spotlight relative overflow-hidden rounded-card border border-white/15 bg-white/5 p-5 text-primary-50 shadow-2xl backdrop-blur-md sm:p-8"
     >
       <svg
         aria-hidden
@@ -44,16 +44,19 @@ export function RateBoard() {
             if (!variant) return null
             return (
               <li key={product.slug}>
-                <Link to={`/p/${product.slug}/`} className="rate-row group flex items-baseline gap-3 py-3.5">
-                  <span className="font-medium text-white transition-colors group-hover:text-accent">
-                    {product.name}
+                {/* Phones stack the pack label under the name and drop the dotted leader. */}
+                <Link to={`/p/${product.slug}/`} className="rate-row group flex items-center gap-3 py-3 sm:items-baseline sm:py-3.5">
+                  <span className="min-w-0 flex-1 sm:flex sm:flex-none sm:items-baseline sm:gap-3">
+                    <span className="block font-medium text-white transition-colors group-hover:text-accent">
+                      {product.name}
+                    </span>
+                    <span className="block whitespace-nowrap text-sm text-primary-100">{variant.label}</span>
                   </span>
-                  <span className="text-sm text-primary-100">{variant.label}</span>
                   <span
                     aria-hidden
-                    className="leader min-w-6 flex-1 translate-y-[-0.3em] border-b-2 border-dotted border-white/30"
+                    className="leader hidden min-w-6 flex-1 translate-y-[-0.3em] border-b-2 border-dotted border-white/30 sm:block"
                   />
-                  <span className="price font-narrow text-2xl font-bold tabular-nums text-white">
+                  <span className="price shrink-0 whitespace-nowrap font-narrow text-xl font-bold tabular-nums text-white sm:text-2xl">
                     {formatPrice(variant.price)}
                   </span>
                 </Link>

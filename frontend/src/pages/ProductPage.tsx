@@ -33,11 +33,11 @@ export default function ProductPage() {
         <Link to={`/c/${product.category}/`} className="link-grow">{product.category.replace('-', ' ')}</Link>
       </nav>
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-2">
+      <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-10">
         {/* Image stand-in: tilts toward the pointer, icon floats in front. */}
         <div
           {...pointerGlow(6)}
-          className="spotlight tilt relative grid aspect-square place-items-center overflow-hidden rounded-card bg-primary-100 text-primary-900"
+          className="spotlight tilt relative grid aspect-[4/3] place-items-center overflow-hidden sm:aspect-square rounded-card bg-primary-100 text-primary-900"
         >
           <svg aria-hidden viewBox="0 0 100 100" className="absolute size-[85%] opacity-15" style={{ animation: 'spin-slow 80s linear infinite' }}>
             <path d={STAR_PATH} fill="var(--color-accent)" />
@@ -45,7 +45,7 @@ export default function ProductPage() {
           {/* Two layers: both effects use transform, so each needs its own element. */}
           <div className="tilt-pop">
             <div className="animate-float">
-              <CategoryIcon slug={product.category} className="size-40" />
+              <CategoryIcon slug={product.category} className="size-28 sm:size-40" />
             </div>
           </div>
         </div>
@@ -94,7 +94,7 @@ export default function ProductPage() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button
               variant="primary"
-              className="px-8"
+              className="w-full px-8 sm:w-auto"
               disabled={!variant || addToCart.isPending}
               onClick={() => variant && addToCart.mutate({ variantId: variant.id })}
             >

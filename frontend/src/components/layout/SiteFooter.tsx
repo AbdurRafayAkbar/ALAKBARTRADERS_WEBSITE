@@ -8,7 +8,7 @@ const year = new Date().getFullYear()
 
 export function SiteFooter() {
   return (
-    <footer className="relative mt-24 overflow-hidden bg-primary-900 text-primary-50">
+    <footer className="relative mt-16 overflow-hidden sm:mt-24 bg-primary-900 text-primary-50">
       <svg
         aria-hidden
         viewBox="0 0 100 100"

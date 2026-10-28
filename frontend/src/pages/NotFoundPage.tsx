@@ -6,7 +6,7 @@ import { STAR_PATH } from '../lib/star'
 export default function NotFoundPage() {
   useDocumentTitle('Page not found')
   return (
-    <Container className="relative grid gap-10 py-20 md:grid-cols-[1fr_auto] md:items-center">
+    <Container className="relative grid gap-10 py-14 sm:py-20 md:grid-cols-[1fr_auto] md:items-center">
       <div className="animate-page-in">
         <h1 className="font-wide text-3xl font-bold sm:text-4xl">This page does not exist</h1>
         <p className="mt-4 text-lg text-ink/80">The link may be old, or the product is no longer sold.</p>

@@ -28,7 +28,7 @@ const questions = [
 
 export function Faq() {
   return (
-    <section aria-labelledby="faq-title" className="py-20">
+    <section aria-labelledby="faq-title" className="py-14 sm:py-20">
       <Container className="max-w-3xl">
         <Reveal>
           <h2 id="faq-title" className="font-wide text-3xl font-bold sm:text-4xl">

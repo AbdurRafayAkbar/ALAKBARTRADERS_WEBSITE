@@ -10,7 +10,7 @@ export function CategoryGrid() {
   const { data: categories, isPending, isError, refetch } = useCategories()
 
   return (
-    <section aria-labelledby="categories-title" className="py-20">
+    <section aria-labelledby="categories-title" className="py-14 sm:py-20">
       <Container>
         <Reveal>
           <h2 id="categories-title" className="font-wide text-3xl font-bold sm:text-4xl">
@@ -21,20 +21,21 @@ export function CategoryGrid() {
         {isPending && <LoadingBlock />}
         {isError && <ErrorBlock onRetry={() => refetch()} />}
         {categories && (
-          <ul className="mt-10 grid gap-5 md:grid-cols-3">
+          <ul className="mt-8 grid gap-3 sm:mt-10 sm:gap-5 md:grid-cols-3">
             {categories.map((category, i) => (
               <Reveal as="li" key={category.slug} index={i}>
+                {/* Phones: icon beside the text in a short row. Wider screens: tall card. */}
                 <Link
                   to={`/c/${category.slug}/`}
                   {...pointerGlow(8)}
-                  className="spotlight tilt group flex h-full flex-col rounded-card border border-secondary/40 bg-card p-7 hover:border-primary"
+                  className="spotlight tilt group grid h-full grid-cols-[auto_1fr] gap-x-4 rounded-card border border-secondary/40 bg-card p-4 hover:border-primary sm:p-6 md:flex md:flex-col md:p-7"
                 >
-                  <span className="tilt-pop grid size-20 place-items-center rounded-2xl bg-primary-100 text-primary-900 transition-colors duration-300 group-hover:bg-primary-900 group-hover:text-primary-50">
-                    <CategoryIcon slug={category.slug} className="size-12 transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110" />
+                  <span className="tilt-pop row-span-3 grid size-14 place-items-center rounded-2xl bg-primary-100 text-primary-900 transition-colors duration-300 group-hover:bg-primary-900 group-hover:text-primary-50 md:size-20">
+                    <CategoryIcon slug={category.slug} className="size-9 transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110 md:size-12" />
                   </span>
-                  <span className="tilt-pop mt-6 block font-wide text-2xl font-bold">{category.name}</span>
-                  <span className="mt-2 block text-muted">{category.summary}</span>
-                  <span className="mt-auto flex items-center justify-between gap-3 pt-6 text-sm font-semibold text-primary-900">
+                  <span className="tilt-pop block font-wide text-xl font-bold md:mt-6 md:text-2xl">{category.name}</span>
+                  <span className="mt-1 block text-sm text-muted md:mt-2 md:text-base">{category.summary}</span>
+                  <span className="mt-3 flex items-center justify-between gap-3 text-sm font-semibold text-primary-900 md:mt-auto md:pt-6">
                     <span>Packs: {category.pack_sizes}</span>
                     <span
                       aria-hidden

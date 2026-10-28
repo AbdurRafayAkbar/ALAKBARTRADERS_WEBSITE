@@ -14,12 +14,12 @@ export function HowItWorks() {
   const ref = useReveal<HTMLOListElement>()
 
   return (
-    <section aria-labelledby="how-title" className="relative overflow-hidden bg-primary-100 py-20">
+    <section aria-labelledby="how-title" className="relative overflow-hidden bg-primary-100 py-14 sm:py-20">
       <Container>
         <h2 id="how-title" className="font-wide text-3xl font-bold sm:text-4xl">
           How ordering works
         </h2>
-        <ol ref={ref} className="group/steps relative mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <ol ref={ref} className="group/steps relative mt-8 grid gap-6 sm:mt-12 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <span
             aria-hidden
             className="absolute left-[1.375rem] right-[12%] top-[1.375rem] hidden h-0.5 origin-left scale-x-0 bg-primary-900/40 transition-transform duration-[1400ms] ease-out group-[.is-visible]/steps:scale-x-100 lg:block"

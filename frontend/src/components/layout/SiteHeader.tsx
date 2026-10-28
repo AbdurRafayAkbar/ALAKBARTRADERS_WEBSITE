@@ -27,22 +27,25 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-secondary/40 bg-card/85 backdrop-blur-md">
       <div className="bg-primary-900 text-sm text-primary-50">
-        <Container className="flex h-9 items-center justify-between gap-4">
-          <span>Cash on delivery across {site.city}</span>
-          <a href={`tel:${site.phone}`} className="link-wipe font-medium">
-            Call {site.phone}
+        <Container className="flex h-9 items-center justify-between gap-3 whitespace-nowrap">
+          <span className="truncate">
+            Cash on delivery<span className="hidden sm:inline"> across {site.city}</span>
+          </span>
+          <a href={`tel:${site.phone}`} className="link-wipe shrink-0 font-medium">
+            <span className="hidden sm:inline">Call </span>
+            {site.phone}
           </a>
         </Container>
       </div>
 
-      <Container className="flex h-16 items-center gap-4">
+      <Container className="flex h-16 items-center gap-2 sm:gap-4">
         <Link to="/" className="group shrink-0" aria-label={`${site.name} home`}>
           <img
             src={logo}
             alt=""
             width={150}
             height={40}
-            className="h-10 w-auto transition-transform duration-300 group-hover:scale-105"
+            className="h-9 w-auto transition-transform sm:h-10 duration-300 group-hover:scale-105"
           />
         </Link>
 
@@ -58,7 +61,7 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
           <Link
             to="/search/"
             className="group grid size-11 place-items-center rounded-full transition-colors hover:bg-primary-50"
@@ -71,7 +74,7 @@ export function SiteHeader() {
           </Link>
           <Link
             to="/cart/"
-            className="btn-fill flex h-11 items-center gap-2 rounded-full border-2 border-primary-900 px-4 font-semibold text-primary-900"
+            className="btn-fill flex h-10 items-center gap-2 rounded-full border-2 border-primary-900 px-3 font-semibold sm:h-11 sm:px-4 text-primary-900"
           >
             Cart
             {/* Keyed by count so the badge pops each time the cart changes. */}
