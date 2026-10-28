@@ -1,0 +1,39 @@
+/* Scroll 3D: sections and cards tip up into place as they scroll into view,
+   and the home hero tips away as you scroll past it. Pure CSS scroll-driven
+   animations, so browsers without support (Firefox today) just show the page
+   as normal. Skipped entirely for people who ask for reduced motion. */
+
+@keyframes s3d-rise {
+  from { opacity: 0.15; transform: perspective(1200px) rotateX(24deg) translateY(90px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes s3d-hero-out {
+  to { transform: perspective(1200px) rotateX(-10deg) translateY(-60px) scale(0.9); opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hover tilt uses the separate rotate/scale properties so it never fights
+     the scroll animation, which owns transform. */
+  main .bg-card { transition: rotate 0.4s var(--ease-out-expo), scale 0.4s var(--ease-out-expo); }
+  main .bg-card:hover { rotate: 1 -1 0 5deg; scale: 1.03; }
+
+  @supports (animation-timeline: view()) {
+    main section:not(:first-child) {
+      animation: s3d-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+    /* Cards finish once fully on screen, so ones at the very bottom of a page
+       still land flat. */
+    main .bg-card {
+      animation: s3d-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+    .scroll-hero > :not([aria-hidden]) {
+      animation: s3d-hero-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+  }
+}

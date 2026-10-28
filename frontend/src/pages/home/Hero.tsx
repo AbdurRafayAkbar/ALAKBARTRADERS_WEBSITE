@@ -14,7 +14,7 @@ const promises = [
 
 export function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-primary-900 text-white">
+    <section className="scroll-hero relative isolate overflow-hidden bg-primary-900 text-white">
       <HeroBackdrop />
 
       <Container className="grid items-center gap-10 py-10 sm:min-h-[calc(100dvh-6.75rem)] sm:gap-12 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
