@@ -1,0 +1,235 @@
+# ALAKBARTRADERS — UI / UX Design
+
+> **Status:** v0.2 (2026-10-28). Owner approved the drafts. Brand colours decided. Logo and photos are still **placeholders** (Q11).
+> Frontend is React (Architecture.md §2.2). "Component" in this file means a React component.
+
+---
+
+## 1. Brand identity
+
+### 1.1 Personality and tone
+- **Trustworthy, fresh, local.** A family trading business from Chashma that sells honest food at fair prices.
+- Tone of copy: warm, simple, direct. Short sentences. Prices and weights always clear.
+  Example: "Premium Basmati, aged 1 year. Long grains, rich aroma. Delivered in Chashma."
+- Avoid: hype ("BEST EVER!!!"), fake urgency, stock photos of people.
+
+### 1.2 Colour tokens (owner palette, decided 2026-10-28)
+
+Owner brand colours: **#9CAF88 sage (main)**, **#A7A7A7 grey (secondary)**, **#CC5500 burnt orange (third)**.
+
+**Contrast check (WCAG AA needs 4.5:1 for normal text, 3:1 for large/bold text and UI borders):**
+
+| Colour | On white | With dark text `#1F2421` on it | Verdict |
+|---|---|---|---|
+| Sage `#9CAF88` | 2.36 | 6.68 | Use as a **background with dark text**. Never as text colour on light backgrounds. |
+| Grey `#A7A7A7` | 2.41 | 6.55 | Decoration only: borders, dividers, disabled states. Never as text. |
+| Orange `#CC5500` | 4.31 | 3.65 | White text on it passes only for **large or bold** text (≥ 18.66px bold). |
+
+So each brand colour gets darker "text-safe" shades. The brand look stays; text stays readable.
+
+| Token | Value | Contrast | Use |
+|---|---|---|---|
+| `--color-primary` | `#9CAF88` | dark text on it 6.68 | Header band, primary buttons (dark text), category tiles, selected pack size |
+| `--color-primary-700` | `#5D6951` | 5.83 on white | Links, icons, sage text on light backgrounds |
+| `--color-primary-900` | `#464E3D` | 8.69 on white | Footer background (white text), headings accent |
+| `--color-primary-50` | `#EEF2EA` | — | Light sage tint for info boxes, hover rows |
+| `--color-secondary` | `#A7A7A7` | 2.41 | Borders, dividers, disabled buttons, skeleton loaders |
+| `--color-muted` | `#6C6C6C` | 5.25 on white | Secondary text (sizes, "per kg", timestamps) |
+| `--color-accent` | `#CC5500` | white text 4.31 | **Main call to action** ("Add to cart", "Place order") with **bold text ≥ 18px**, badges, free-delivery progress bar |
+| `--color-accent-700` | `#B74C00` | 5.19 on white | Accent at normal text size: prices, "Only 3 left", small accent buttons |
+| `--color-bg` | `#FBF8F1` | — | Page background (rice cream) |
+| `--color-surface` | `#FFFFFF` | — | Cards |
+| `--color-text` | `#1F2421` | 15.9 on white | Body text |
+| `--color-danger` | `#B3261E` | 6.5 on white | Errors, "Out of stock", expiry alerts |
+| `--color-success` | `#2E7D32` | 5.1 on white | Success messages, "Delivered" |
+| `--color-cold` | `#2B6CB0` | 5.4 on white | "Keep refrigerated" badge on creams |
+
+**Usage rules**
+- One orange button per screen: the main action. Everything else uses sage or outline buttons. Orange loses meaning if it is everywhere.
+- Orange `#CC5500` and danger red `#B3261E` look close. Never show them side by side. Errors always also show an icon and text.
+- Sage buttons always use dark text `#1F2421`, never white (white on sage is 2.36, fails).
+- Grey `#A7A7A7` is never used for text. Use `--color-muted` instead.
+- Tokens live in one place (Tailwind theme in `frontend/src/styles/theme.css`). Changing a colour is a single edit.
+
+### 1.2a Palette trial: one palette per page (2026-10-28, owner to choose)
+
+The owner asked for a different palette on every page so they can pick the best one. Each palette is a block of CSS variables under `[data-palette=name]` in `frontend/src/styles/index.css`. The layout sets `data-palette` from the current route, so components never name a palette; they only use tokens (`bg-primary`, `text-accent`, and so on). When the owner picks one, every route gets that palette and the others are deleted.
+
+| Palette | Page | `primary-900` | `accent` | `primary` | `surface` | Idea |
+|---|---|---|---|---|---|---|
+| Emerald | Home `/` | `#035A3A` | `#CAA753` | `#4F8A6E` | `#F5F9F6` | The logo's own green and gold |
+| Sage | Shop, category, search | `#464E3D` | `#CC5500` | `#9CAF88` | `#FBFCFA` | The owner's first palette (§1.2) |
+| Saffron | Product | `#5B2E0E` | `#B8321F` | `#D9A441` | `#FFFBF3` | Spice market, rice sacks |
+| Pistachio | Cart | `#2D481A` | `#8E3B62` | `#93C572` | `#FAFDF7` | Dry fruits |
+| Indus | Delivery areas | `#12394A` | `#E98A3F` | `#5B9AA9` | `#F6FAFB` | The river at Chashma |
+| Date palm | 404 | `#4A2C1A` | `#2F7D6D` | `#B07D56` | — | Dates and palm leaves |
+
+- A "Palette" switcher at the bottom left previews any palette on any page. The choice is kept in `localStorage` as a UI preference only; it never changes data.
+- Every palette keeps the same contrast rules as §1.2: body text on `surface`, light text only on `primary-900`.
+
+### 1.2b Motion and effects (2026-10-28)
+
+The owner found the first build too plain and asked for animation, a fitting background and varied hover effects.
+
+- **Intro curtain:** on the home page only, a short curtain with the gold star plays once, then lifts to show the page. It sits outside the animated page wrapper (see Learning.md: transforms create a containing block).
+- **Hero background:** a three.js scene of floating rice grains and stars (`HeroScene`). It loads lazily in its own chunk and draws all grains with one instanced mesh. With reduced motion it shows a still frame.
+- **Scroll reveal:** the `Reveal` component adds `is-visible` when an element enters the viewport (IntersectionObserver). Lists stagger by `index`.
+- **Headline:** `SplitWords` rises word by word. The full sentence is in an `sr-only` copy and the animated words are `aria-hidden`, so screen readers read one normal sentence.
+- **Hover effects, by job:**
+  - Buttons: `btn-sheen` (light sweep) for the main action, `btn-fill` (colour fills from below) for secondary buttons.
+  - Text links: `link-grow` (underline grows) and `link-wipe` (colour wipe).
+  - Cards: `lift` (rise and shadow), `spotlight` (glow follows the pointer through `--mx`/`--my`, set by `pointerGlow`), `tilt` with `tilt-pop` for 3D tilt toward the pointer.
+  - Feedback: `animate-pop` when a quantity, a line total or "Added to cart" changes.
+- **Rule:** two effects that both use `transform` go on separate nested elements, or one overrides the other.
+- **Reduced motion:** every animation stops under `prefers-reduced-motion: reduce` (`prefersReducedMotion()` in `lib/motion.ts` for JavaScript effects).
+
+### 1.3 Typography
+- **Headings + body:** Archivo, a variable font served from our own build (no Google Fonts request). Headings use the wide width (`font-wide`); prices use the narrow width (`font-narrow`) with tabular numbers so columns of prices line up. Decided 2026-10-28.
+- **Urdu (later):** "Noto Nastaliq Urdu" or "Noto Naskh Arabic" (Naskh is easier to read at small sizes).
+- Base size 16px; line-height 1.5; prices in semibold with tabular numbers.
+
+### 1.4 Logo usage
+- Header: logo left on mobile and desktop, at most 40px tall on mobile.
+- Needs a version that reads on both light and dark backgrounds and a square icon for the favicon/social share.
+- The received logo is green `#035A3A` and gold `#CAA753`. It is shown as an image; site colours stay on the owner palette (§1.2). If the logo and sage look wrong together, the fallback is to move the dark shades (`primary-900`) toward the logo green.
+- Home hero signature element: the "Today's rates" board, a price list with dotted leaders like a shop's rate board. Only one orange call to action per screen.
+
+---
+
+## 2. Layout rules (mobile first)
+
+- Design for a **360px-wide phone first**; most customers will order from a phone.
+- Breakpoints: `sm 640`, `md 768`, `lg 1024`, `xl 1280`.
+- Product grid: 2 columns on mobile, 3 on tablet, 4 on desktop.
+- Tap targets at least 44×44px.
+- **Sticky bottom bar on mobile** for product detail ("Add to cart") and cart ("Checkout").
+- Max content width 1200px on desktop.
+- Spacing scale: 4 / 8 / 12 / 16 / 24 / 32 / 48px only.
+- Floating **WhatsApp contact** button (link to the shop number). Many local customers prefer to ask before ordering.
+
+---
+
+## 3. Customer pages (wireframe descriptions)
+
+### Home
+1. Header: logo, search icon, cart icon with count, menu.
+2. Hero: one strong photo (rice or dry fruits), a one-line promise ("Fresh rice, dry fruits & cream, delivered in Chashma"), one button "Shop now".
+3. Category tiles: Rice, Dry Fruits, Dairy Creams.
+4. Best sellers (4–8 product cards).
+5. Trust strip: "Cash on Delivery", "Delivery across Chashma", "Freshness guaranteed".
+6. Footer: contact, delivery areas, policies, WhatsApp, social links.
+
+### Category listing
+- Title + short description.
+- Filters (bottom sheet on mobile, side panel on desktop): pack size, price range, in stock only. Sort: popular, price low–high, price high–low, newest.
+- Product cards: image, name, "from Rs X", pack sizes available, out-of-stock label.
+
+### Product detail
+- Image gallery (swipe on mobile).
+- Name, short description, **pack-size selector as buttons** (1 kg | 5 kg | 10 kg | 25 kg), not a dropdown, so all options are visible.
+- Price updates instantly when a size is picked (React state; variant data already loaded with the product); price per kg shown for comparison.
+- Stock state: "In stock", "Only 3 left", "Out of stock".
+- Creams: "Keep refrigerated" badge, "Best before" date of the batch that will be sent, delivery-zone note.
+- Quantity stepper + "Add to cart" (sticky on mobile).
+- Details: origin, grain length, storage tips. Related products.
+
+### Search
+- Search box with results as you type (TanStack Query, after 2+ characters, 300 ms debounce).
+- Results page uses the same card grid. Empty state with category links.
+
+### Cart
+- Line items: image, name, size, unit price, quantity stepper, remove, line total.
+- Price-change notice if a price changed since adding.
+- Subtotal, "Delivery fee calculated at checkout", progress hint: "Add Rs 800 more for free delivery".
+- Primary button "Checkout".
+
+### Checkout (single page)
+1. Contact: name, phone (required, Pakistan format), email (optional for guests, needed for email updates).
+2. Delivery: zone dropdown (Chashma areas), house/street, landmark, delivery notes.
+3. Payment: Cash on Delivery (only option at launch, pre-selected).
+4. Order summary with delivery fee and total.
+5. "Place order" button; note: "Our team will call you to confirm your order."
+- Guests can tick "Create an account" (password field appears).
+
+### Order placed (thank you)
+- Order number large and clear, summary, "We will call you on 03XX-XXXXXXX to confirm", link to track order, WhatsApp link.
+
+### Order tracking
+- Form: order number + phone. Result: status timeline (Placed → Confirmed → Packed → Out for delivery → Delivered).
+
+### Login / Signup / Password reset
+- Simple single-column forms, clear error messages, show/hide password.
+
+### Customer account
+- Orders list with status, order detail with timeline + invoice PDF download, saved addresses, profile, change password.
+
+### About / Contact / Delivery areas / Policies
+- About: story of the business, photos of the shop. Contact: phone, WhatsApp, address, hours, contact form.
+- Delivery areas: list of Chashma zones with fees.
+- Policies: returns (with special rules for perishables), privacy, terms.
+
+---
+
+## 4. Staff dashboard screens
+
+- **Dashboard home:** counters for today (new orders, to confirm, out for delivery, delivered, revenue), alert cards (low stock, creams near expiry).
+- **Order queue:** tabs by status; each row shows number, customer, phone (tap to call), zone, total, age. Oldest first.
+- **Order detail:** items, address, notes, status history, action buttons for **only** the allowed next statuses, "Print invoice", "Block this phone".
+- **Stock screen:** variants with stock levels, low-stock highlight; receive a cream batch (code, quantity, expiry date); stock adjustment with reason.
+- **Expiry screen:** cream batches sorted by expiry, colour-coded (expired / within cut-off / OK).
+- **Reports (owner):** sales by day/week/month, top products, orders by status, revenue by zone; CSV export.
+
+Staff screens are **desktop and tablet first**, but must work on a phone for the owner.
+
+---
+
+## 5. Reusable components
+
+Header, footer, mobile menu, search bar, product card, pack-size selector, price display (with price-per-kg),
+quantity stepper, stock badge, cold-chain badge, cart line item, cart count (reads the cached cart query), order summary box,
+form field (label + input + help + error), button (primary / secondary / danger), alert/toast messages,
+status badge + status timeline, pagination, empty state, filter panel / bottom sheet, modal/confirm dialog,
+data table (staff), stat card (staff), breadcrumbs.
+
+---
+
+## 6. Accessibility
+
+- Target **WCAG 2.2 AA**.
+- Semantic HTML (real `<button>`, `<label>`, headings in order).
+- All images need `alt` text; decorative images use `alt=""`.
+- Visible keyboard focus; every action works without a mouse.
+- Errors are announced as text, not only by colour.
+- Dynamic updates announced with `aria-live` regions (e.g. "Added to cart", cart count).
+- On route change, React moves focus to the page `<h1>` and updates `document.title`, so screen readers know the page changed.
+- Loading states use skeletons with `aria-busy`, not spinners alone.
+
+## 7. Performance targets
+
+- **Largest Contentful Paint < 2.5s** on a mid-range Android on 4G.
+- Page weight < 1 MB on home and listing pages.
+- Images: WebP, resized per screen (`srcset`), lazy-loaded below the fold.
+- CSS: Tailwind build, under 30 KB gzipped.
+- JS: first-load customer bundle under **150 KB gzipped**. Code-split by route (`React.lazy`). Staff screens are a separate chunk; customers never download them.
+- At most 10 database queries per API request.
+- Product and category pages show content from the API within one round trip (no request waterfalls).
+
+## 8. SEO basics
+
+- Clean slugs: `/p/super-basmati-rice/`.
+- Unique `<title>` and meta description per page; Open Graph tags for WhatsApp/Facebook previews.
+  Because the frontend is a React SPA, **Django fills these tags into `index.html` on the server** for product and category URLs. WhatsApp previews do not run JavaScript, so this is required (Architecture.md §2.2).
+- `sitemap.xml` + `robots.txt`.
+- **Product structured data** (JSON-LD `Product` with `Offer`, price in PKR, availability).
+- **LocalBusiness** structured data for the Chashma shop (address, phone, hours).
+- Canonical URLs on filtered listing pages.
+- Google Business Profile for local search **[RECOMMENDED]** (outside the code).
+
+## 9. UI/UX principles (why these choices)
+
+- **Pack sizes as buttons, not a dropdown:** the customer sees all choices at once and compares prices in one glance.
+- **Price per kg:** helps customers see that the 25 kg bag is better value, which raises order value honestly.
+- **"We will call you to confirm":** sets expectations for COD and reduces fake orders, because people know a human will check.
+- **Single-page checkout:** each extra step loses customers; we only need a few fields.
+- **Free-delivery progress hint:** shows a clear goal ("add Rs 800 more") instead of a hidden rule.
+- **Sticky action bar on mobile:** the main action is always reachable with a thumb.
