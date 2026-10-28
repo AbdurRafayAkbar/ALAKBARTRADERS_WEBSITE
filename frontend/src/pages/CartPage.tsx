@@ -19,7 +19,7 @@ export default function CartPage() {
 
   return (
     <Container className="py-10 sm:py-14">
-      <h1 className="animate-page-in font-display text-3xl font-bold sm:text-4xl">Your cart</h1>
+      <h1 className="animate-page-in font-display text-3xl font-bold sm:text-4xl">Your <span className="text-duo">cart</span></h1>
 
       {isPending && <LoadingBlock label="Loading cart" />}
       {isError && <div className="mt-8"><ErrorBlock onRetry={() => refetch()} /></div>}

@@ -4,8 +4,11 @@ import type { CSSProperties } from 'react'
 // Screen readers and search get the plain sentence from the sr-only copy;
 // the animated words are hidden from them, because some name calculations
 // drop the spaces between separate word spans.
-export function SplitWords({ text, delay = 0 }: { text: string; delay?: number }) {
+// Words from index `highlightFrom` on take the palette's spark colours.
+export function SplitWords({ text, delay = 0, highlightFrom }: { text: string; delay?: number; highlightFrom?: number }) {
   const words = text.split(' ')
+  const lit = highlightFrom ?? words.length
+  const steps = Math.max(words.length - 1 - lit, 1)
   return (
     <>
       <span className="sr-only">{text}</span>
@@ -13,7 +16,12 @@ export function SplitWords({ text, delay = 0 }: { text: string; delay?: number }
         {words.map((word, i) => (
           <span key={`${word}-${i}`}>
             <span className="word-mask">
-              <span style={{ '--i': i, '--d': `${delay}ms` } as CSSProperties}>{word}</span>
+              <span
+                className={i >= lit ? 'text-spark' : undefined}
+                style={{ '--i': i, '--d': `${delay}ms`, '--t': i >= lit ? (i - lit) / steps : undefined } as CSSProperties}
+              >
+                {word}
+              </span>
             </span>
             {i < words.length - 1 && ' '}
           </span>

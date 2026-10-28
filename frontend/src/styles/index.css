@@ -21,6 +21,8 @@
   --color-surface: #ffffff; /* page background */
   --color-card: #ffffff; /* raised panels */
   --color-glow: #cc5500; /* hover light and particles */
+  --color-spark-from: #ffb27a; /* heading highlight on dark surfaces */
+  --color-spark-to: #dfe6d7;
   --color-danger: #b42318;
 
   --radius-card: 0.75rem;
@@ -55,6 +57,8 @@
   --color-surface: #f5f9f6;
   --color-card: #ffffff;
   --color-glow: #caa753;
+  --color-spark-from: #e9c46a;
+  --color-spark-to: #a7e3c4;
 }
 
 /* Sage: the owner's approved palette. Shop. */
@@ -73,6 +77,8 @@
   --color-surface: #fbfcfa;
   --color-card: #ffffff;
   --color-glow: #cc5500;
+  --color-spark-from: #ffb27a;
+  --color-spark-to: #dfe6d7;
 }
 
 /* Saffron: turmeric, cinnamon and chilli. Product page. */
@@ -91,6 +97,8 @@
   --color-surface: #fffbf3;
   --color-card: #ffffff;
   --color-glow: #f0b429;
+  --color-spark-from: #f0b429;
+  --color-spark-to: #ff9e80;
 }
 
 /* Pistachio: green kernel, berry skin. Cart. */
@@ -109,6 +117,8 @@
   --color-surface: #fafdf7;
   --color-card: #ffffff;
   --color-glow: #93c572;
+  --color-spark-from: #c5e8a8;
+  --color-spark-to: #f2a7c9;
 }
 
 /* Indus: river water at sunset. Delivery areas. */
@@ -127,6 +137,8 @@
   --color-surface: #f6fafb;
   --color-card: #ffffff;
   --color-glow: #e98a3f;
+  --color-spark-from: #ffb070;
+  --color-spark-to: #9fd8e6;
 }
 
 /* Date palm: dark dates with a teal leaf. Not-found page. */
@@ -145,6 +157,8 @@
   --color-surface: #fffaf6;
   --color-card: #ffffff;
   --color-glow: #2f7d6d;
+  --color-spark-from: #7fd1bf;
+  --color-spark-to: #f0dfd1;
 }
 
 @layer base {
@@ -294,6 +308,23 @@
 }
 
 /* Headline words rise out of a mask, one after another. */
+/* Two-colour headings. The highlighted part of a heading runs from the
+   palette's brand colour to its accent, so each palette tints it differently.
+   Both ends are text-safe shades. On dark surfaces use .text-spark instead. */
+.text-duo {
+  background: linear-gradient(90deg, var(--color-primary-700), var(--color-accent-700));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* SplitWords colours each highlighted word one step along the palette's
+   spark pair (--t from 0 to 1), so the gradient survives the word animation. */
+.text-spark {
+  color: color-mix(in oklab, var(--color-spark-to) calc(var(--t, 0) * 100%), var(--color-spark-from));
+}
+
 .word-mask {
   display: inline-block;
   overflow: hidden;

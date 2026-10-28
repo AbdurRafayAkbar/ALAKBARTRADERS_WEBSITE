@@ -32,7 +32,7 @@ export function Faq() {
       <Container className="max-w-3xl">
         <Reveal>
           <h2 id="faq-title" className="font-display text-3xl font-bold sm:text-4xl">
-            Questions customers ask
+            Questions <span className="text-duo">customers ask</span>
           </h2>
         </Reveal>
         <div className="mt-8 grid gap-3">

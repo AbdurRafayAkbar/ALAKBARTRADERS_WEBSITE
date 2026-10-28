@@ -13,7 +13,7 @@ export function FeaturedProducts() {
       <Container>
         <Reveal className="flex flex-wrap items-end justify-between gap-4">
           <h2 id="featured-title" className="font-display text-3xl font-bold sm:text-4xl">
-            Most ordered this week
+            Most ordered <span className="text-duo">this week</span>
           </h2>
           <Link to="/shop/" className="link-grow font-semibold text-primary-900">
             See every product

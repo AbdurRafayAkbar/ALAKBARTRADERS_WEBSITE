@@ -10,7 +10,7 @@ export function DeliveryAreas() {
       <Container className="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
         <Reveal>
           <h2 id="areas-title" className="font-display text-3xl font-bold sm:text-4xl">
-            Where we deliver
+            Where <span className="text-duo">we deliver</span>
           </h2>
           <p className="mt-4 max-w-md text-lg text-ink/80">
             Our own riders cover {site.city} and nearby villages. The fee depends on your area and is shown before you

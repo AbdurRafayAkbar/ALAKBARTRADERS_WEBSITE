@@ -14,7 +14,7 @@ export function CategoryGrid() {
       <Container>
         <Reveal>
           <h2 id="categories-title" className="font-display text-3xl font-bold sm:text-4xl">
-            What we sell
+            What <span className="text-duo">we sell</span>
           </h2>
           <p className="mt-3 max-w-xl text-lg text-muted">Three things, bought fresh and packed in the shop.</p>
         </Reveal>

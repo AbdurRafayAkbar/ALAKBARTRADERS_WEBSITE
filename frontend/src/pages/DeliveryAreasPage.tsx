@@ -9,7 +9,7 @@ export default function DeliveryAreasPage() {
   return (
     <Container className="max-w-3xl py-10 sm:py-14">
       <div className="animate-page-in">
-        <h1 className="font-display text-3xl font-bold sm:text-4xl">Delivery areas and fees</h1>
+        <h1 className="font-display text-3xl font-bold sm:text-4xl">Delivery areas <span className="text-duo">and fees</span></h1>
         <p className="mt-4 text-lg text-ink/80">
           Our own riders deliver across {site.city}. Orders placed before 5 pm arrive the same day in town. Later orders
           arrive the next morning.
