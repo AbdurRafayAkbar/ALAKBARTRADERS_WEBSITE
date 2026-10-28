@@ -44,6 +44,9 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-28 | Step 3 quiz postponed; default questions stay in Learning.md and the owner will change them later | Owner request |
 | 2026-10-28 | Font: Archivo (variable, self-hosted). Wide width for headings, narrow width for prices | One family, legible on cheap phones, no Google Fonts request |
 | 2026-10-28 | Logo (green `#035A3A` + gold `#CAA753`) is used as an image; the site keeps the owner palette | Owner said to try their palette first; revisit if the two clash |
+| 2026-10-28 | Phone layout: swipe row for featured products, compact category rows, two-row cart lines, smaller section padding below `sm` | Owner said cards looked bad on phones |
+| 2026-10-28 | Frontend preview hosted on Cloudflare Pages (Git integration: root `frontend`, build `npm run build`, output `dist`). SPA fallback via `public/_redirects`. Backend hosting still decided at Phase 14 | Owner request. Free static hosting; mock data is bundled, so no API is needed yet |
+| 2026-10-28 | Work is pushed to GitHub (`AbdurRafayAkbar/ALAKBARTRADERS_WEBSITE`, branch `main`) as small, separate commits | Owner wants each change easy to review or revert |
 
 ## 3. Open questions / pending decisions
 
@@ -56,22 +59,27 @@ See `Architecture.md` §10. Q1 and Q12 are decided (see the log above). Still op
 
 - **Phase:** 1 — Frontend first (backend next)
 - **Task:** T1.6 React app scaffold `[~]`
-- **Step:** Frontend redesigned with motion and a per-page palette trial. Waiting for the owner to pick a palette.
+- **Step:** Frontend redesigned with motion and a per-page palette trial. Phone layout fixed. Preview deploy on Cloudflare Pages. Waiting for the owner to pick a palette.
 
 ## 5. Last completed step
+
+- 2026-10-28: Phone layout pass after owner feedback ("not responsive, cards don't look good on phone").
+  - Header top bar no longer wraps; palette switcher is a small round button on phones.
+  - Hero promise cards, rate board, category cards, featured products (swipe row), product page and cart reworked for 375 px screens.
+  - Intro title breaks between words, not inside a word.
+  - Added `frontend/public/_redirects` for Cloudflare Pages.
+  - Checks: typecheck, tests (6) and build pass.
 
 - 2026-10-28: Redesign after owner feedback ("too simple, add animation, background, hover effects").
   - Home: intro curtain, three.js hero (instanced rice grains and stars, lazy chunk), word-by-word headline, marquee, scroll reveals.
   - All pages: palette per route (design.md §1.2a), hover effects and motion (design.md §1.2b), bottom-left palette switcher.
   - Checks: `npm run typecheck`, `npm test` (6 tests), `npm run build` pass. Lint shows only the existing fast-refresh warnings.
-  - Nothing committed yet.
 
 - 2026-10-28: Customer frontend built in `frontend/` on mock data.
   - Layout: header (top bar, nav, search, cart count, mobile menu), footer, skip link.
   - Home: hero with the "Today's rates" board, categories, featured products, how ordering works, delivery areas, FAQ.
   - Pages: shop (all / category / search), product detail with pack sizes and add to cart, cart with quantity changes, delivery areas, 404. All pages except home load lazily.
   - Checks: `npm run typecheck`, `npm test` (6 tests), `npm run build` and `npm run lint` pass. Lint shows 6 fast-refresh warnings only.
-- Nothing committed yet.
 
 ## 6. Known issues / technical debt
 
