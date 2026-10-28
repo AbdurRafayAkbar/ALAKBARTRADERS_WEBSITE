@@ -24,7 +24,7 @@ export function RateBoard() {
         <path d={STAR_PATH} fill="var(--color-accent)" />
       </svg>
       <div className="flex items-baseline justify-between gap-4 border-b border-white/20 pb-4">
-        <h2 id="rates-title" className="font-wide text-xl font-bold text-white">
+        <h2 id="rates-title" className="font-display text-xl font-bold text-white">
           Today's rates
         </h2>
         <span className="text-sm text-primary-100">Per pack, in rupees</span>

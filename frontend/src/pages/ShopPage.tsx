@@ -30,7 +30,7 @@ export default function ShopPage({ mode }: { mode: 'all' | 'category' | 'search'
   return (
     <Container className="py-10 sm:py-14">
       <div className="animate-page-in">
-        <h1 className="font-wide text-3xl font-bold sm:text-4xl">{title}</h1>
+        <h1 className="font-display text-3xl font-bold sm:text-4xl">{title}</h1>
         {category && <p className="mt-3 max-w-2xl text-lg text-ink/80">{category.summary}</p>}
         <span aria-hidden className="mt-5 block h-1 w-20 rounded-full bg-accent" />
       </div>

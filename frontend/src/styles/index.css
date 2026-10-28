@@ -1,11 +1,11 @@
-@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/bricolage-grotesque/standard.css';
 @import 'tailwindcss';
 
 /* Brand tokens. Source of truth: docs/design.md §1.2.
    These are the defaults (the Sage palette). Each page swaps them through
    [data-palette] below, so components only ever use token names. */
 @theme {
-  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
 
   --color-primary: #9caf88; /* mid tint: surfaces only, never text on light */
   --color-primary-50: #eef2ea;
@@ -27,12 +27,14 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Archivo has a width axis. Wide = headings (echoes the logo), narrow = prices. */
-@utility font-wide {
-  font-stretch: 125%;
+/* Bricolage Grotesque has width and optical-size axes. Display = big headings
+   with tighter spacing; narrow = prices, so columns of numbers stay compact. */
+@utility font-display {
+  font-optical-sizing: auto;
+  letter-spacing: -0.025em;
 }
 @utility font-narrow {
-  font-stretch: 80%;
+  font-stretch: 75%;
 }
 
 /* ---------- Page palettes (design.md §1.3) ---------- */

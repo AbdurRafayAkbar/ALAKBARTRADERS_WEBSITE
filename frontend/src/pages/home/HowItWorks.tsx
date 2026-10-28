@@ -16,7 +16,7 @@ export function HowItWorks() {
   return (
     <section aria-labelledby="how-title" className="relative overflow-hidden bg-primary-100 py-14 sm:py-20">
       <Container>
-        <h2 id="how-title" className="font-wide text-3xl font-bold sm:text-4xl">
+        <h2 id="how-title" className="font-display text-3xl font-bold sm:text-4xl">
           How ordering works
         </h2>
         <ol ref={ref} className="group/steps relative mt-8 grid gap-6 sm:mt-12 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">

@@ -103,7 +103,7 @@ export function IntroCurtain() {
                 }}
               />
             </svg>
-            <p className="mt-6 font-wide text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+            <p className="mt-6 font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
               {/* Letters animate one by one, but each word stays whole so phones break between words. */}
               {['ALAKBAR', 'TRADERS'].map((word, w) => (
                 <span key={word}>

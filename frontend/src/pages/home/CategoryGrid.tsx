@@ -13,7 +13,7 @@ export function CategoryGrid() {
     <section aria-labelledby="categories-title" className="py-14 sm:py-20">
       <Container>
         <Reveal>
-          <h2 id="categories-title" className="font-wide text-3xl font-bold sm:text-4xl">
+          <h2 id="categories-title" className="font-display text-3xl font-bold sm:text-4xl">
             What we sell
           </h2>
           <p className="mt-3 max-w-xl text-lg text-muted">Three things, bought fresh and packed in the shop.</p>
@@ -33,7 +33,7 @@ export function CategoryGrid() {
                   <span className="tilt-pop row-span-3 grid size-14 place-items-center rounded-2xl bg-primary-100 text-primary-900 transition-colors duration-300 group-hover:bg-primary-900 group-hover:text-primary-50 md:size-20">
                     <CategoryIcon slug={category.slug} className="size-9 transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110 md:size-12" />
                   </span>
-                  <span className="tilt-pop block font-wide text-xl font-bold md:mt-6 md:text-2xl">{category.name}</span>
+                  <span className="tilt-pop block font-display text-xl font-bold md:mt-6 md:text-2xl">{category.name}</span>
                   <span className="mt-1 block text-sm text-muted md:mt-2 md:text-base">{category.summary}</span>
                   <span className="mt-3 flex items-center justify-between gap-3 text-sm font-semibold text-primary-900 md:mt-auto md:pt-6">
                     <span>Packs: {category.pack_sizes}</span>

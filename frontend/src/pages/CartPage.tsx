@@ -19,7 +19,7 @@ export default function CartPage() {
 
   return (
     <Container className="py-10 sm:py-14">
-      <h1 className="animate-page-in font-wide text-3xl font-bold sm:text-4xl">Your cart</h1>
+      <h1 className="animate-page-in font-display text-3xl font-bold sm:text-4xl">Your cart</h1>
 
       {isPending && <LoadingBlock label="Loading cart" />}
       {isError && <div className="mt-8"><ErrorBlock onRetry={() => refetch()} /></div>}
@@ -88,7 +88,7 @@ export default function CartPage() {
           </ul>
 
           <aside className="h-fit rounded-card border-t-4 border-accent bg-card p-5 shadow-lg sm:p-6 lg:sticky lg:top-32">
-            <h2 className="font-wide text-xl font-bold">Order summary</h2>
+            <h2 className="font-display text-xl font-bold">Order summary</h2>
             <dl className="mt-4 grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2">
               <dt>Subtotal</dt>
               <dd className="text-right font-narrow text-xl font-bold tabular-nums">{formatPrice(cart.subtotal)}</dd>

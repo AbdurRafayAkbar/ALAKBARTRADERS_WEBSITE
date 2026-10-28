@@ -51,7 +51,7 @@ export default function ProductPage() {
         </div>
 
         <div className="animate-page-in">
-          <h1 className="font-wide text-3xl font-bold sm:text-4xl">{product.name}</h1>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">{product.name}</h1>
           {product.is_perishable && (
             <p className="mt-3 inline-block rounded-full bg-primary-50 px-3 py-1 text-sm font-medium text-primary-900">
               Keep refrigerated. Delivered in an ice box.

@@ -19,7 +19,7 @@ export function SiteFooter() {
       </svg>
       <Container className="relative grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-2">
-          <p className="font-wide text-xl font-bold text-white">{site.name}</p>
+          <p className="font-display text-xl font-bold text-white">{site.name}</p>
           <p className="mt-3 max-w-sm">
             Family shop in {site.city} selling rice, dry fruits and fresh milk cream. Delivered by our own riders, paid in
             cash at your door.

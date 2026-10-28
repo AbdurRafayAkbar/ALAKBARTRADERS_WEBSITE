@@ -9,7 +9,7 @@ export function DeliveryAreas() {
     <section aria-labelledby="areas-title" className="py-14 sm:py-20">
       <Container className="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
         <Reveal>
-          <h2 id="areas-title" className="font-wide text-3xl font-bold sm:text-4xl">
+          <h2 id="areas-title" className="font-display text-3xl font-bold sm:text-4xl">
             Where we deliver
           </h2>
           <p className="mt-4 max-w-md text-lg text-ink/80">

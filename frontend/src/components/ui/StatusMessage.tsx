@@ -14,7 +14,7 @@ export function LoadingBlock({ label = 'Loading' }: { label?: string }) {
 export function MessageBlock({ title, children }: { title: string; children?: ReactNode }) {
   return (
     <div className="rounded-card border border-secondary/60 bg-primary-50 px-6 py-8">
-      <p className="font-wide text-lg font-semibold text-primary-900">{title}</p>
+      <p className="font-display text-lg font-semibold text-primary-900">{title}</p>
       {children && <div className="mt-2 text-muted">{children}</div>}
     </div>
   )

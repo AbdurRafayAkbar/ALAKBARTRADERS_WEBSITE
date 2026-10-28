@@ -31,7 +31,7 @@ export function Faq() {
     <section aria-labelledby="faq-title" className="py-14 sm:py-20">
       <Container className="max-w-3xl">
         <Reveal>
-          <h2 id="faq-title" className="font-wide text-3xl font-bold sm:text-4xl">
+          <h2 id="faq-title" className="font-display text-3xl font-bold sm:text-4xl">
             Questions customers ask
           </h2>
         </Reveal>

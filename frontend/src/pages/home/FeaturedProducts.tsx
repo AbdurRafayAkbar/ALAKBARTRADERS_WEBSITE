@@ -12,7 +12,7 @@ export function FeaturedProducts() {
     <section aria-labelledby="featured-title" className="py-14 sm:py-20">
       <Container>
         <Reveal className="flex flex-wrap items-end justify-between gap-4">
-          <h2 id="featured-title" className="font-wide text-3xl font-bold sm:text-4xl">
+          <h2 id="featured-title" className="font-display text-3xl font-bold sm:text-4xl">
             Most ordered this week
           </h2>
           <Link to="/shop/" className="link-grow font-semibold text-primary-900">

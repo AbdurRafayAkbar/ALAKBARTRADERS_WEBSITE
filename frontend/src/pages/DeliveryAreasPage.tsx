@@ -9,7 +9,7 @@ export default function DeliveryAreasPage() {
   return (
     <Container className="max-w-3xl py-10 sm:py-14">
       <div className="animate-page-in">
-        <h1 className="font-wide text-3xl font-bold sm:text-4xl">Delivery areas and fees</h1>
+        <h1 className="font-display text-3xl font-bold sm:text-4xl">Delivery areas and fees</h1>
         <p className="mt-4 text-lg text-ink/80">
           Our own riders deliver across {site.city}. Orders placed before 5 pm arrive the same day in town. Later orders
           arrive the next morning.
@@ -25,7 +25,7 @@ export default function DeliveryAreasPage() {
             <path d="M12 2v20M4.9 6l14.2 12M19.1 6 4.9 18M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" />
           </svg>
           <div>
-            <h2 className="font-wide text-2xl font-bold">Milk cream</h2>
+            <h2 className="font-display text-2xl font-bold">Milk cream</h2>
             <p className="mt-3 text-ink/80">
               Cream travels in an ice box and goes only to areas we reach quickly. Please be home to receive it.
             </p>
