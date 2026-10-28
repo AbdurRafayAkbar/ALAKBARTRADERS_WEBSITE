@@ -41,13 +41,14 @@ export function SiteHeader() {
       </div>
 
       <div className={`flex h-16 items-center gap-2 sm:h-[4.5rem] sm:gap-4 md:grid md:grid-cols-[1fr_auto_1fr] ${edge}`}>
-        <Link to="/" className="group shrink-0 justify-self-start" aria-label={`${site.name} home`}>
+        {/* On phones the logo gives up width first, so the buttons always fit. */}
+        <Link to="/" className="group min-w-0 justify-self-start" aria-label={`${site.name} home`}>
           <img
             src={logo}
             alt=""
             width={140}
             height={48}
-            className="h-10 w-auto transition-transform sm:h-12 duration-300 group-hover:scale-105"
+            className="h-auto max-h-12 w-36 max-w-full transition-transform duration-300 group-hover:scale-105"
           />
         </Link>
 
@@ -63,7 +64,7 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 justify-self-end sm:gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-0.5 justify-self-end sm:gap-2">
           <Link
             to="/search/"
             className="group grid size-11 place-items-center rounded-full transition-colors hover:bg-primary-50"
@@ -76,9 +77,14 @@ export function SiteHeader() {
           </Link>
           <Link
             to="/cart/"
-            className="btn-fill flex h-10 items-center gap-2 rounded-full border-2 border-primary-900 px-3 font-semibold sm:h-11 sm:px-4 text-primary-900"
+            className="btn-fill flex h-10 items-center gap-1.5 rounded-full border-2 border-primary-900 px-2.5 font-semibold sm:h-11 sm:gap-2 sm:px-4 text-primary-900"
           >
-            Cart
+            {/* Small phones show a bag icon; "Cart" returns once there is room. */}
+            <svg viewBox="0 0 24 24" className="size-5 min-[25rem]:hidden" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+              <path d="M5 8h14l-1 12H6L5 8Z" strokeLinejoin="round" />
+              <path d="M9 8V6a3 3 0 0 1 6 0v2" strokeLinecap="round" />
+            </svg>
+            <span className="max-[25rem]:sr-only">Cart</span>
             {/* Keyed by count so the badge pops each time the cart changes. */}
             <span
               key={count}

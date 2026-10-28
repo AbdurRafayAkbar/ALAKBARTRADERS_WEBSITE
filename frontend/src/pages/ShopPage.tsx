@@ -54,7 +54,7 @@ export default function ShopPage({ mode }: { mode: 'all' | 'category' | 'search'
             type="search"
             defaultValue={q}
             placeholder="Basmati, almonds, cream…"
-            className="min-h-11 flex-1 rounded-lg border border-secondary bg-card px-4 transition-[border-color,box-shadow] focus:border-primary-900 focus:shadow-lg"
+            className="min-h-11 min-w-0 flex-1 rounded-lg border border-secondary bg-card px-4 transition-[border-color,box-shadow] focus:border-primary-900 focus:shadow-lg"
           />
           <Button type="submit">Search</Button>
         </form>
