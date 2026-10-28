@@ -26,9 +26,9 @@ export function Hero() {
             <span aria-hidden className="size-2 animate-pulse rounded-full bg-accent" />
             Taking orders today in {site.city}
           </p>
-          {/* The headline names where the food comes from; the line below says what it is. */}
+          {/* The headline says the food is fresh; the line below says what it is. */}
           <h1 className="mt-6 font-display text-[clamp(2rem,10vw,3rem)] leading-[1.02] font-extrabold tracking-tight text-balance sm:text-6xl lg:text-7xl">
-            <SplitWords text="From the paddy, the orchard and the dairy, to your door." delay={150} highlightFrom={7} />
+            <SplitWords text="Fresh from the farm. Ready for your table." delay={150} highlightFrom={4} />
           </h1>
           <p
             className="mt-6 max-w-xl text-primary-100 sm:mt-7 sm:text-lg"
