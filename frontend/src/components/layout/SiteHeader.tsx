@@ -3,7 +3,6 @@ import { Link, NavLink, useLocation } from 'react-router'
 import { useCart } from '../../api/hooks'
 import logo from '../../assets/brand/logo-full.jpg'
 import { site } from '../../config/site'
-import { Container } from '../ui/Container'
 
 const nav = [
   { to: '/c/rice/', label: 'Rice' },
@@ -13,6 +12,9 @@ const nav = [
 ]
 
 // link-grow draws the underline on hover and keeps it on the current page.
+// The header spans the whole window, wider than page content, so the logo and cart sit at the edges.
+const edge = 'px-4 sm:px-6 lg:px-10'
+
 const navClass = ({ isActive }: { isActive: boolean }) =>
   `link-grow px-3 py-2 font-medium transition-colors hover:text-primary-900 ${isActive ? 'text-primary-900' : 'text-ink'}`
 
@@ -27,7 +29,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-secondary/40 bg-card/85 backdrop-blur-md">
       <div className="bg-primary-900 text-sm text-primary-50">
-        <Container className="flex h-9 items-center justify-between gap-3 whitespace-nowrap">
+        <div className={`flex h-9 items-center justify-between gap-3 whitespace-nowrap ${edge}`}>
           <span className="truncate">
             Cash on delivery<span className="hidden sm:inline"> across {site.city}</span>
           </span>
@@ -35,11 +37,11 @@ export function SiteHeader() {
             <span className="hidden sm:inline">Call </span>
             {site.phone}
           </a>
-        </Container>
+        </div>
       </div>
 
-      <Container className="flex h-16 items-center gap-2 sm:gap-4">
-        <Link to="/" className="group shrink-0" aria-label={`${site.name} home`}>
+      <div className={`flex h-16 items-center gap-2 sm:h-[4.5rem] sm:gap-4 md:grid md:grid-cols-[1fr_auto_1fr] ${edge}`}>
+        <Link to="/" className="group shrink-0 justify-self-start" aria-label={`${site.name} home`}>
           <img
             src={logo}
             alt=""
@@ -49,7 +51,7 @@ export function SiteHeader() {
           />
         </Link>
 
-        <nav aria-label="Main" className="ml-6 hidden md:block">
+        <nav aria-label="Main" className="hidden md:block">
           <ul className="flex gap-1">
             {nav.map((item) => (
               <li key={item.to}>
@@ -61,7 +63,7 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+        <div className="ml-auto flex items-center gap-1 justify-self-end sm:gap-2">
           <Link
             to="/search/"
             className="group grid size-11 place-items-center rounded-full transition-colors hover:bg-primary-50"
@@ -100,11 +102,11 @@ export function SiteHeader() {
             </svg>
           </button>
         </div>
-      </Container>
+      </div>
 
       {open && (
         <nav id="mobile-menu" aria-label="Main" className="animate-page-in border-t border-secondary/40 bg-card md:hidden">
-          <Container className="py-3">
+          <div className={`py-3 ${edge}`}>
             <ul className="grid gap-1">
               {nav.map((item) => (
                 <li key={item.to}>
@@ -114,7 +116,7 @@ export function SiteHeader() {
                 </li>
               ))}
             </ul>
-          </Container>
+          </div>
         </nav>
       )}
     </header>
