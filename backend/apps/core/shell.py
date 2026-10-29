@@ -127,6 +127,17 @@ def password_reset_confirm(request, uid, token):
 
 
 @require_safe
+def profile(request):
+    # React sends guests to the login page; the HTML is the same for everyone.
+    return render_shell(request, pages.PROFILE)
+
+
+@require_safe
+def addresses(request):
+    return render_shell(request, pages.ADDRESSES)
+
+
+@require_safe
 def not_found(request):
     # React shows its 404 page; the status code tells Google the same.
     return render_shell(request, pages.NOT_FOUND)
