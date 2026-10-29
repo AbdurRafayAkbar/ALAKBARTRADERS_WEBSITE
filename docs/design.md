@@ -226,6 +226,23 @@ data table (staff), stat card (staff), breadcrumbs.
 - Canonical URLs on filtered listing pages.
 - Google Business Profile for local search **[RECOMMENDED]** (outside the code).
 
+### 8.1 Google rules and income (decided 2026-10-29)
+
+Income comes from orders. Google brings buyers in two free ways: normal search results and **Google Merchant Center free listings** (products with price and photo in Google Search and the Shopping tab). There are no ads on the site.
+
+The site follows Google Search Essentials:
+- **Same content for Google and people.** Django puts the page's real heading, text and links inside `#root` in the HTML it sends. React then draws the same content. Showing Google something different from what people see is cloaking and is not allowed.
+- **Real 404s.** Unknown pages return status 404, not a 200 page that says "not found" (a "soft 404").
+- **Pages that should not be in search** (cart, checkout, search results, account) send `noindex`.
+- **Stable URLs.** Page URLs never change once live. If one must change, a 301 redirect points to the new URL. Every page has a canonical URL without query strings.
+- **No tricks:** no hidden text, no keyword stuffing, no fake or paid reviews, no copied product descriptions.
+- **Fast pages** (Core Web Vitals): LCP under 2.5 s, CLS under 0.1, INP under 200 ms on a mid-range phone. See §7 and T12.2.
+
+Merchant Center needs, before the shop applies (T12.1):
+- A product feed (or product JSON-LD) with name, price in PKR, availability, image and link for every product.
+- Public pages for shipping (delivery areas and fees), returns and refunds, privacy, terms, and contact with a phone number and the shop address.
+- The price and stock in the feed must match the product page. Merchant Center suspends shops whose prices do not match.
+
 ## 9. UI/UX principles (why these choices)
 
 - **Pack sizes as buttons, not a dropdown:** the customer sees all choices at once and compares prices in one glance.

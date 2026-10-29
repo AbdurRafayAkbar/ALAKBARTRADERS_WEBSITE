@@ -1,0 +1,10 @@
+{# Added to the React index.html head by apps/core/shell.py. #}
+{% if page.index %}<link rel="canonical" href="{{ canonical }}" />
+{% else %}<meta name="robots" content="noindex" />
+{% endif %}<meta property="og:type" content="website" />
+<meta property="og:site_name" content="{{ site_name }}" />
+<meta property="og:locale" content="en_PK" />
+<meta property="og:title" content="{{ page.full_title }}" />
+<meta property="og:description" content="{{ page.description }}" />
+{% if page.index %}<meta property="og:url" content="{{ canonical }}" />
+{% endif %}

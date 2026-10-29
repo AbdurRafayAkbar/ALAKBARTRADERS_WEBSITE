@@ -284,6 +284,7 @@ The page URLs below are **React Router routes**. For each customer page route, D
 | URL | Page |
 |---|---|
 | `/` | Home |
+| `/shop/` | All products |
 | `/c/<category-slug>/` | Category listing with filters |
 | `/p/<product-slug>/` | Product detail + pack-size selector |
 | `/search/?q=` | Search results |

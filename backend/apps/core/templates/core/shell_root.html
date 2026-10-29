@@ -1,0 +1,15 @@
+{# Server copy of the page for crawlers. React replaces it with the same content. #}
+<header>
+  <a href="/">{{ site_name }}</a>
+  <nav aria-label="Main">
+    <a href="/shop/">All products</a>
+    <a href="/c/rice/">Rice</a>
+    <a href="/c/dry-fruits/">Dry fruits</a>
+    <a href="/c/milk-cream/">Milk cream</a>
+    <a href="/delivery-areas/">Delivery areas</a>
+  </nav>
+</header>
+<main>
+  <h1>{{ page.heading }}</h1>
+  {% if page.text %}<p>{{ page.text }}</p>{% endif %}
+</main>

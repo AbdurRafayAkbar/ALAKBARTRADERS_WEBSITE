@@ -8,6 +8,7 @@ dependencies = [
     "djangorestframework>=3.18.3",
     "drf-spectacular>=0.30.0",
     "psycopg[binary]>=3.3.6",
+    "whitenoise>=6.9",
 ]
 
 [dependency-groups]
@@ -36,3 +37,5 @@ DJANGO_SETTINGS_MODULE = "config.settings.test"
 testpaths = ["tests", "apps"]
 python_files = ["test_*.py"]
 addopts = "-ra"
+# WhiteNoise warns that staticfiles/ is missing; collectstatic only runs on the server.
+filterwarnings = ["ignore:No directory at:UserWarning"]

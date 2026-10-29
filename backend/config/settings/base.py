@@ -37,6 +37,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # Serves the Vite build (WHITENOISE_ROOT) and collected static files.
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -89,6 +91,20 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# The Vite build (`npm run build` in frontend/). Django sends its index.html for
+# page URLs (apps/core/shell.py) and WhiteNoise serves its /assets/ files.
+FRONTEND_DIST_DIR = Path(
+    env("FRONTEND_DIST_DIR", default=str(BASE_DIR.parent / "frontend" / "dist"))
+)
+WHITENOISE_ROOT = FRONTEND_DIST_DIR if FRONTEND_DIST_DIR.is_dir() else None
+# Vite puts a content hash in every /assets/ file name (index-BIFjTqe8.js), so a
+# changed file gets a new name and browsers may keep the old one for a year.
+WHITENOISE_IMMUTABLE_FILE_TEST = r"^/assets/"
+
+# Origin for canonical and og:url links, e.g. https://alakbartraders.pk.
+# Empty means the origin the request came in on, which is fine in dev.
+SITE_URL = env("DJANGO_SITE_URL", default="")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

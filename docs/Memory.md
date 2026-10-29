@@ -50,6 +50,8 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-28 | Phone layout: swipe row for featured products, compact category rows, two-row cart lines, smaller section padding below `sm` | Owner said cards looked bad on phones |
 | 2026-10-28 | Frontend preview hosted on Cloudflare Pages (Git integration: root `frontend`, build `npm run build`, output `dist`). SPA fallback via `public/_redirects`. Backend hosting still decided at Phase 14 | Owner request. Free static hosting; mock data is bundled, so no API is needed yet |
 | 2026-10-29 | Hosting: one self-managed 1 GB VPS (RackNerd or IONOS VPS XS, about $2–3/month), bought at Phase 14. No Docker on the server: Nginx, Gunicorn and PostgreSQL run as systemd services with 2 GB swap. React is built on the PC and `dist/` is uploaded. Owner maintains the server. Replaces the earlier "Docker for deploy" plan | Owner budget is $2–3/month; 1 GB RAM cannot comfortably run Docker plus the stack |
+| 2026-10-29 | SEO goal: income comes from **sales** driven by Google Search and free Google Merchant Center listings. No ads (AdSense) on the shop. The site follows Google Search Essentials: Django puts the real page content and meta tags in the HTML it sends (the same content React shows, so no cloaking), URLs stay stable with canonical tags, and there is no hidden text, keyword stuffing or fake reviews. Details in design.md §8 | Owner wants SEO and income "according to Google's rules". Ads on a small shop earn little and slow the pages; Merchant Center listings are free and show products with price in Google |
+| 2026-10-29 | `/shop/` (all products) is a page URL and stays | The frontend already links to it; changing page URLs later costs search ranking |
 | 2026-10-28 | Work is pushed to GitHub (`AbdurRafayAkbar/ALAKBARTRADERS_WEBSITE`, branch `main`) as small, separate commits | Owner wants each change easy to review or revert |
 
 ## 3. Open questions / pending decisions
@@ -62,10 +64,16 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 ## 4. Current position
 
 - **Phase:** 1 — Frontend first (backend next)
-- **Task:** T1.6 React app scaffold `[~]`
-- **Step:** Frontend redesigned with motion and a per-page palette trial. Phone layout fixed. Preview deploy on Cloudflare Pages. Waiting for the owner to pick a palette.
+- **Task:** T1.7 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
+- **Step:** Django serves the React build with per-page SEO tags. Next backend task is T2.1 (custom User model).
 
 ## 5. Last completed step
+
+- 2026-10-30: T1.7 Django serves the SPA shell, built for Google Search (design.md §8.1).
+  - Page URLs return the Vite `index.html` with the title, description, canonical, robots and Open Graph tags filled in, and the page heading and text inside `#root`.
+  - Real 404 status for unknown pages; `noindex` on cart, search, 404 and product pages (until T3.3).
+  - WhiteNoise serves the build; hashed `/assets/` files are cached for a year.
+  - Checks: pytest (34), ruff check and ruff format pass; smoke test against the real build passes.
 
 - 2026-10-29: Font, hero background and header changed after owner feedback.
   - Font is Bricolage Grotesque; three.js hero replaced by a CSS/SVG backdrop; header is full width with centred nav.
@@ -94,6 +102,7 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 - Checkout button is a placeholder until the orders API exists (Phase 6).
 - Mock cart lives in memory and resets on page reload.
+- Page text for crawlers in `backend/apps/core/pages.py` is a hand copy of the React page text. Change both together until T3.3 / T12.1 read it from the database.
 - Watch: WeasyPrint needs GTK on Windows. PDF development may need WSL or Docker (decide at T10.2).
 
 ## 7. Next step
