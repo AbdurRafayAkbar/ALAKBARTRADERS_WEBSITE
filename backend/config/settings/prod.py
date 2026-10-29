@@ -5,7 +5,7 @@ DJANGO_ALLOWED_HOSTS must be set (base.py reads it), e.g. "alakbartraders.pk".
 """
 
 from .base import *  # noqa: F403
-from .base import env
+from .base import REST_FRAMEWORK, env
 
 DEBUG = False
 
@@ -20,3 +20,8 @@ CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS", default=[])
 SECURE_HSTS_SECONDS = env.int("DJANGO_HSTS_SECONDS", default=31536000)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = False
+
+# Nginx is the one proxy in front of Gunicorn. With this, the rate limits
+# (DEFAULT_THROTTLE_RATES) count each customer's IP from X-Forwarded-For
+# instead of counting everyone as 127.0.0.1.
+REST_FRAMEWORK["NUM_PROXIES"] = 1
