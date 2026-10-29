@@ -35,13 +35,13 @@
 - **Concepts:** project vs app, `manage.py`, WSGI/ASGI, request/response cycle.
 - **Done (2026-10-29):** Django 5.2.18 on Python 3.14 via `uv`; all backend files in `backend/` (`config/` project, empty `apps/` package, `pyproject.toml`, `uv.lock`); root `.gitignore`. Welcome page served on port 8000.
 
-### [~] T1.2 Settings split + env vars
+### [x] T1.2 Settings split + env vars
 - **Description:** `config/settings/{base,dev,prod}.py`; `django-environ`; `.env.example`; PostgreSQL connection.
 - **Depends on:** T1.1
 - **Acceptance:** dev runs on PostgreSQL; no secret in Git; `DJANGO_SETTINGS_MODULE` switches environments.
 - **Mode:** 🤝
 - **Concepts:** 12-factor config, secrets, `DATABASES`, `SECRET_KEY`, `DEBUG`.
-- **Progress (2026-10-29):** `backend/config/settings/{base,dev,prod}.py` with `django-environ` and psycopg 3; `backend/.env.example`; `manage.py` defaults to dev, `wsgi.py`/`asgi.py` to prod. `TIME_ZONE = Asia/Karachi`, `ATOMIC_REQUESTS` on. Left: owner creates the `alakbar` role and `alakbartraders` database in PostgreSQL 17, then the connection is checked. Do not run `migrate` until the custom User model exists (T2.1).
+- **Done (2026-10-29):** `backend/config/settings/{base,dev,prod}.py` with `django-environ` and psycopg 3; `backend/.env.example`; `manage.py` defaults to dev, `wsgi.py`/`asgi.py` to prod. `TIME_ZONE = Asia/Karachi`, `ATOMIC_REQUESTS` on. PostgreSQL 17 has the `alakbar` role (with `CREATEDB` for test databases) and the `alakbartraders` database; dev connects. No migrations run yet: do not run `migrate` until the custom User model exists (T2.1).
 
 ### [ ] T1.3 Code quality tooling
 - **Description:** Ruff config, pre-commit hooks, pytest + pytest-django + factory_boy, first smoke test.
