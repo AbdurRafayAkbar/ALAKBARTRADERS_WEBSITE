@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
-import { useCart } from '../../api/hooks'
+import { useCart, useLogout, useMe } from '../../api/hooks'
 import logo from '../../assets/brand/logo-full.png'
 import { site } from '../../config/site'
 
@@ -17,6 +17,52 @@ const edge = 'px-4 sm:px-6 lg:px-10'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
   `link-grow px-3 py-2 font-medium transition-colors hover:text-primary-900 ${isActive ? 'text-primary-900' : 'text-ink'}`
+
+const iconButton =
+  'group flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-2 font-medium transition-colors hover:bg-primary-50 lg:px-3'
+
+function PersonIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="size-6 transition-transform duration-300 group-hover:scale-110"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      aria-hidden
+    >
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0 1 16 0" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+// Phones show only the icon; the words return on wide screens.
+function AccountControl() {
+  const { data: me } = useMe()
+  const logoutMutation = useLogout()
+
+  if (!me) {
+    return (
+      <Link to="/accounts/login/" className={iconButton}>
+        <PersonIcon />
+        <span className="max-lg:sr-only">Log in</span>
+      </Link>
+    )
+  }
+  return (
+    <button
+      type="button"
+      className={iconButton}
+      title={me.email}
+      disabled={logoutMutation.isPending}
+      onClick={() => logoutMutation.mutate()}
+    >
+      <PersonIcon />
+      <span className="max-lg:sr-only">Log out</span> <span className="sr-only">{me.email}</span>
+    </button>
+  )
+}
 
 export function SiteHeader() {
   const { data: cart } = useCart()
@@ -84,6 +130,7 @@ export function SiteHeader() {
               <path d="m20 20-3.5-3.5" strokeLinecap="round" />
             </svg>
           </Link>
+          <AccountControl />
           <Link
             to="/cart/"
             className="btn-fill flex h-10 items-center gap-1.5 rounded-full border-2 border-primary-900 px-2.5 font-semibold sm:h-11 sm:gap-2 sm:px-4 text-primary-900"

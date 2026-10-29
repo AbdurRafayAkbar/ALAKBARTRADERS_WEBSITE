@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { http, HttpResponse } from 'msw'
+import { setupServer } from 'msw/node'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { resetMockCart } from '../api/cart'
 import { routes } from './routes'
 
@@ -16,6 +18,14 @@ function renderAt(path: string) {
   )
 }
 
+// The catalog and cart are still mocks; the header asks the real API who is logged in.
+const server = setupServer(
+  http.get('/api/v1/auth/me/', () => new HttpResponse(null, { status: 204 })),
+)
+
+beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 beforeEach(() => resetMockCart())
 
 describe('home page', () => {

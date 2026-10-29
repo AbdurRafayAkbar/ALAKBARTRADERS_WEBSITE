@@ -9,6 +9,10 @@ const ShopPage = lazy(() => import('../pages/ShopPage'))
 const ProductPage = lazy(() => import('../pages/ProductPage'))
 const CartPage = lazy(() => import('../pages/CartPage'))
 const DeliveryAreasPage = lazy(() => import('../pages/DeliveryAreasPage'))
+const LoginPage = lazy(() => import('../pages/accounts/LoginPage'))
+const SignupPage = lazy(() => import('../pages/accounts/SignupPage'))
+const PasswordResetPage = lazy(() => import('../pages/accounts/PasswordResetPage'))
+const PasswordResetConfirmPage = lazy(() => import('../pages/accounts/PasswordResetConfirmPage'))
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'))
 
 // Each page has its own palette while the owner picks one (design.md).
@@ -26,6 +30,18 @@ export const routes: RouteObject[] = [
       { path: '/p/:slug/', element: <ProductPage />, handle: palette('saffron') },
       { path: '/cart/', element: <CartPage />, handle: palette('pistachio') },
       { path: '/delivery-areas/', element: <DeliveryAreasPage />, handle: palette('indus') },
+      { path: '/accounts/login/', element: <LoginPage />, handle: palette('emerald') },
+      { path: '/accounts/signup/', element: <SignupPage />, handle: palette('emerald') },
+      {
+        path: '/accounts/password-reset/',
+        element: <PasswordResetPage />,
+        handle: palette('emerald'),
+      },
+      {
+        path: '/accounts/password-reset/:uid/:token/',
+        element: <PasswordResetConfirmPage />,
+        handle: palette('emerald'),
+      },
       { path: '*', element: <NotFoundPage />, handle: palette('date') },
     ],
   },
