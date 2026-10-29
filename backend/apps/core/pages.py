@@ -89,6 +89,13 @@ PASSWORD_RESET_CONFIRM = Page(
     heading="Choose a new password",
     index=False,
 )
+PROFILE = Page(title="Your account", heading="Your account", index=False)
+ADDRESSES = Page(
+    title="Saved addresses",
+    heading="Saved addresses",
+    text="Save the places we deliver to, so checkout fills them in for you.",
+    index=False,
+)
 
 NOT_FOUND = Page(
     title="Page not found",

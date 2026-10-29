@@ -25,6 +25,8 @@ urlpatterns = [
         shell.password_reset_confirm,
         name="password-reset-confirm",
     ),
+    path("account/", shell.profile, name="profile"),
+    path("account/addresses/", shell.addresses, name="addresses"),
     # Any other URL ending in a slash, except under /api/, which keeps its own 404.
     re_path(r"^(?!api/).+/$", shell.not_found),
 ]

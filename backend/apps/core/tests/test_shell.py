@@ -96,6 +96,8 @@ def test_cart_and_search_are_noindex(client, url):
         ("/accounts/signup/", "Create an account"),
         ("/accounts/password-reset/", "Reset your password"),
         ("/accounts/password-reset/MQ/abc-123/", "Choose a new password"),
+        ("/account/", "Your account"),
+        ("/account/addresses/", "Saved addresses"),
     ],
 )
 def test_account_pages_load_the_app_and_are_noindex(client, url, title):
