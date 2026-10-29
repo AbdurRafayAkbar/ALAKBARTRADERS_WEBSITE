@@ -106,6 +106,27 @@ def delivery_areas(request):
 
 
 @require_safe
+def login(request):
+    return render_shell(request, pages.LOGIN)
+
+
+@require_safe
+def signup(request):
+    return render_shell(request, pages.SIGNUP)
+
+
+@require_safe
+def password_reset(request):
+    return render_shell(request, pages.PASSWORD_RESET)
+
+
+@require_safe
+def password_reset_confirm(request, uid, token):
+    # The API checks the uid and token when the form is sent, not here.
+    return render_shell(request, pages.PASSWORD_RESET_CONFIRM)
+
+
+@require_safe
 def not_found(request):
     # React shows its 404 page; the status code tells Google the same.
     return render_shell(request, pages.NOT_FOUND)

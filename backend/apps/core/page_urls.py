@@ -17,6 +17,14 @@ urlpatterns = [
     path("p/<slug:slug>/", shell.product, name="product"),
     path("cart/", shell.cart, name="cart"),
     path("delivery-areas/", shell.delivery_areas, name="delivery-areas"),
+    path("accounts/login/", shell.login, name="login"),
+    path("accounts/signup/", shell.signup, name="signup"),
+    path("accounts/password-reset/", shell.password_reset, name="password-reset"),
+    path(
+        "accounts/password-reset/<str:uid>/<str:token>/",
+        shell.password_reset_confirm,
+        name="password-reset-confirm",
+    ),
     # Any other URL ending in a slash, except under /api/, which keeps its own 404.
     re_path(r"^(?!api/).+/$", shell.not_found),
 ]

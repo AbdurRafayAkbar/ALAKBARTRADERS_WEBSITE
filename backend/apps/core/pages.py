@@ -65,6 +65,31 @@ DELIVERY_AREAS = Page(
 
 CART = Page(title="Your cart", heading="Your cart", index=False)
 
+# Account pages: nothing here for Google to show, so all are noindex.
+LOGIN = Page(
+    title="Log in",
+    heading="Log in",
+    text="No account? You can still order as a guest.",
+    index=False,
+)
+SIGNUP = Page(
+    title="Create an account",
+    heading="Create an account",
+    text="An account is optional. You can still order as a guest.",
+    index=False,
+)
+PASSWORD_RESET = Page(
+    title="Reset your password",
+    heading="Reset your password",
+    text="Enter the email you signed up with. We will email you a link to choose a new password.",
+    index=False,
+)
+PASSWORD_RESET_CONFIRM = Page(
+    title="Choose a new password",
+    heading="Choose a new password",
+    index=False,
+)
+
 NOT_FOUND = Page(
     title="Page not found",
     heading="This page does not exist",
