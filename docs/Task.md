@@ -96,12 +96,13 @@
 
 ## Phase 2 — Auth & user accounts
 
-### [ ] T2.1 Custom User model
+### [x] T2.1 Custom User model
 - **Description:** `accounts.User` with email login, phone field; set `AUTH_USER_MODEL` before the first migrate.
 - **Depends on:** T1.5
 - **Acceptance:** `createsuperuser` with email works; tests for user manager.
 - **Mode:** 🤖
 - **Concepts:** `AbstractUser` vs `AbstractBaseUser`, user managers, why the custom user must be first.
+- **Done (2026-10-30):** `apps/accounts` with `User(AbstractUser)`: no `username`, `USERNAME_FIELD = "email"`, optional `phone`. Email is unique ignoring letter case (`Lower("email")` constraint), and login ignores case too (`get_by_natural_key` uses `email__iexact`). `UserManager` builds users and superusers from an email. Admin pages list, search, add and edit users by email. `AUTH_USER_MODEL = "accounts.User"` is set, and the first `migrate` on the dev database has run. Tests (11): manager, case rules, `authenticate`, `createsuperuser --noinput` and the admin add page.
 
 ### [ ] T2.2 Signup, login, logout, password reset
 - **Description:** Session-auth API endpoints (`auth/*`) + React forms and pages; `useMe()` hook; email backend prints to console in dev; rate limit login.
