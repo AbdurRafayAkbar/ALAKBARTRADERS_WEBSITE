@@ -1,28 +1,27 @@
 @import '@fontsource-variable/bricolage-grotesque/standard.css';
 @import 'tailwindcss';
 
-/* Brand tokens. Source of truth: docs/design.md §1.2.
-   These are the defaults (the Sage palette). Each page swaps them through
-   [data-palette] below, so components only ever use token names. */
+/* Brand tokens: the logo's green and gold. Source of truth: docs/design.md §1.2.
+   Components only ever use these token names. */
 @theme {
   --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
 
-  --color-primary: #9caf88; /* mid tint: surfaces only, never text on light */
-  --color-primary-50: #eef2ea;
-  --color-primary-100: #dfe6d7;
-  --color-primary-700: #5d6951;
-  --color-primary-900: #464e3d; /* dark surfaces and strong text */
-  --color-ink: #262b21; /* body text */
-  --color-secondary: #a7a7a7; /* borders only */
-  --color-muted: #6c6c6c; /* secondary text */
-  --color-accent: #cc5500; /* one CTA per screen */
-  --color-accent-700: #b74c00; /* accent text and hover */
-  --color-on-accent: #ffffff; /* text on the accent fill */
-  --color-surface: #ffffff; /* page background */
+  --color-primary: #4f8a6e; /* mid tint: surfaces only, never text on light */
+  --color-primary-50: #edf5f0;
+  --color-primary-100: #d4e7dc;
+  --color-primary-700: #0b6b47;
+  --color-primary-900: #035a3a; /* logo green: dark surfaces and strong text */
+  --color-ink: #10241a; /* body text */
+  --color-secondary: #b6c6bc; /* borders only */
+  --color-muted: #52665a; /* secondary text */
+  --color-accent: #caa753; /* logo gold: one CTA per screen */
+  --color-accent-700: #7d5f17; /* accent text and hover */
+  --color-on-accent: #10241a; /* text on the accent fill */
+  --color-surface: #f5f9f6; /* page background */
   --color-card: #ffffff; /* raised panels */
-  --color-glow: #cc5500; /* hover light and particles */
-  --color-spark-from: #ffb27a; /* heading highlight on dark surfaces */
-  --color-spark-to: #dfe6d7;
+  --color-glow: #caa753; /* hover light and particles */
+  --color-spark-from: #e9c46a; /* heading highlight on dark surfaces */
+  --color-spark-to: #a7e3c4;
   --color-danger: #b42318;
 
   --radius-card: 0.75rem;
@@ -39,128 +38,6 @@
   font-stretch: 75%;
 }
 
-/* ---------- Page palettes (design.md §1.3) ---------- */
-
-/* Emerald: the logo's green and gold. Home. */
-[data-palette='emerald'] {
-  --color-primary: #4f8a6e;
-  --color-primary-50: #edf5f0;
-  --color-primary-100: #d4e7dc;
-  --color-primary-700: #0b6b47;
-  --color-primary-900: #035a3a;
-  --color-ink: #10241a;
-  --color-secondary: #b6c6bc;
-  --color-muted: #52665a;
-  --color-accent: #caa753;
-  --color-accent-700: #7d5f17;
-  --color-on-accent: #10241a;
-  --color-surface: #f5f9f6;
-  --color-card: #ffffff;
-  --color-glow: #caa753;
-  --color-spark-from: #e9c46a;
-  --color-spark-to: #a7e3c4;
-}
-
-/* Sage: the owner's approved palette. Shop. */
-[data-palette='sage'] {
-  --color-primary: #9caf88;
-  --color-primary-50: #eef2ea;
-  --color-primary-100: #dfe6d7;
-  --color-primary-700: #5d6951;
-  --color-primary-900: #464e3d;
-  --color-ink: #262b21;
-  --color-secondary: #a7a7a7;
-  --color-muted: #6c6c6c;
-  --color-accent: #cc5500;
-  --color-accent-700: #b74c00;
-  --color-on-accent: #ffffff;
-  --color-surface: #fbfcfa;
-  --color-card: #ffffff;
-  --color-glow: #cc5500;
-  --color-spark-from: #ffb27a;
-  --color-spark-to: #dfe6d7;
-}
-
-/* Saffron: turmeric, cinnamon and chilli. Product page. */
-[data-palette='saffron'] {
-  --color-primary: #d9a441;
-  --color-primary-50: #fdf6e7;
-  --color-primary-100: #f7e5bb;
-  --color-primary-700: #8c5a0b;
-  --color-primary-900: #5b2e0e;
-  --color-ink: #2b1a10;
-  --color-secondary: #d6c1a2;
-  --color-muted: #765f4d;
-  --color-accent: #b8321f;
-  --color-accent-700: #9a2817;
-  --color-on-accent: #ffffff;
-  --color-surface: #fffbf3;
-  --color-card: #ffffff;
-  --color-glow: #f0b429;
-  --color-spark-from: #f0b429;
-  --color-spark-to: #ff9e80;
-}
-
-/* Pistachio: green kernel, berry skin. Cart. */
-[data-palette='pistachio'] {
-  --color-primary: #93c572;
-  --color-primary-50: #f1f8eb;
-  --color-primary-100: #ddeecf;
-  --color-primary-700: #4a7629;
-  --color-primary-900: #2d481a;
-  --color-ink: #1b2514;
-  --color-secondary: #bfcdb3;
-  --color-muted: #5c6953;
-  --color-accent: #8e3b62;
-  --color-accent-700: #74304f;
-  --color-on-accent: #ffffff;
-  --color-surface: #fafdf7;
-  --color-card: #ffffff;
-  --color-glow: #93c572;
-  --color-spark-from: #c5e8a8;
-  --color-spark-to: #f2a7c9;
-}
-
-/* Indus: river water at sunset. Delivery areas. */
-[data-palette='indus'] {
-  --color-primary: #5b9aa9;
-  --color-primary-50: #ebf4f6;
-  --color-primary-100: #d1e6eb;
-  --color-primary-700: #1d6272;
-  --color-primary-900: #12394a;
-  --color-ink: #0f2129;
-  --color-secondary: #a7bec5;
-  --color-muted: #4d656e;
-  --color-accent: #e98a3f;
-  --color-accent-700: #a8520f;
-  --color-on-accent: #0f2129;
-  --color-surface: #f6fafb;
-  --color-card: #ffffff;
-  --color-glow: #e98a3f;
-  --color-spark-from: #ffb070;
-  --color-spark-to: #9fd8e6;
-}
-
-/* Date palm: dark dates with a teal leaf. Not-found page. */
-[data-palette='date'] {
-  --color-primary: #b07d56;
-  --color-primary-50: #faf2ec;
-  --color-primary-100: #f0dfd1;
-  --color-primary-700: #7c4c29;
-  --color-primary-900: #4a2c1a;
-  --color-ink: #2a1a10;
-  --color-secondary: #cbb6a5;
-  --color-muted: #75604f;
-  --color-accent: #2f7d6d;
-  --color-accent-700: #24675a;
-  --color-on-accent: #ffffff;
-  --color-surface: #fffaf6;
-  --color-card: #ffffff;
-  --color-glow: #2f7d6d;
-  --color-spark-from: #7fd1bf;
-  --color-spark-to: #f0dfd1;
-}
-
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
@@ -170,11 +47,6 @@
     @apply bg-surface font-sans text-ink antialiased;
     font-size: 1.0625rem;
     line-height: 1.6;
-  }
-  [data-palette] {
-    transition:
-      background-color 0.6s ease,
-      color 0.6s ease;
   }
   :focus-visible {
     outline: 3px solid var(--color-accent-700);
@@ -309,8 +181,7 @@
 
 /* Headline words rise out of a mask, one after another. */
 /* Two-colour headings. The highlighted part of a heading runs from the
-   palette's brand colour to its accent, so each palette tints it differently.
-   Both ends are text-safe shades. On dark surfaces use .text-spark instead. */
+   brand green to the gold accent. Both ends are text-safe shades. On dark surfaces use .text-spark instead. */
 .text-duo {
   background: linear-gradient(90deg, var(--color-primary-700), var(--color-accent-700));
   -webkit-background-clip: text;
@@ -319,7 +190,7 @@
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-/* SplitWords colours each highlighted word one step along the palette's
+/* SplitWords colours each highlighted word one step along the
    spark pair (--t from 0 to 1), so the gradient survives the word animation. */
 .text-spark {
   color: color-mix(
