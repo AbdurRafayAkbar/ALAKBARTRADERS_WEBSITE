@@ -7,3 +7,30 @@ dependencies = [
     "django-environ>=0.14.0",
     "psycopg[binary]>=3.3.6",
 ]
+
+[dependency-groups]
+dev = [
+    "factory-boy>=3.3.3",
+    "pre-commit>=4.7.0",
+    "pytest>=9.2.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.17.3",
+]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["**/migrations/*"]
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: import order, B: likely bugs,
+# UP: modern syntax, DJ: Django rules, SIM: simpler code.
+select = ["E", "W", "F", "I", "B", "UP", "DJ", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "apps"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+testpaths = ["tests", "apps"]
+python_files = ["test_*.py"]
+addopts = "-ra"

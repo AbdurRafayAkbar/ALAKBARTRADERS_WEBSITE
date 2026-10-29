@@ -43,12 +43,13 @@
 - **Concepts:** 12-factor config, secrets, `DATABASES`, `SECRET_KEY`, `DEBUG`.
 - **Done (2026-10-29):** `backend/config/settings/{base,dev,prod}.py` with `django-environ` and psycopg 3; `backend/.env.example`; `manage.py` defaults to dev, `wsgi.py`/`asgi.py` to prod. `TIME_ZONE = Asia/Karachi`, `ATOMIC_REQUESTS` on. PostgreSQL 17 has the `alakbar` role (with `CREATEDB` for test databases) and the `alakbartraders` database; dev connects. No migrations run yet: do not run `migrate` until the custom User model exists (T2.1).
 
-### [ ] T1.3 Code quality tooling
+### [x] T1.3 Code quality tooling
 - **Description:** Ruff config, pre-commit hooks, pytest + pytest-django + factory_boy, first smoke test.
 - **Depends on:** T1.1
 - **Acceptance:** `pre-commit run --all-files` and `pytest` pass.
 - **Mode:** 🧑‍💻
 - **Concepts:** linting vs formatting, pre-commit hooks, pytest fixtures.
+- **Done (2026-10-29):** Ruff and pytest config in `backend/pyproject.toml` (dev dependency group); `.pre-commit-config.yaml` at the repo root (Ruff lint + format on `backend/`, plus merge-conflict, large-file, private-key, YAML and TOML checks); `config/settings/test.py` used by pytest; `backend/tests/test_smoke.py` checks PostgreSQL and the admin login page. Install the hook once per clone: `cd backend && uv run pre-commit install`.
 
 ### [ ] T1.4 Git + GitHub + CI
 - **Description:** `.gitignore`, first commit and push to `origin`, branch protection on `main`, GitHub Actions running Ruff + pytest with a PostgreSQL service.
