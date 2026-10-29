@@ -73,7 +73,8 @@
 - **Acceptance:** `npm run dev` shows the home page in brand colours and reads `/api/v1/health/` through the proxy; `npm run build` passes.
 - **Mode:** 🤖
 - **Concepts:** Vite dev server vs build, SPA routing, components and props, proxy, CSRF with fetch.
-- **Progress (2026-10-28):** Done ahead of the backend, on mock data: Tailwind tokens, router, TanStack Query hooks, API client with `X-CSRFToken`, layout, home, shop, product, cart, delivery areas and 404 pages, tests. Redesign done: motion, CSS hero backdrop (three.js removed 2026-10-29), hover effects, per-page palette trial (design.md §1.2a–b). Left: owner picks one palette; Vite proxy check against a real `/api/v1/health/` once Django exists.
+- **Progress (2026-10-28):** Done ahead of the backend, on mock data: Tailwind tokens, router, TanStack Query hooks, API client with `X-CSRFToken`, layout, home, shop, product, cart, delivery areas and 404 pages, tests. Redesign done: motion, CSS hero backdrop (three.js removed 2026-10-29), hover effects, per-page palette trial (design.md §1.2a–b). Left: owner picks one palette.
+- **Proxy check (2026-10-29):** `/api/v1/health/` and `/api/v1/auth/csrf/` work through the Vite proxy on :2004. The check found that every POST failed Django's CSRF origin check, because the proxy rewrites Host to `127.0.0.1:8000` while the browser sends `Origin: http://localhost:2004`. `dev.py` now trusts the Vite origins in `CSRF_TRUSTED_ORIGINS`; a POST with the token passes and one without is refused.
 
 ### [ ] T1.7 Django serves the SPA shell
 - **Description:** Django view returns the built `index.html` for page routes, with `<title>` and meta tags filled in per URL; static files from the Vite build.
