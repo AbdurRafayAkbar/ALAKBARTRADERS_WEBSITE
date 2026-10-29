@@ -1,6 +1,7 @@
 """Every API error uses {"code", "message", "fields"} (rules.md §4)."""
 
 import pytest
+from django.http import Http404
 from rest_framework import exceptions
 from rest_framework.permissions import AllowAny
 from rest_framework.test import APIClient, APIRequestFactory
@@ -82,3 +83,11 @@ def test_wrong_method_on_a_real_endpoint():
         "message": 'Method "DELETE" not allowed.',
         "fields": {},
     }
+
+
+def test_django_http404_uses_the_same_shape():
+    # get_object_or_404 in generic views raises Django's Http404, not DRF's NotFound.
+    response = _call_view_raising(Http404("No Address matches the given query."))
+
+    assert response.status_code == 404
+    assert response.data == {"code": "not_found", "message": "Not found.", "fields": {}}
