@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # Our apps
     "apps.core",
+    "apps.accounts",
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,9 @@ DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # Keep connections open for 60 s instead of reconnecting on every request.
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("DATABASE_CONN_MAX_AGE", default=60)
+
+# Must be set before the first migrate; changing it later is very hard.
+AUTH_USER_MODEL = "accounts.User"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
