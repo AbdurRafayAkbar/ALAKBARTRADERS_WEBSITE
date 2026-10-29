@@ -3,7 +3,8 @@ import { ApiRequestError } from '../../api/client'
 import type { ApiError } from '../../api/types'
 import { Container } from '../ui/Container'
 
-// Shared parts of the account pages: login, signup and password reset.
+// Shared parts of the account pages: login, signup, password reset, profile
+// and saved addresses.
 
 // A failed request without our error body is a lost connection.
 export function toApiError(error: unknown): ApiError | null {
@@ -17,14 +18,16 @@ export function toApiError(error: unknown): ApiError | null {
 export function AuthLayout({
   heading,
   text,
+  wide = false,
   children,
 }: {
   heading: string
   text?: string
+  wide?: boolean
   children: ReactNode
 }) {
   return (
-    <Container className="max-w-md py-10 sm:py-14">
+    <Container className={`${wide ? 'max-w-2xl' : 'max-w-md'} py-10 sm:py-14`}>
       <div className="animate-page-in">
         <h1 className="font-display text-3xl font-bold sm:text-4xl">{heading}</h1>
         {text && <p className="mt-3 text-lg text-muted">{text}</p>}

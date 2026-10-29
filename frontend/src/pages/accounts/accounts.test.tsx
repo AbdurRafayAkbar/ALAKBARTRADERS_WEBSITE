@@ -39,7 +39,7 @@ function renderAt(path: string) {
 }
 
 describe('login page', () => {
-  it('logs in, goes home and shows log out in the header', async () => {
+  it('logs in, goes home and shows the account link in the header', async () => {
     let sent: unknown
     server.use(
       http.post('/api/v1/auth/login/', async ({ request }) => {
@@ -55,7 +55,7 @@ describe('login page', () => {
     await user.click(screen.getByRole('button', { name: 'Log in' }))
 
     const header = screen.getByRole('banner')
-    expect(await within(header).findByRole('button', { name: /log out/i })).toBeInTheDocument()
+    expect(await within(header).findByRole('link', { name: /account/i })).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/')
     expect(sent).toEqual({ email: 'ali@example.com', password: 'Basmati-Sella-2026' })
   })
@@ -138,7 +138,7 @@ describe('signup page', () => {
     await user.click(screen.getByRole('button', { name: 'Create account' }))
 
     const header = screen.getByRole('banner')
-    expect(await within(header).findByRole('button', { name: /log out/i })).toBeInTheDocument()
+    expect(await within(header).findByRole('link', { name: /account/i })).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/')
     expect(sent).toEqual({
       email: 'ali@example.com',
@@ -218,19 +218,13 @@ describe('header account control', () => {
     )
   })
 
-  it('logs out', async () => {
-    server.use(
-      http.get('/api/v1/auth/me/', () => HttpResponse.json(ali)),
-      http.post('/api/v1/auth/logout/', () => new HttpResponse(null, { status: 204 })),
-    )
-    const user = userEvent.setup()
+  it('links a logged-in customer to their account', async () => {
+    server.use(http.get('/api/v1/auth/me/', () => HttpResponse.json(ali)))
     renderAt('/delivery-areas/')
+
     const header = screen.getByRole('banner')
-
-    await user.click(
-      await within(header).findByRole('button', { name: /log out ali@example.com/i }),
-    )
-
-    expect(await within(header).findByRole('link', { name: 'Log in' })).toBeInTheDocument()
+    expect(
+      await within(header).findByRole('link', { name: /account ali@example.com/i }),
+    ).toHaveAttribute('href', '/account/')
   })
 })

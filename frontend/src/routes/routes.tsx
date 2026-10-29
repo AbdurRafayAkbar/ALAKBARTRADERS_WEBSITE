@@ -12,6 +12,8 @@ const LoginPage = lazy(() => import('../pages/accounts/LoginPage'))
 const SignupPage = lazy(() => import('../pages/accounts/SignupPage'))
 const PasswordResetPage = lazy(() => import('../pages/accounts/PasswordResetPage'))
 const PasswordResetConfirmPage = lazy(() => import('../pages/accounts/PasswordResetConfirmPage'))
+const ProfilePage = lazy(() => import('../pages/account/ProfilePage'))
+const AddressesPage = lazy(() => import('../pages/account/AddressesPage'))
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'))
 
 // URLs end with a slash to match Django (urls.md).
@@ -36,6 +38,8 @@ export const routes: RouteObject[] = [
         path: '/accounts/password-reset/:uid/:token/',
         element: <PasswordResetConfirmPage />,
       },
+      { path: '/account/', element: <ProfilePage /> },
+      { path: '/account/addresses/', element: <AddressesPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
