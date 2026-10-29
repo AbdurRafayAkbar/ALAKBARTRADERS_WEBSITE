@@ -16,8 +16,8 @@
 - **Mode:** 🤖
 - **Concepts:** system design docs, ERD, state machines, trade-off analysis.
 
-### [ ] T0.2 Local tools install
-- **Description:** Install Python 3.13, `uv`, PostgreSQL 16+, Node.js LTS + npm, Git config, VS Code extensions (Python, Ruff, Django, ESLint, Prettier, Tailwind CSS IntelliSense).
+### [x] T0.2 Local tools install
+- **Description:** Install Python 3.14, `uv`, PostgreSQL 17, Node.js LTS + npm, Git config, VS Code extensions (Python, Ruff, Django, ESLint, Prettier, Tailwind CSS IntelliSense).
 - **Depends on:** T0.1
 - **Acceptance:** `python --version`, `uv --version`, `psql --version`, `node --version`, `npm --version` work; a test database can be created.
 - **Mode:** 🧑‍💻
@@ -27,12 +27,13 @@
 
 ## Phase 1 — Project skeleton, settings, environments, Git, CI
 
-### [ ] T1.1 Create Django project
+### [x] T1.1 Create Django project
 - **Description:** Decide Django version (Q1); `uv init`; install Django; `startproject config .`; `apps/` folder.
 - **Depends on:** T0.2
 - **Acceptance:** `runserver` shows the welcome page; structure matches rules.md §1.
 - **Mode:** 🤖
 - **Concepts:** project vs app, `manage.py`, WSGI/ASGI, request/response cycle.
+- **Done (2026-10-29):** Django 5.2.18 on Python 3.14 via `uv`; `config/` project, empty `apps/` package, root `.gitignore`. Welcome page served on port 8000.
 
 ### [ ] T1.2 Settings split + env vars
 - **Description:** `config/settings/{base,dev,prod}.py`; `django-environ`; `.env.example`; PostgreSQL connection.

@@ -35,9 +35,9 @@ deploy complexity, and cost with zero benefit.
 
 | Layer | Choice | Why |
 |---|---|---|
-| Language | Python 3.13 | Current stable; 3.12+ required. |
-| Framework | Django — **[PENDING]** 5.2 LTS or latest 6.x | LTS = security fixes for years with fewer upgrades. Latest = newest features. Decide in Task 1.1. |
-| Database | PostgreSQL 16+ | Real transactions, row locking (`select_for_update`), full-text search, `CHECK` constraints. SQLite is not used, even in dev, so dev matches prod. |
+| Language | Python 3.14 | Installed on the dev PC; the server gets the same version through `uv`. Pinned in `.python-version`. |
+| Framework | Django 5.2 LTS (`django~=5.2`) | LTS = security fixes until April 2028 with fewer upgrades. Decided in Task 1.1. |
+| Database | PostgreSQL 17 (same major version in dev and prod) | Real transactions, row locking (`select_for_update`), full-text search, `CHECK` constraints. SQLite is not used, even in dev, so dev matches prod. |
 | Frontend | **React + Vite** (owner decision, Q2 = B) | See 2.1 and 2.2. |
 | Frontend language | TypeScript **[RECOMMENDED]** | Catches wrong API field names at build time. |
 | API | Django REST Framework (DRF), JSON under `/api/v1/` | Standard Django API toolkit; serializers validate input. |
@@ -397,7 +397,7 @@ flowchart TB
 
 | # | Question | Needed by |
 |---|---|---|
-| Q1 | Django version: 5.2 LTS or latest 6.x | Task 1.1 |
+| Q1 | ~~Django version~~ **Decided: 5.2 LTS** | — |
 | Q2 | ~~Frontend option~~ **Decided: B, React** (2026-10-28) | — |
 | Q12 | React sub-decisions in 2.2: Vite SPA, Django-filled meta for SEO, session auth, TypeScript (all recommended) | Step 3 review |
 | Q3 | List of Chashma delivery zones + fee for each; which zones accept creams | Phase 8 |
