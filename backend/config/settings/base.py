@@ -28,6 +28,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third party
+    "rest_framework",
+    "drf_spectacular",
+    # Our apps
+    "apps.core",
 ]
 
 MIDDLEWARE = [
@@ -86,3 +91,26 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# React reads this cookie to send the X-CSRFToken header, so it must not be HttpOnly.
+CSRF_COOKIE_HTTPONLY = False
+
+REST_FRAMEWORK = {
+    # Same-origin session cookie, with CSRF checked for anonymous users too.
+    "DEFAULT_AUTHENTICATION_CLASSES": ["apps.core.authentication.CsrfSessionAuthentication"],
+    # Closed by default: every public endpoint opts in with AllowAny.
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    "EXCEPTION_HANDLER": "apps.core.exceptions.api_exception_handler",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # Money goes out as strings ("1250.00") so JavaScript never turns it into a float.
+    "COERCE_DECIMAL_TO_STRING": True,
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "ALAKBARTRADERS API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+}
