@@ -112,12 +112,13 @@
 - **Concepts:** `login()`/`logout()`, sessions, CSRF with an SPA, password hashing, protected routes.
 - **Done (2026-10-30):** API under `/api/v1/auth/`: `me/` (200 with the user, 204 for a guest), `signup/` (201, logs the new user in), `login/`, `logout/`, `password-reset/` (always 204, so it does not reveal which emails have accounts) and `password-reset/confirm/` (`uid`, `token`, `password`). Passwords go through Django's validators. Login is limited to 5 tries a minute, signup to 10 an hour and reset emails to 5 an hour per IP (429 `throttled`). Dev prints emails in the runserver terminal. React: `useMe()` and the auth mutations in `api/hooks.ts`; `apiFetch` asks `auth/csrf/` for the cookie before the first POST; pages at `/accounts/login/`, `/accounts/signup/`, `/accounts/password-reset/` and `/accounts/password-reset/<uid>/<token>/` (Django serves their shell pages, noindex); the header shows Log in or Log out. Tests: pytest 70 (21 for the auth API), vitest 23 (11 for the account pages and header).
 
-### [ ] T2.3 Addresses + profile
+### [x] T2.3 Addresses + profile
 - **Description:** Address CRUD API + React screens (zone FK added in Phase 8; text placeholder until then), profile edit. Address fields follow the guest address format in Architecture.md §4 (house number, block/category, colony, optional house name).
 - **Depends on:** T2.2
 - **Acceptance:** a user sees and edits only their own addresses (test proves another user gets 404).
 - **Mode:** 🧑‍💻
 - **Concepts:** ModelSerializer, `IsAuthenticated`, filtering querysets by `request.user`, object-level access.
+- **Done (2026-10-30):** `Address` model in `apps/accounts` (name, phone, house number, block, colony, optional house name and landmark, `area` text until the zone FK in Phase 8, `is_default`). API under `/api/v1/account/`: `profile/` (PATCH name and phone) and `addresses/` (list, add, PATCH, delete). The queryset is filtered by `request.user`, so another user's address returns 404. A user can save at most 5 addresses, and saving one as default clears the old default. Django's `Http404` now uses the standard `{code, message, fields}` shape. React: "Your account" at `/account/` (name, phone, log out) and "Saved addresses" at `/account/addresses/` (add, edit, delete with a confirm step, make default); guests go to the login page with `?next=`; the header account control links to `/account/`. Django serves both shell pages. Tests: pytest 93, vitest 38.
 
 ### [ ] T2.4 Roles: Owner and Staff
 - **Description:** Data migration creating `Owner`/`Staff` groups + permissions; DRF permission classes `IsStaff`, `IsOwner`; `auth/me/` returns the role so React shows the right menu.
