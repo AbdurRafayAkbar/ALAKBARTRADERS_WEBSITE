@@ -104,12 +104,13 @@
 - **Concepts:** `AbstractUser` vs `AbstractBaseUser`, user managers, why the custom user must be first.
 - **Done (2026-10-30):** `apps/accounts` with `User(AbstractUser)`: no `username`, `USERNAME_FIELD = "email"`, optional `phone`. Email is unique ignoring letter case (`Lower("email")` constraint), and login ignores case too (`get_by_natural_key` uses `email__iexact`). `UserManager` builds users and superusers from an email. Admin pages list, search, add and edit users by email. `AUTH_USER_MODEL = "accounts.User"` is set, and the first `migrate` on the dev database has run. Tests (11): manager, case rules, `authenticate`, `createsuperuser --noinput` and the admin add page.
 
-### [ ] T2.2 Signup, login, logout, password reset
+### [x] T2.2 Signup, login, logout, password reset
 - **Description:** Session-auth API endpoints (`auth/*`) + React forms and pages; `useMe()` hook; email backend prints to console in dev; rate limit login.
 - **Depends on:** T2.1, T1.6
 - **Acceptance:** full flow works in React; wrong password shows an error; API tests + component tests pass.
 - **Mode:** 🤝
 - **Concepts:** `login()`/`logout()`, sessions, CSRF with an SPA, password hashing, protected routes.
+- **Done (2026-10-30):** API under `/api/v1/auth/`: `me/` (200 with the user, 204 for a guest), `signup/` (201, logs the new user in), `login/`, `logout/`, `password-reset/` (always 204, so it does not reveal which emails have accounts) and `password-reset/confirm/` (`uid`, `token`, `password`). Passwords go through Django's validators. Login is limited to 5 tries a minute, signup to 10 an hour and reset emails to 5 an hour per IP (429 `throttled`). Dev prints emails in the runserver terminal. React: `useMe()` and the auth mutations in `api/hooks.ts`; `apiFetch` asks `auth/csrf/` for the cookie before the first POST; pages at `/accounts/login/`, `/accounts/signup/`, `/accounts/password-reset/` and `/accounts/password-reset/<uid>/<token>/` (Django serves their shell pages, noindex); the header shows Log in or Log out. Tests: pytest 70 (21 for the auth API), vitest 23 (11 for the account pages and header).
 
 ### [ ] T2.3 Addresses + profile
 - **Description:** Address CRUD API + React screens (zone FK added in Phase 8; text placeholder until then), profile edit. Address fields follow the guest address format in Architecture.md §4 (house number, block/category, colony, optional house name).

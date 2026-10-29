@@ -66,10 +66,17 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 ## 4. Current position
 
 - **Phase:** 1 — Frontend first (backend next)
-- **Task:** T2.1 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
-- **Step:** Custom User model exists and the dev database is migrated. Next backend task is T2.2 (signup, login, logout and password reset).
+- **Task:** T2.2 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
+- **Step:** Customers can sign up, log in, log out and reset a password from React. Guests can still order. Next backend task is T2.3 (addresses and profile).
 
 ## 5. Last completed step
+
+- 2026-10-30: T2.2 signup, login, logout and password reset.
+  - Session-auth API under `/api/v1/auth/` with CSRF checked on every POST; React fetches the CSRF cookie before the first POST.
+  - Rate limits: login 5/min, signup 10/hour, password reset 5/hour per IP.
+  - Dev prints reset emails in the runserver terminal. Production needs a real email backend before launch.
+  - React pages under `/accounts/`, `useMe()` hook, Log in / Log out in the header.
+  - Checks: pytest (70), ruff, vitest (23), typecheck, lint and build pass.
 
 - 2026-10-30: T2.1 custom User model (`apps/accounts`).
   - Users log in with email, not a username; email is unique ignoring letter case; optional phone field.
@@ -119,4 +126,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Next task: T2.2 signup, login, logout and password reset (customers can still order as guests). Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner runs `npm run dev` in `frontend/`, reviews the pages, picks one palette (then all routes use it and the others are deleted), and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
+Next task: T2.3 addresses and profile (address fields follow the guest address format). Try the flow: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:5173/accounts/signup/. Reset emails print in the runserver terminal. Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner runs `npm run dev` in `frontend/`, reviews the pages, picks one palette (then all routes use it and the others are deleted), and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
