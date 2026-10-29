@@ -1,5 +1,5 @@
 // Fixed, decorative background behind every page: soft colour fields that
-// drift slowly, taken from the current palette, over a faint dot grid.
+// drift slowly, taken from the brand colours, over a faint dot grid.
 export function PageBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

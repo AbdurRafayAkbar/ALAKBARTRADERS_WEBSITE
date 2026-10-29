@@ -61,7 +61,7 @@ export function IntroCurtain() {
     opening ? { animation: `${name} ${CLOSE_AFTER}ms cubic-bezier(0.76, 0, 0.24, 1) forwards` } : {}
 
   return (
-    <div data-palette="emerald" className="fixed inset-0 z-[70]" onClick={() => setPhase('open')}>
+    <div className="fixed inset-0 z-[70]" onClick={() => setPhase('open')}>
       <div aria-hidden className="absolute inset-0">
         <div className={`${panel} top-0`} style={panelMotion('curtain-up')} />
         <div className={`${panel} bottom-0`} style={panelMotion('curtain-down')} />

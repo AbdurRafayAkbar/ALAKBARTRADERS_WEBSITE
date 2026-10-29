@@ -4,7 +4,7 @@ import type { CSSProperties } from 'react'
 // Screen readers and search get the plain sentence from the sr-only copy;
 // the animated words are hidden from them, because some name calculations
 // drop the spaces between separate word spans.
-// Words from index `highlightFrom` on take the palette's spark colours.
+// Words from index `highlightFrom` on take the spark colours.
 export function SplitWords({
   text,
   delay = 0,
