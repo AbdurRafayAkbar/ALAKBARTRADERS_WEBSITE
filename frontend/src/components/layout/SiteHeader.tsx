@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
-import { useCart, useLogout, useMe } from '../../api/hooks'
+import { useCart, useMe } from '../../api/hooks'
 import logo from '../../assets/brand/logo-full.png'
 import { site } from '../../config/site'
 
@@ -40,7 +40,6 @@ function PersonIcon() {
 // Phones show only the icon; the words return on wide screens.
 function AccountControl() {
   const { data: me } = useMe()
-  const logoutMutation = useLogout()
 
   if (!me) {
     return (
@@ -50,17 +49,12 @@ function AccountControl() {
       </Link>
     )
   }
+  // Log out lives on the account page.
   return (
-    <button
-      type="button"
-      className={iconButton}
-      title={me.email}
-      disabled={logoutMutation.isPending}
-      onClick={() => logoutMutation.mutate()}
-    >
+    <Link to="/account/" className={iconButton} title={me.email}>
       <PersonIcon />
-      <span className="max-lg:sr-only">Log out</span> <span className="sr-only">{me.email}</span>
-    </button>
+      <span className="max-lg:sr-only">Account</span> <span className="sr-only">{me.email}</span>
+    </Link>
   )
 }
 

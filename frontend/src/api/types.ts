@@ -72,6 +72,21 @@ export interface User {
   phone: string
 }
 
+// A saved delivery address (account/addresses/). Chashma addresses are a
+// house number, a block and a colony. area stays blank until zones exist.
+export interface Address {
+  id: number
+  full_name: string
+  phone: string
+  house_number: string
+  block: string
+  colony: string
+  house_name: string
+  landmark: string
+  area: string
+  is_default: boolean
+}
+
 // One error shape for the whole API (rules.md §4).
 export interface ApiError {
   code: string

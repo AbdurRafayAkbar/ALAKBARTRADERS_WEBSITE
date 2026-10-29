@@ -1,5 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+  createAddress,
+  deleteAddress,
+  fetchAddresses,
+  updateAddress,
+  updateProfile,
+  type AddressInput,
+  type ProfileInput,
+} from './account'
+import {
   confirmPasswordReset,
   fetchMe,
   login,
@@ -27,6 +36,7 @@ export const queryKeys = {
   delivery: ['delivery'] as const,
   cart: ['cart'] as const,
   me: ['me'] as const,
+  addresses: ['addresses'] as const,
 }
 
 export const useCategories = () =>
@@ -94,3 +104,34 @@ export const usePasswordReset = () =>
 
 export const usePasswordResetConfirm = () =>
   useMutation({ mutationFn: (input: PasswordResetConfirmInput) => confirmPasswordReset(input) })
+
+export function useUpdateProfile() {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: (input: ProfileInput) => updateProfile(input),
+    onSuccess: (user) => client.setQueryData(queryKeys.me, user),
+  })
+}
+
+export const useAddresses = () =>
+  useQuery({ queryKey: queryKeys.addresses, queryFn: fetchAddresses })
+
+// A change to one address can move the default flag on another, so each
+// change reloads the whole list.
+function useAddressMutation<V>(mutationFn: (vars: V) => Promise<unknown>) {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn,
+    onSuccess: () => client.invalidateQueries({ queryKey: queryKeys.addresses }),
+  })
+}
+
+export const useCreateAddress = () =>
+  useAddressMutation((input: AddressInput) => createAddress(input))
+
+export const useUpdateAddress = () =>
+  useAddressMutation(({ id, input }: { id: number; input: Partial<AddressInput> }) =>
+    updateAddress(id, input),
+  )
+
+export const useDeleteAddress = () => useAddressMutation((id: number) => deleteAddress(id))
