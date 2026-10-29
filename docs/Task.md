@@ -76,12 +76,13 @@
 - **Progress (2026-10-28):** Done ahead of the backend, on mock data: Tailwind tokens, router, TanStack Query hooks, API client with `X-CSRFToken`, layout, home, shop, product, cart, delivery areas and 404 pages, tests. Redesign done: motion, CSS hero backdrop (three.js removed 2026-10-29), hover effects, per-page palette trial (design.md §1.2a–b). Left: owner picks one palette.
 - **Proxy check (2026-10-29):** `/api/v1/health/` and `/api/v1/auth/csrf/` work through the Vite proxy on :2004. The check found that every POST failed Django's CSRF origin check, because the proxy rewrites Host to `127.0.0.1:8000` while the browser sends `Origin: http://localhost:2004`. `dev.py` now trusts the Vite origins in `CSRF_TRUSTED_ORIGINS`; a POST with the token passes and one without is refused.
 
-### [ ] T1.7 Django serves the SPA shell
-- **Description:** Django view returns the built `index.html` for page routes, with `<title>` and meta tags filled in per URL; static files from the Vite build.
+### [x] T1.7 Django serves the SPA shell
+- **Description:** Django view returns the built `index.html` for page routes, with `<title>`, meta description, canonical URL, Open Graph and robots tags filled in per URL, and the page's heading and text inside `#root` for crawlers (design.md §8.1); WhiteNoise serves the Vite build.
 - **Depends on:** T1.6
-- **Acceptance:** "View page source" on `/` shows the server-filled title; deep link `/p/test/` loads React, not a Django 404.
+- **Acceptance:** "View page source" on `/` shows the server-filled title and heading; deep link `/p/test/` loads React, not a Django 404; an unknown page returns status 404; `/cart/` and `/search/` send `noindex`; unknown `/api/` URLs do not return the page shell.
 - **Mode:** 🤝
 - **Concepts:** SPA fallback routing, static files, why crawlers and WhatsApp need server HTML.
+- **Done (2026-10-30):** `apps/core/page_urls.py` mirrors the React routes and is included last in `config/urls.py`. `apps/core/shell.py` reads `FRONTEND_DIST_DIR/index.html` on each request and fills in the title, description, canonical (from `DJANGO_SITE_URL`, query string dropped), robots and Open Graph tags, plus a header, nav and the page heading and text inside `#root`. Page text lives in `apps/core/pages.py` and must match the React pages. Unknown pages and unknown category slugs return the app with status 404; cart, search, 404 and (until T3.3) product pages are `noindex`. Unknown `/api/` URLs keep Django's plain 404. A missing build returns 503 with the fix. WhiteNoise serves the build, with a one-year immutable cache for the hashed `/assets/` files. Tests in `apps/core/tests/test_shell.py` also check that `frontend/index.html` still has the markers the shell needs.
 
 ### [ ] T1.8 Frontend tooling in CI
 - **Description:** ESLint + Prettier, Vitest + React Testing Library + MSW, first component test; add `tsc`, lint, test, build jobs to GitHub Actions.
@@ -387,9 +388,9 @@
 ## Phase 12 — SEO, performance, security hardening
 
 ### [ ] T12.1 SEO
-- **Description:** Server-filled meta tags, Open Graph, Product + LocalBusiness JSON-LD in the SPA shell (from T1.7); sitemap, robots.txt, canonical URLs.
+- **Description:** Product and category data in the SPA shell (from T1.7): meta tags, Open Graph image, Product + Offer and LocalBusiness JSON-LD, server-rendered product name, price and description; sitemap, robots.txt; Google Merchant Center product feed; shipping, returns, privacy, terms and contact pages (design.md §8.1); submit to Search Console and Merchant Center.
 - **Depends on:** T3.4
-- **Acceptance:** Google Rich Results test passes for a product page; WhatsApp link preview shows the product name, image, and price.
+- **Acceptance:** Google Rich Results test passes for a product page; WhatsApp link preview shows the product name, image, and price; Merchant Center accepts the feed with no price mismatch errors.
 - **Mode:** 🧑‍💻
 - **Concepts:** `django.contrib.sitemaps`, structured data, how crawlers see an SPA.
 
