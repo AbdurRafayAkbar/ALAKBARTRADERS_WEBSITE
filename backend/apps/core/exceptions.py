@@ -6,6 +6,8 @@ One JSON shape for every API error (rules.md §4, Architecture.md §6):
 React shows `message`, puts `fields` next to form inputs, and tests check `code`.
 """
 
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from rest_framework import exceptions
 from rest_framework.views import exception_handler
 
@@ -13,6 +15,12 @@ VALIDATION_MESSAGE = "Please check the highlighted fields."
 
 
 def api_exception_handler(exc, context):
+    # get_object_or_404 raises Django's Http404, which has no error codes.
+    # DRF's handler maps it to NotFound internally; map it here too.
+    if isinstance(exc, Http404):
+        exc = exceptions.NotFound()
+    elif isinstance(exc, PermissionDenied):
+        exc = exceptions.PermissionDenied()
     response = exception_handler(exc, context)
     if response is None:
         # Not an API error (a bug): let Django return a 500 and log it.
