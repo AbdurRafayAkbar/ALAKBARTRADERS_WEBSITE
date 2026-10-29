@@ -9,26 +9,33 @@
 
 ```
 ALAKBARTRADERS_Website/
-├── config/                 # Django project package
-│   ├── settings/
-│   │   ├── base.py         # shared settings
-│   │   ├── dev.py
-│   │   └── prod.py
-│   ├── urls.py
-│   ├── wsgi.py / asgi.py
-├── apps/
-│   └── <app_name>/
-│       ├── models.py
-│       ├── services.py     # write operations + business rules
-│       ├── selectors.py    # read queries
-│       ├── api/
-│       │   ├── serializers.py  # validate input, shape JSON output
-│       │   ├── views.py        # thin: validate, call service/selector, return JSON
-│       │   └── urls.py
-│       ├── admin.py
-│       ├── management/commands/
-│       └── tests/
-├── templates/              # only: SPA shell with meta tags, emails, invoice PDF
+├── backend/                # Django project (run all Python commands from here)
+│   ├── config/                 # Django project package
+│   │   ├── settings/
+│   │   │   ├── base.py         # shared settings
+│   │   │   ├── dev.py
+│   │   │   └── prod.py
+│   │   ├── urls.py
+│   │   └── wsgi.py / asgi.py
+│   ├── apps/
+│   │   └── <app_name>/
+│   │       ├── models.py
+│   │       ├── services.py     # write operations + business rules
+│   │       ├── selectors.py    # read queries
+│   │       ├── api/
+│   │       │   ├── serializers.py  # validate input, shape JSON output
+│   │       │   ├── views.py        # thin: validate, call service/selector, return JSON
+│   │       │   └── urls.py
+│   │       ├── admin.py
+│   │       ├── management/commands/
+│   │       └── tests/
+│   ├── templates/              # only: SPA shell with meta tags, emails, invoice PDF
+│   ├── media/                  # uploads (never committed)
+│   ├── .env.example            # all env vars with dummy values
+│   ├── pyproject.toml          # dependencies + Ruff + pytest config
+│   ├── manage.py
+│   ├── uv.lock                 # exact package versions
+│   └── .python-version         # Python 3.14 for uv
 ├── frontend/               # React app (Vite + TypeScript)
 │   ├── src/
 │   │   ├── api/            # typed API client + TanStack Query hooks
@@ -42,12 +49,9 @@ ALAKBARTRADERS_Website/
 │   ├── vite.config.ts      # dev proxy /api to Django
 │   ├── package.json + package-lock.json
 │   └── tsconfig.json
-├── media/                  # uploads (never committed)
 ├── docs/                   # these design files
 ├── deploy/                 # systemd units, gunicorn and nginx config (Phase 14)
-├── .env.example            # all env vars with dummy values
-├── pyproject.toml          # dependencies + Ruff + pytest config
-└── manage.py
+└── .gitignore
 ```
 **Why:** every developer (and every AI session) knows where code goes without asking.
 

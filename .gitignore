@@ -8,8 +8,8 @@ __pycache__/
 htmlcov/
 
 # Django
-/media/
-/staticfiles/
+/backend/media/
+/backend/staticfiles/
 *.sqlite3
 
 # Secrets

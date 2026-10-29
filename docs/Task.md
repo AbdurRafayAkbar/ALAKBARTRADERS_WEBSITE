@@ -33,7 +33,7 @@
 - **Acceptance:** `runserver` shows the welcome page; structure matches rules.md §1.
 - **Mode:** 🤖
 - **Concepts:** project vs app, `manage.py`, WSGI/ASGI, request/response cycle.
-- **Done (2026-10-29):** Django 5.2.18 on Python 3.14 via `uv`; `config/` project, empty `apps/` package, root `.gitignore`. Welcome page served on port 8000.
+- **Done (2026-10-29):** Django 5.2.18 on Python 3.14 via `uv`; all backend files in `backend/` (`config/` project, empty `apps/` package, `pyproject.toml`, `uv.lock`); root `.gitignore`. Welcome page served on port 8000.
 
 ### [ ] T1.2 Settings split + env vars
 - **Description:** `config/settings/{base,dev,prod}.py`; `django-environ`; `.env.example`; PostgreSQL connection.

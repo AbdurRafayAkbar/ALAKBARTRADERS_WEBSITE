@@ -384,7 +384,7 @@ flowchart TB
 - **Settings:** `config/settings/base.py`, `dev.py`, `prod.py`; all values that change between environments come from env vars.
 - **No Docker** in dev or prod. The 1 GB server cannot spare the memory, and `systemd` services are simpler to run on one box.
 - **Frontend build:** `npm ci && npm run build` runs on the developer PC (or in CI), and only `frontend/dist/` is uploaded to the server. Node is not installed on the running server.
-- **Dev:** two terminals. `python manage.py runserver` (port 8000) and `npm run dev` (Vite, port 2004, proxies `/api` to 8000).
+- **Dev:** two terminals. In `backend/`: `uv run python manage.py runserver` (port 8000); in `frontend/`: and `npm run dev` (Vite, port 2004, proxies `/api` to 8000).
 - **Backups:** daily database dump + media copied off-site, 14-day retention, **restore tested** before go-live.
 - **Logging:** Django logging to stdout, collected by `journald` through systemd; Nginx access/error logs; Sentry for exceptions.
 - **Monitoring:** uptime check + Sentry alerts + daily email reports from cron.
