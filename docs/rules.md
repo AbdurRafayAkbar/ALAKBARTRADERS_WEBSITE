@@ -86,7 +86,7 @@ ALAKBARTRADERS_Website/
 
 ### 3.1 Frontend (React) standards
 - **TypeScript `strict: true`**, no `any` without a comment explaining why. **Why:** API shape mistakes fail at build time, not in front of a customer.
-- **ESLint + Prettier**, run by pre-commit and CI. **Why:** same reason as Ruff.
+- **oxlint + Prettier**, run in CI (`npm run lint`, `npm run format:check`); run `npm run format` before committing. **Why:** same reason as Ruff.
 - **All server data goes through TanStack Query hooks** in `src/api/`. Components never call `fetch` directly. **Why:** one place for caching, loading, errors, and the CSRF header.
 - **The frontend never calculates money that matters.** It shows prices, line totals, and fees returned by the API (`checkout/quote/`). **Why:** the server is the only source of truth; client values can be edited in the browser.
 - **Components stay small and presentational**; pages fetch data and pass it down. **Why:** small parts are easy to test and reuse.
@@ -150,7 +150,7 @@ ALAKBARTRADERS_Website/
 - Concurrency-critical code (stock deduction) has a test that simulates two buyers. **Why:** race conditions don't appear in manual testing.
 - Permission tests for every staff URL. **Why:** see Security.
 - Target coverage: ≥ 90% for `services.py`, ≥ 75% overall. **Why:** focus where bugs are expensive.
-- Tests run in CI on every push (pytest, Ruff, `tsc --noEmit`, ESLint, Vitest, `npm run build`); a red CI blocks the merge. **Why:** `main` is always deployable.
+- Tests run in CI on every push (pytest, Ruff, `tsc -b`, oxlint, Prettier, Vitest, `npm run build`); a red CI blocks the merge. **Why:** `main` is always deployable.
 - Write the test first (TDD) for services. **Why:** you define the rule before writing the code.
 
 ## 9. Git rules

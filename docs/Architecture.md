@@ -141,7 +141,7 @@ erDiagram
 | Model | Key fields | Notes |
 |---|---|---|
 | `User` | email (login), first/last name, phone, is_staff | **Custom user from day one.** Changing it later is very painful. |
-| `Address` | user, full_name, phone, zone, street/house, landmark, is_default | Chashma only, so the zone replaces city/province. |
+| `Address` | user, full_name, phone, zone, house_number, block, colony, house_name (optional), landmark (optional), is_default | Chashma only, so the zone replaces city/province. Matches how people in Chashma write addresses, e.g. "House#999, CAT-V, <colony name>". |
 | `DeliveryZone` | name (e.g. a colony or sector), fee, cream_allowed, is_active, sort_order | **[PENDING]** list of Chashma areas + fees. |
 | `Category` | name, slug, parent (optional), is_active | Rice, Dry Fruits, Dairy Creams. |
 | `Product` | category, name, slug, description, is_perishable, is_active | `is_perishable=True` turns on batch tracking. |
@@ -150,7 +150,7 @@ erDiagram
 | `StockBatch` | variant, batch_code, quantity_received, quantity_remaining, received_on, expiry_date | Creams only. Sellable stock = sum of `quantity_remaining` where expiry_date > today + cut-off days. |
 | `StockMovement` | variant, batch (optional), change (+/-), reason (RECEIVED, SOLD, CANCELLED, RETURNED, EXPIRED, ADJUSTED), order (optional), user, created_at | Append-only. Answers "where did 3 bags go?" |
 | `Cart` / `CartItem` | cart: user or session_key; item: variant, quantity | No price stored; price is always read live. |
-| `Order` | number (e.g. `AKT-000123`), user (optional), customer name/phone/email, address snapshot, zone, subtotal, shipping_fee, total, currency="PKR", status, payment_method, refund_status, notes, placed_at | Address and totals are **copied** so later edits never change past orders. |
+| `Order` | number (e.g. `AKT-000123`), user (optional), customer name/phone/email, address snapshot (house number, block, colony, house name, landmark), zone, subtotal, shipping_fee, total, currency="PKR", status, payment_method, refund_status, notes, placed_at | Address and totals are **copied** so later edits never change past orders. |
 | `OrderItem` | order, variant (`PROTECT`), product_name, variant_label, sku, unit_price, quantity, line_total | Price **snapshot** at order time. |
 | `BatchAllocation` | order_item, batch, quantity | Which cream batch each item came from (FEFO). Needed for recalls and returns. |
 | `OrderStatusHistory` | order, from_status, to_status, user, note, created_at | Full audit trail. |

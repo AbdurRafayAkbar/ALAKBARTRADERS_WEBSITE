@@ -84,12 +84,13 @@
 - **Concepts:** SPA fallback routing, static files, why crawlers and WhatsApp need server HTML.
 - **Done (2026-10-30):** `apps/core/page_urls.py` mirrors the React routes and is included last in `config/urls.py`. `apps/core/shell.py` reads `FRONTEND_DIST_DIR/index.html` on each request and fills in the title, description, canonical (from `DJANGO_SITE_URL`, query string dropped), robots and Open Graph tags, plus a header, nav and the page heading and text inside `#root`. Page text lives in `apps/core/pages.py` and must match the React pages. Unknown pages and unknown category slugs return the app with status 404; cart, search, 404 and (until T3.3) product pages are `noindex`. Unknown `/api/` URLs keep Django's plain 404. A missing build returns 503 with the fix. WhiteNoise serves the build, with a one-year immutable cache for the hashed `/assets/` files. Tests in `apps/core/tests/test_shell.py` also check that `frontend/index.html` still has the markers the shell needs.
 
-### [ ] T1.8 Frontend tooling in CI
-- **Description:** ESLint + Prettier, Vitest + React Testing Library + MSW, first component test; add `tsc`, lint, test, build jobs to GitHub Actions.
+### [x] T1.8 Frontend tooling in CI
+- **Description:** Linter (oxlint, chosen over ESLint) + Prettier, Vitest + React Testing Library + MSW, first component test; add `tsc`, lint, test, build jobs to GitHub Actions.
 - **Depends on:** T1.6, T1.4
 - **Acceptance:** CI runs backend and frontend jobs; both green.
 - **Mode:** 🧑‍💻
 - **Concepts:** type checking vs tests, mocking APIs, CI caching for `npm ci`.
+- **Done (2026-10-30):** Prettier 3 with `frontend/.prettierrc.json` (no semicolons, single quotes, trailing commas, 100 columns); `npm run format` and `npm run format:check`; the codebase is formatted. The linter stays oxlint, which the Vite template set up and which is much faster than ESLint. MSW 3 tests for `src/api/client.ts` (`src/api/client.test.ts`): JSON body, CSRF header on POST, 204, API error body, non-JSON error fallback. The CI workflow has a new `frontend` job (Node 24, npm cache): `npm ci`, type check, lint, Prettier check, tests, build.
 
 ---
 
@@ -110,7 +111,7 @@
 - **Concepts:** `login()`/`logout()`, sessions, CSRF with an SPA, password hashing, protected routes.
 
 ### [ ] T2.3 Addresses + profile
-- **Description:** Address CRUD API + React screens (zone FK added in Phase 8; text placeholder until then), profile edit.
+- **Description:** Address CRUD API + React screens (zone FK added in Phase 8; text placeholder until then), profile edit. Address fields follow the guest address format in Architecture.md §4 (house number, block/category, colony, optional house name).
 - **Depends on:** T2.2
 - **Acceptance:** a user sees and edits only their own addresses (test proves another user gets 404).
 - **Mode:** 🧑‍💻
@@ -231,7 +232,7 @@
 - **Concepts:** transactions, idempotency, `on_commit`, validation errors in services.
 
 ### [ ] T6.3 Checkout API + React checkout and thank-you pages
-- **Description:** `checkout/quote/` and `checkout/` endpoints; single-page React checkout for guest and logged-in users; Pakistan phone validation on both sides; idempotency key per checkout page visit; button disabled while submitting.
+- **Description:** `checkout/quote/` and `checkout/` endpoints; single-page React checkout for guest and logged-in users (no login needed; address fields: house number, block/category, colony, optional house name, landmark); Pakistan phone validation on both sides; idempotency key per checkout page visit; button disabled while submitting.
 - **Depends on:** T6.2
 - **Acceptance:** guest can place an order end-to-end; field errors from the API appear next to fields; a repeated request with the same key returns the same order.
 - **Mode:** 🧑‍💻

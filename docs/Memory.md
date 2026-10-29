@@ -52,6 +52,8 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-29 | Hosting: one self-managed 1 GB VPS (RackNerd or IONOS VPS XS, about $2–3/month), bought at Phase 14. No Docker on the server: Nginx, Gunicorn and PostgreSQL run as systemd services with 2 GB swap. React is built on the PC and `dist/` is uploaded. Owner maintains the server. Replaces the earlier "Docker for deploy" plan | Owner budget is $2–3/month; 1 GB RAM cannot comfortably run Docker plus the stack |
 | 2026-10-29 | SEO goal: income comes from **sales** driven by Google Search and free Google Merchant Center listings. No ads (AdSense) on the shop. The site follows Google Search Essentials: Django puts the real page content and meta tags in the HTML it sends (the same content React shows, so no cloaking), URLs stay stable with canonical tags, and there is no hidden text, keyword stuffing or fake reviews. Details in design.md §8 | Owner wants SEO and income "according to Google's rules". Ads on a small shop earn little and slow the pages; Merchant Center listings are free and show products with price in Google |
 | 2026-10-29 | `/shop/` (all products) is a page URL and stays | The frontend already links to it; changing page URLs later costs search ranking |
+| 2026-10-30 | Frontend linter stays **oxlint** (not ESLint), with Prettier for formatting; both run in CI | The Vite template already set up oxlint; it is much faster and covers the rules we need |
+| 2026-10-30 | Customers order without logging in (no Google/Gmail sign-in). Checkout address: house number (e.g. "House#999"), block/category (e.g. "CAT-V"), colony name, all required; the house name written outside the house is optional; landmark optional | Owner request. Matches how addresses are written in Chashma and lets riders find the house |
 | 2026-10-28 | Work is pushed to GitHub (`AbdurRafayAkbar/ALAKBARTRADERS_WEBSITE`, branch `main`) as small, separate commits | Owner wants each change easy to review or revert |
 
 ## 3. Open questions / pending decisions
@@ -64,10 +66,15 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 ## 4. Current position
 
 - **Phase:** 1 — Frontend first (backend next)
-- **Task:** T1.7 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
-- **Step:** Django serves the React build with per-page SEO tags. Next backend task is T2.1 (custom User model).
+- **Task:** T1.8 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
+- **Step:** CI runs backend and frontend jobs. Next backend task is T2.1 (custom User model).
 
 ## 5. Last completed step
+
+- 2026-10-30: T1.8 frontend tooling in CI.
+  - Prettier config and scripts; codebase formatted. Linter stays oxlint.
+  - MSW tests for the API client (CSRF header, 204, error bodies).
+  - New `frontend` CI job: `npm ci`, type check, lint, Prettier check, tests (11), build.
 
 - 2026-10-30: T1.7 Django serves the SPA shell, built for Google Search (design.md §8.1).
   - Page URLs return the Vite `index.html` with the title, description, canonical, robots and Open Graph tags filled in, and the page heading and text inside `#root`.
@@ -107,4 +114,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Owner runs `npm run dev` in `frontend/`, reviews the pages, picks one palette (then all routes use it and the others are deleted), and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
+Next task: T2.1 custom User model (the first `migrate` on the dev database happens there). Owner runs `npm run dev` in `frontend/`, reviews the pages, picks one palette (then all routes use it and the others are deleted), and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
