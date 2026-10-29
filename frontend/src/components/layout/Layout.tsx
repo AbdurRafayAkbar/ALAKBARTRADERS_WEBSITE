@@ -21,7 +21,9 @@ export function Layout() {
       </a>
       <PageBackdrop />
       <SiteHeader />
-      <main id="main" className="flex-1">
+      {/* Clip, not hidden: sections tilted by scroll-3d.css grow wider than a
+          phone screen, and clip trims them without making a scroll box. */}
+      <main id="main" className="flex-1 overflow-x-clip">
         <Suspense
           fallback={
             <Container>
