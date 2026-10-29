@@ -55,7 +55,12 @@ export function Faq() {
         </div>
         <p className="mt-8 text-ink/80">
           Other question?{' '}
-          <a href={whatsappLink()} target="_blank" rel="noreferrer" className="link-grow font-semibold text-primary-900">
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noreferrer"
+            className="link-grow font-semibold text-primary-900"
+          >
             Message us on WhatsApp
           </a>
         </p>

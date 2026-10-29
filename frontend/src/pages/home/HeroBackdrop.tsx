@@ -14,13 +14,14 @@ export function HeroBackdrop() {
       />
       <div
         className="absolute -bottom-1/3 left-[-15%] size-[55vmax] rounded-full opacity-50 blur-3xl"
-        style={{ background: 'var(--color-primary)', animation: 'drift 34s ease-in-out -12s infinite reverse' }}
+        style={{
+          background: 'var(--color-primary)',
+          animation: 'drift 34s ease-in-out -12s infinite reverse',
+        }}
       />
 
       {/* Star grid fades out toward the text so the headline stays easy to read. */}
-      <svg
-        className="absolute inset-0 size-full text-white opacity-[0.07] [mask-image:linear-gradient(to_left,black,transparent_75%)]"
-      >
+      <svg className="absolute inset-0 size-full text-white opacity-[0.07] [mask-image:linear-gradient(to_left,black,transparent_75%)]">
         <defs>
           <pattern id={`${id}-stars`} width="72" height="72" patternUnits="userSpaceOnUse">
             <path d={STAR_PATH} fill="currentColor" transform="translate(26 26) scale(0.2)" />
@@ -31,7 +32,12 @@ export function HeroBackdrop() {
 
       <svg className="absolute inset-0 size-full opacity-[0.12] mix-blend-overlay">
         <filter id={`${id}-grain`}>
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.85"
+            numOctaves="2"
+            stitchTiles="stitch"
+          />
         </filter>
         <rect width="100%" height="100%" filter={`url(#${id}-grain)`} />
       </svg>

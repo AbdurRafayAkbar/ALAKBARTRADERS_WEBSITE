@@ -19,16 +19,24 @@ export default function CartPage() {
 
   return (
     <Container className="py-10 sm:py-14">
-      <h1 className="animate-page-in font-display text-3xl font-bold sm:text-4xl">Your <span className="text-duo">cart</span></h1>
+      <h1 className="animate-page-in font-display text-3xl font-bold sm:text-4xl">
+        Your <span className="text-duo">cart</span>
+      </h1>
 
       {isPending && <LoadingBlock label="Loading cart" />}
-      {isError && <div className="mt-8"><ErrorBlock onRetry={() => refetch()} /></div>}
+      {isError && (
+        <div className="mt-8">
+          <ErrorBlock onRetry={() => refetch()} />
+        </div>
+      )}
 
       {cart?.items.length === 0 && (
         <div className="mt-8">
           <MessageBlock title="Your cart is empty">
-            <Link to="/shop/" className="link-grow font-semibold text-primary-900">Browse products</Link> and add the
-            pack sizes you need.
+            <Link to="/shop/" className="link-grow font-semibold text-primary-900">
+              Browse products
+            </Link>{' '}
+            and add the pack sizes you need.
           </MessageBlock>
         </div>
       )}
@@ -52,10 +60,17 @@ export default function CartPage() {
                     {line.variant_label}, {formatPrice(line.unit_price)} each
                   </p>
                 </div>
-                <span key={line.line_total} className="animate-pop font-narrow text-right text-xl font-bold tabular-nums sm:order-last sm:w-28">
+                <span
+                  key={line.line_total}
+                  className="animate-pop font-narrow text-right text-xl font-bold tabular-nums sm:order-last sm:w-28"
+                >
                   {formatPrice(line.line_total)}
                 </span>
-                <div className="flex w-fit items-center rounded-full border border-secondary" role="group" aria-label={`Quantity of ${line.product_name}`}>
+                <div
+                  className="flex w-fit items-center rounded-full border border-secondary"
+                  role="group"
+                  aria-label={`Quantity of ${line.product_name}`}
+                >
                   <button
                     type="button"
                     className={stepClass}
@@ -65,7 +80,12 @@ export default function CartPage() {
                   >
                     −
                   </button>
-                  <span key={line.quantity} className="animate-pop w-8 text-center font-semibold tabular-nums">{line.quantity}</span>
+                  <span
+                    key={line.quantity}
+                    className="animate-pop w-8 text-center font-semibold tabular-nums"
+                  >
+                    {line.quantity}
+                  </span>
                   <button
                     type="button"
                     className={stepClass}
@@ -91,7 +111,9 @@ export default function CartPage() {
             <h2 className="font-display text-xl font-bold">Order summary</h2>
             <dl className="mt-4 grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2">
               <dt>Subtotal</dt>
-              <dd className="text-right font-narrow text-xl font-bold tabular-nums">{formatPrice(cart.subtotal)}</dd>
+              <dd className="text-right font-narrow text-xl font-bold tabular-nums">
+                {formatPrice(cart.subtotal)}
+              </dd>
               <dt className="text-muted">Delivery</dt>
               <dd className="text-right text-muted">Set by your area</dd>
             </dl>
@@ -101,10 +123,18 @@ export default function CartPage() {
               </p>
             )}
             {/* Checkout arrives with the backend (Phase 5). */}
-            <ButtonLink to="/cart/" variant="primary" className="mt-6 w-full" aria-disabled onClick={(e) => e.preventDefault()}>
+            <ButtonLink
+              to="/cart/"
+              variant="primary"
+              className="mt-6 w-full"
+              aria-disabled
+              onClick={(e) => e.preventDefault()}
+            >
               Checkout opens soon
             </ButtonLink>
-            <p className="mt-3 text-sm text-muted">Cash on delivery. We call to confirm before sending.</p>
+            <p className="mt-3 text-sm text-muted">
+              Cash on delivery. We call to confirm before sending.
+            </p>
           </aside>
         </div>
       )}

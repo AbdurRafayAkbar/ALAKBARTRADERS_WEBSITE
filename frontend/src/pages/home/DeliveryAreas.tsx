@@ -13,10 +13,13 @@ export function DeliveryAreas() {
             Where <span className="text-duo">we deliver</span>
           </h2>
           <p className="mt-4 max-w-md text-lg text-ink/80">
-            Our own riders cover {site.city} and nearby villages. The fee depends on your area and is shown before you
-            place the order.
+            Our own riders cover {site.city} and nearby villages. The fee depends on your area and
+            is shown before you place the order.
           </p>
-          <Link to="/delivery-areas/" className="link-grow mt-6 inline-block font-semibold text-primary-900">
+          <Link
+            to="/delivery-areas/"
+            className="link-grow mt-6 inline-block font-semibold text-primary-900"
+          >
             Delivery times and rules
           </Link>
         </Reveal>

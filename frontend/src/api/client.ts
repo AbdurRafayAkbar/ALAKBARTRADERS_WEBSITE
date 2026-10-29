@@ -28,7 +28,12 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
   if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
   if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) headers.set('X-CSRFToken', csrfToken())
 
-  const response = await fetch(BASE + path, { ...init, method, headers, credentials: 'same-origin' })
+  const response = await fetch(BASE + path, {
+    ...init,
+    method,
+    headers,
+    credentials: 'same-origin',
+  })
   if (response.status === 204) return undefined as T
 
   const body = await response.json().catch(() => null)

@@ -14,14 +14,24 @@ const variants: Record<Variant, string> = {
   ghost: 'text-primary-900 underline-offset-4 hover:underline',
 }
 
-export const buttonClass = (variant: Variant = 'outline', extra = '') => `${base} ${variants[variant]} ${extra}`
+export const buttonClass = (variant: Variant = 'outline', extra = '') =>
+  `${base} ${variants[variant]} ${extra}`
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }
 
-export function Button({ variant = 'outline', className = '', type = 'button', ...props }: ButtonProps) {
+export function Button({
+  variant = 'outline',
+  className = '',
+  type = 'button',
+  ...props
+}: ButtonProps) {
   return <button type={type} className={buttonClass(variant, className)} {...props} />
 }
 
-export function ButtonLink({ variant = 'outline', className = '', ...props }: LinkProps & { variant?: Variant }) {
+export function ButtonLink({
+  variant = 'outline',
+  className = '',
+  ...props
+}: LinkProps & { variant?: Variant }) {
   return <Link className={buttonClass(variant, className)} {...props} />
 }

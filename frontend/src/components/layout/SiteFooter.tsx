@@ -21,26 +21,50 @@ export function SiteFooter() {
         <div className="lg:col-span-2">
           <p className="font-display text-xl font-bold text-white">{site.name}</p>
           <p className="mt-3 max-w-sm">
-            Family shop in {site.city} selling rice, dry fruits and fresh milk cream. Delivered by our own riders, paid in
-            cash at your door.
+            Family shop in {site.city} selling rice, dry fruits and fresh milk cream. Delivered by
+            our own riders, paid in cash at your door.
           </p>
         </div>
 
         <div>
           <p className="font-semibold text-white">Shop</p>
           <ul className="mt-3 grid gap-2">
-            <li><Link to="/c/rice/" className="link-wipe">Rice</Link></li>
-            <li><Link to="/c/dry-fruits/" className="link-wipe">Dry fruits</Link></li>
-            <li><Link to="/c/milk-cream/" className="link-wipe">Milk cream</Link></li>
-            <li><Link to="/delivery-areas/" className="link-wipe">Delivery areas and fees</Link></li>
+            <li>
+              <Link to="/c/rice/" className="link-wipe">
+                Rice
+              </Link>
+            </li>
+            <li>
+              <Link to="/c/dry-fruits/" className="link-wipe">
+                Dry fruits
+              </Link>
+            </li>
+            <li>
+              <Link to="/c/milk-cream/" className="link-wipe">
+                Milk cream
+              </Link>
+            </li>
+            <li>
+              <Link to="/delivery-areas/" className="link-wipe">
+                Delivery areas and fees
+              </Link>
+            </li>
           </ul>
         </div>
 
         <div>
           <p className="font-semibold text-white">Contact</p>
           <ul className="mt-3 grid gap-2">
-            <li><a href={`tel:${site.phone}`} className="link-wipe">{site.phone}</a></li>
-            <li><a href={whatsappLink()} className="link-wipe" target="_blank" rel="noreferrer">WhatsApp us</a></li>
+            <li>
+              <a href={`tel:${site.phone}`} className="link-wipe">
+                {site.phone}
+              </a>
+            </li>
+            <li>
+              <a href={whatsappLink()} className="link-wipe" target="_blank" rel="noreferrer">
+                WhatsApp us
+              </a>
+            </li>
             <li>{site.address}</li>
             <li>{site.hours}</li>
           </ul>

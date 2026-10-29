@@ -22,7 +22,8 @@ export default function ShopPage({ mode }: { mode: 'all' | 'category' | 'search'
     q: q || undefined,
   })
 
-  const title = mode === 'search' ? (q ? `Results for "${q}"` : 'Search') : (category?.name ?? 'All products')
+  const title =
+    mode === 'search' ? (q ? `Results for "${q}"` : 'Search') : (category?.name ?? 'All products')
   useDocumentTitle(title)
 
   if (mode === 'category' && categories && !category) return <NotFoundPage />

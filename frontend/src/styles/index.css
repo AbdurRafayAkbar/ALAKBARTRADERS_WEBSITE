@@ -322,7 +322,11 @@
 /* SplitWords colours each highlighted word one step along the palette's
    spark pair (--t from 0 to 1), so the gradient survives the word animation. */
 .text-spark {
-  color: color-mix(in oklab, var(--color-spark-to) calc(var(--t, 0) * 100%), var(--color-spark-from));
+  color: color-mix(
+    in oklab,
+    var(--color-spark-to) calc(var(--t, 0) * 100%),
+    var(--color-spark-from)
+  );
 }
 
 .word-mask {

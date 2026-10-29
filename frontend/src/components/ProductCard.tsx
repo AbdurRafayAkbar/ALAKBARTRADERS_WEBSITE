@@ -48,7 +48,9 @@ export function ProductCard({ product }: { product: Product }) {
               <label
                 key={v.id}
                 className={`cursor-pointer rounded-md border px-3 py-1.5 text-sm font-medium transition-colors has-checked:border-primary-900 has-checked:bg-primary-900 has-checked:text-white has-focus-visible:outline-3 has-focus-visible:outline-accent-700 ${
-                  out ? 'cursor-not-allowed border-secondary/50 text-muted line-through' : 'border-secondary hover:border-primary-900'
+                  out
+                    ? 'cursor-not-allowed border-secondary/50 text-muted line-through'
+                    : 'border-secondary hover:border-primary-900'
                 }`}
               >
                 <input
@@ -71,7 +73,10 @@ export function ProductCard({ product }: { product: Product }) {
         {variant && (
           <p className="leading-tight">
             {/* Keyed by variant so the price pops when the pack size changes. */}
-            <span key={variant.id} className="animate-pop inline-block font-narrow text-2xl font-bold tabular-nums">
+            <span
+              key={variant.id}
+              className="animate-pop inline-block font-narrow text-2xl font-bold tabular-nums"
+            >
               {formatPrice(variant.price)}
             </span>
             {variant.compare_at_price && (

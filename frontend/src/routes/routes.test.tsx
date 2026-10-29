@@ -21,9 +21,16 @@ beforeEach(() => resetMockCart())
 describe('home page', () => {
   it('shows the hero and the shop CTA', async () => {
     renderAt('/')
-    expect(screen.getByRole('heading', { level: 1, name: /ready for your table/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Shop all products' })).toHaveAttribute('href', '/shop/')
-    expect((await screen.findAllByRole('link', { name: /Super Kernel Basmati/i })).length).toBeGreaterThan(0)
+    expect(
+      screen.getByRole('heading', { level: 1, name: /ready for your table/i }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Shop all products' })).toHaveAttribute(
+      'href',
+      '/shop/',
+    )
+    expect(
+      (await screen.findAllByRole('link', { name: /Super Kernel Basmati/i })).length,
+    ).toBeGreaterThan(0)
   })
 })
 
@@ -42,6 +49,8 @@ describe('product page', () => {
 
   it('shows not found for an unknown product', async () => {
     renderAt('/p/no-such-thing/')
-    expect(await screen.findByRole('heading', { name: 'This page does not exist' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { name: 'This page does not exist' }),
+    ).toBeInTheDocument()
   })
 })

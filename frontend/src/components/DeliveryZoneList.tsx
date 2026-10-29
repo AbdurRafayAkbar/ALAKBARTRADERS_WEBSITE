@@ -30,7 +30,9 @@ export function DeliveryZoneList() {
                 {zone.name}
               </span>
               {!zone.cream_allowed && (
-                <span className="text-sm text-muted">Milk cream not delivered here, it would not stay cold.</span>
+                <span className="text-sm text-muted">
+                  Milk cream not delivered here, it would not stay cold.
+                </span>
               )}
             </span>
             <span className="font-narrow text-xl font-bold tabular-nums transition-colors group-hover:text-primary-900">

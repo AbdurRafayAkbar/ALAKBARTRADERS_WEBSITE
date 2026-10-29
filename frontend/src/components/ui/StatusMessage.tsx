@@ -5,7 +5,10 @@ import type { ReactNode } from 'react'
 export function LoadingBlock({ label = 'Loading' }: { label?: string }) {
   return (
     <div role="status" className="flex items-center gap-3 py-10 text-muted">
-      <span className="size-4 animate-spin rounded-full border-2 border-primary border-t-primary-900" aria-hidden />
+      <span
+        className="size-4 animate-spin rounded-full border-2 border-primary border-t-primary-900"
+        aria-hidden
+      />
       {label}…
     </div>
   )
@@ -26,7 +29,11 @@ export function ErrorBlock({ onRetry }: { onRetry?: () => void }) {
       <p className="font-semibold text-danger">This section did not load.</p>
       <p className="mt-1 text-muted">Check your internet connection and try again.</p>
       {onRetry && (
-        <button type="button" onClick={onRetry} className="link-grow mt-3 font-semibold text-primary-900">
+        <button
+          type="button"
+          onClick={onRetry}
+          className="link-grow mt-3 font-semibold text-primary-900"
+        >
           Try again
         </button>
       )}

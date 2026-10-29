@@ -8,7 +8,9 @@ export function PriceTicker() {
   const { data: products } = useProducts({ featured: true })
   const items = (products ?? []).flatMap((product) => {
     const variant = product.variants[0]
-    return variant ? [{ key: product.slug, name: product.name, label: variant.label, price: variant.price }] : []
+    return variant
+      ? [{ key: product.slug, name: product.name, label: variant.label, price: variant.price }]
+      : []
   })
   if (items.length === 0) return null
 
@@ -21,12 +23,17 @@ export function PriceTicker() {
         </svg>
         <span className="font-semibold">{item.name}</span>
         <span className="text-primary-100">{item.label}</span>
-        <span className="font-narrow text-lg font-bold tabular-nums text-accent">{formatPrice(item.price)}</span>
+        <span className="font-narrow text-lg font-bold tabular-nums text-accent">
+          {formatPrice(item.price)}
+        </span>
       </span>
     ))
 
   return (
-    <div aria-hidden className="marquee overflow-hidden border-y border-white/10 bg-primary-900 py-3 text-white">
+    <div
+      aria-hidden
+      className="marquee overflow-hidden border-y border-white/10 bg-primary-900 py-3 text-white"
+    >
       <div className="marquee-track flex w-max">
         {run(0)}
         {run(1)}

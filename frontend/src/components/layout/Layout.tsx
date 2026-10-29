@@ -47,7 +47,10 @@ export function Layout() {
   }
 
   return (
-    <div data-palette={preview ?? pagePalette} className="grain relative isolate flex min-h-dvh flex-col bg-surface text-ink">
+    <div
+      data-palette={preview ?? pagePalette}
+      className="grain relative isolate flex min-h-dvh flex-col bg-surface text-ink"
+    >
       <a
         href="#main"
         className="sr-only z-50 bg-card px-4 py-2 font-semibold focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
