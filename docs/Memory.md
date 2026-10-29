@@ -66,10 +66,15 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 ## 4. Current position
 
 - **Phase:** 1 — Frontend first (backend next)
-- **Task:** T1.8 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
-- **Step:** CI runs backend and frontend jobs. Next backend task is T2.1 (custom User model).
+- **Task:** T2.1 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
+- **Step:** Custom User model exists and the dev database is migrated. Next backend task is T2.2 (signup, login, logout and password reset).
 
 ## 5. Last completed step
+
+- 2026-10-30: T2.1 custom User model (`apps/accounts`).
+  - Users log in with email, not a username; email is unique ignoring letter case; optional phone field.
+  - `AUTH_USER_MODEL = "accounts.User"`; first `migrate` on the dev database done.
+  - Admin pages for users. Checks: pytest (45, 11 of them for accounts), ruff check and ruff format pass.
 
 - 2026-10-30: T1.8 frontend tooling in CI.
   - Prettier config and scripts; codebase formatted. Linter stays oxlint.
@@ -114,4 +119,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Next task: T2.1 custom User model (the first `migrate` on the dev database happens there). Owner runs `npm run dev` in `frontend/`, reviews the pages, picks one palette (then all routes use it and the others are deleted), and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
+Next task: T2.2 signup, login, logout and password reset (customers can still order as guests). Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner runs `npm run dev` in `frontend/`, reviews the pages, picks one palette (then all routes use it and the others are deleted), and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
