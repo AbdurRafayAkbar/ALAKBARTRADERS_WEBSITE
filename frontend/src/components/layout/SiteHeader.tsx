@@ -40,7 +40,9 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className={`flex h-16 items-center gap-2 sm:h-[4.5rem] sm:gap-4 md:grid md:grid-cols-[1fr_auto_1fr] ${edge}`}>
+      <div
+        className={`flex h-16 items-center gap-2 sm:h-[4.5rem] sm:gap-4 md:grid md:grid-cols-[1fr_auto_1fr] ${edge}`}
+      >
         {/* On phones the logo gives up width first, so the buttons always fit. */}
         <Link to="/" className="group min-w-0 justify-self-start" aria-label={`${site.name} home`}>
           <img
@@ -70,7 +72,14 @@ export function SiteHeader() {
             className="group grid size-11 place-items-center rounded-full transition-colors hover:bg-primary-50"
             aria-label="Search products"
           >
-            <svg viewBox="0 0 24 24" className="size-6 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              className="size-6 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden
+            >
               <circle cx="11" cy="11" r="7" />
               <path d="m20 20-3.5-3.5" strokeLinecap="round" />
             </svg>
@@ -80,7 +89,14 @@ export function SiteHeader() {
             className="btn-fill flex h-10 items-center gap-1.5 rounded-full border-2 border-primary-900 px-2.5 font-semibold sm:h-11 sm:gap-2 sm:px-4 text-primary-900"
           >
             {/* Small phones show a bag icon; "Cart" returns once there is room. */}
-            <svg viewBox="0 0 24 24" className="size-5 min-[25rem]:hidden" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              className="size-5 min-[25rem]:hidden"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden
+            >
               <path d="M5 8h14l-1 12H6L5 8Z" strokeLinejoin="round" />
               <path d="M9 8V6a3 3 0 0 1 6 0v2" strokeLinecap="round" />
             </svg>
@@ -103,7 +119,14 @@ export function SiteHeader() {
             onClick={() => setOpenOn(open ? null : location.pathname)}
           >
             <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
-            <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              className="size-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden
+            >
               {open ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
             </svg>
           </button>
@@ -111,7 +134,11 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <nav id="mobile-menu" aria-label="Main" className="animate-page-in border-t border-secondary/40 bg-card md:hidden">
+        <nav
+          id="mobile-menu"
+          aria-label="Main"
+          className="animate-page-in border-t border-secondary/40 bg-card md:hidden"
+        >
           <div className={`py-3 ${edge}`}>
             <ul className="grid gap-1">
               {nav.map((item) => (

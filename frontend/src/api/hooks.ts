@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { addCartItem, fetchCart, updateCartItem } from './cart'
-import { fetchCategories, fetchDeliveryInfo, fetchProduct, fetchProducts, type ProductFilters } from './catalog'
+import {
+  fetchCategories,
+  fetchDeliveryInfo,
+  fetchProduct,
+  fetchProducts,
+  type ProductFilters,
+} from './catalog'
 
 // Components use these hooks, never fetch directly (rules.md §3.1).
 
@@ -12,7 +18,8 @@ export const queryKeys = {
   cart: ['cart'] as const,
 }
 
-export const useCategories = () => useQuery({ queryKey: queryKeys.categories, queryFn: fetchCategories })
+export const useCategories = () =>
+  useQuery({ queryKey: queryKeys.categories, queryFn: fetchCategories })
 
 export const useProducts = (filters: ProductFilters = {}) =>
   useQuery({ queryKey: queryKeys.products(filters), queryFn: () => fetchProducts(filters) })
@@ -20,7 +27,8 @@ export const useProducts = (filters: ProductFilters = {}) =>
 export const useProduct = (slug: string) =>
   useQuery({ queryKey: queryKeys.product(slug), queryFn: () => fetchProduct(slug) })
 
-export const useDeliveryInfo = () => useQuery({ queryKey: queryKeys.delivery, queryFn: fetchDeliveryInfo })
+export const useDeliveryInfo = () =>
+  useQuery({ queryKey: queryKeys.delivery, queryFn: fetchDeliveryInfo })
 
 export const useCart = () => useQuery({ queryKey: queryKeys.cart, queryFn: fetchCart })
 
@@ -36,7 +44,8 @@ export function useAddToCart() {
 export function useUpdateCartItem() {
   const client = useQueryClient()
   return useMutation({
-    mutationFn: ({ lineId, quantity }: { lineId: number; quantity: number }) => updateCartItem(lineId, quantity),
+    mutationFn: ({ lineId, quantity }: { lineId: number; quantity: number }) =>
+      updateCartItem(lineId, quantity),
     onSuccess: (cart) => client.setQueryData(queryKeys.cart, cart),
   })
 }

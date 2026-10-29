@@ -28,14 +28,18 @@ export function Hero() {
           </p>
           {/* The headline says the food is fresh; the line below says what it is. */}
           <h1 className="mt-6 font-display text-[clamp(2rem,10vw,3rem)] leading-[1.02] font-extrabold tracking-tight text-balance sm:text-6xl lg:text-7xl">
-            <SplitWords text="Fresh from the farm. Ready for your table." delay={150} highlightFrom={4} />
+            <SplitWords
+              text="Fresh from the farm. Ready for your table."
+              delay={150}
+              highlightFrom={4}
+            />
           </h1>
           <p
             className="mt-6 max-w-xl text-primary-100 sm:mt-7 sm:text-lg"
             style={{ animation: 'fade-up 0.9s var(--ease-out-expo) 0.9s both' }}
           >
-            Basmati rice, dry fruits and fresh milk cream, delivered in {site.city}. Order online and pay cash when it
-            arrives.
+            Basmati rice, dry fruits and fresh milk cream, delivered in {site.city}. Order online
+            and pay cash when it arrives.
           </p>
           <div
             className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 sm:mt-9"
@@ -58,7 +62,9 @@ export function Hero() {
                 <span className="block text-sm font-semibold transition-colors group-hover:text-accent sm:text-base">
                   {item.title}
                 </span>
-                <span className="mt-0.5 block text-xs text-primary-100 sm:text-sm">{item.detail}</span>
+                <span className="mt-0.5 block text-xs text-primary-100 sm:text-sm">
+                  {item.detail}
+                </span>
               </li>
             ))}
           </ul>

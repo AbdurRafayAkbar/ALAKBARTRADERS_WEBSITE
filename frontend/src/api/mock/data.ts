@@ -28,7 +28,12 @@ export const categories: Category[] = [
 ]
 
 let nextId = 1
-function v(label: string, price: string, compare: string | null = null, low = false): ProductVariant {
+function v(
+  label: string,
+  price: string,
+  compare: string | null = null,
+  low = false,
+): ProductVariant {
   const id = nextId++
   return {
     id,
@@ -45,16 +50,23 @@ export const products: Product[] = [
     slug: 'super-kernel-basmati',
     name: 'Super Kernel Basmati',
     category: 'rice',
-    description: 'Long grain, aged basmati. Cooks fluffy and separate. Our best seller for biryani and pulao.',
+    description:
+      'Long grain, aged basmati. Cooks fluffy and separate. Our best seller for biryani and pulao.',
     is_perishable: false,
     is_featured: true,
-    variants: [v('1 kg', '450.00'), v('5 kg', '2150.00', '2250.00'), v('10 kg', '4200.00'), v('25 kg', '10250.00')],
+    variants: [
+      v('1 kg', '450.00'),
+      v('5 kg', '2150.00', '2250.00'),
+      v('10 kg', '4200.00'),
+      v('25 kg', '10250.00'),
+    ],
   },
   {
     slug: 'sella-basmati',
     name: 'Sella Basmati',
     category: 'rice',
-    description: 'Parboiled golden sella. Firm grains that hold their shape in daigs and large cooking.',
+    description:
+      'Parboiled golden sella. Firm grains that hold their shape in daigs and large cooking.',
     is_perishable: false,
     is_featured: true,
     variants: [v('5 kg', '1950.00'), v('10 kg', '3850.00'), v('25 kg', '9400.00')],
@@ -117,7 +129,8 @@ export const products: Product[] = [
     slug: 'fresh-milk-cream',
     name: 'Fresh Milk Cream',
     category: 'milk-cream',
-    description: 'Thick dairy cream for tea, desserts and cooking. Keep refrigerated and use by the date on the tub.',
+    description:
+      'Thick dairy cream for tea, desserts and cooking. Keep refrigerated and use by the date on the tub.',
     is_perishable: true,
     is_featured: true,
     variants: [v('250 g', '380.00'), v('500 g', '740.00')],

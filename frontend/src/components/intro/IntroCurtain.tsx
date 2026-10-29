@@ -29,7 +29,9 @@ const grains = Array.from({ length: 28 }, (_, i) => ({
 // the name rises letter by letter, then the curtain splits to show the page.
 // The page underneath stays in the accessibility tree the whole time.
 export function IntroCurtain() {
-  const [phase, setPhase] = useState<'play' | 'open' | 'done'>(() => (shouldPlay() ? 'play' : 'done'))
+  const [phase, setPhase] = useState<'play' | 'open' | 'done'>(() =>
+    shouldPlay() ? 'play' : 'done',
+  )
 
   useEffect(() => {
     if (phase === 'done') {
@@ -109,15 +111,17 @@ export function IntroCurtain() {
                 <span key={word}>
                   {w > 0 && ' '}
                   <span className="inline-block whitespace-nowrap">
-                  {[...word].map((ch, i) => (
-                    <span
-                      key={i}
-                      className="inline-block"
-                      style={{ animation: `letter-in 0.7s cubic-bezier(0.16,1,0.3,1) ${900 + (w * 8 + i) * 45}ms both` }}
-                    >
-                      {ch}
-                    </span>
-                  ))}
+                    {[...word].map((ch, i) => (
+                      <span
+                        key={i}
+                        className="inline-block"
+                        style={{
+                          animation: `letter-in 0.7s cubic-bezier(0.16,1,0.3,1) ${900 + (w * 8 + i) * 45}ms both`,
+                        }}
+                      >
+                        {ch}
+                      </span>
+                    ))}
                   </span>
                 </span>
               ))}

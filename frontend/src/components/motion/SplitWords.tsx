@@ -5,7 +5,15 @@ import type { CSSProperties } from 'react'
 // the animated words are hidden from them, because some name calculations
 // drop the spaces between separate word spans.
 // Words from index `highlightFrom` on take the palette's spark colours.
-export function SplitWords({ text, delay = 0, highlightFrom }: { text: string; delay?: number; highlightFrom?: number }) {
+export function SplitWords({
+  text,
+  delay = 0,
+  highlightFrom,
+}: {
+  text: string
+  delay?: number
+  highlightFrom?: number
+}) {
   const words = text.split(' ')
   const lit = highlightFrom ?? words.length
   const steps = Math.max(words.length - 1 - lit, 1)
@@ -18,7 +26,13 @@ export function SplitWords({ text, delay = 0, highlightFrom }: { text: string; d
             <span className="word-mask">
               <span
                 className={i >= lit ? 'text-spark' : undefined}
-                style={{ '--i': i, '--d': `${delay}ms`, '--t': i >= lit ? (i - lit) / steps : undefined } as CSSProperties}
+                style={
+                  {
+                    '--i': i,
+                    '--d': `${delay}ms`,
+                    '--t': i >= lit ? (i - lit) / steps : undefined,
+                  } as CSSProperties
+                }
               >
                 {word}
               </span>

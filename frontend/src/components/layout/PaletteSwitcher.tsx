@@ -63,7 +63,9 @@ export function PaletteSwitcher({
               'conic-gradient(var(--color-primary-900) 0 33%, var(--color-accent) 0 66%, var(--color-primary) 0)',
           }}
         />
-        <span aria-hidden className="hidden sm:inline">Palette</span>
+        <span aria-hidden className="hidden sm:inline">
+          Palette
+        </span>
       </button>
     </div>
   )

@@ -18,8 +18,18 @@ export default function ProductPage() {
   const addToCart = useAddToCart()
   useDocumentTitle(product?.name ?? 'Product')
 
-  if (isPending) return <Container><LoadingBlock label="Loading product" /></Container>
-  if (isError) return <Container className="py-10"><ErrorBlock onRetry={() => refetch()} /></Container>
+  if (isPending)
+    return (
+      <Container>
+        <LoadingBlock label="Loading product" />
+      </Container>
+    )
+  if (isError)
+    return (
+      <Container className="py-10">
+        <ErrorBlock onRetry={() => refetch()} />
+      </Container>
+    )
   if (!product) return <NotFoundPage />
 
   const firstSellable = product.variants.find((v) => v.stock_state !== 'out_of_stock')
@@ -28,9 +38,13 @@ export default function ProductPage() {
   return (
     <Container className="py-10 sm:py-14">
       <nav aria-label="Breadcrumb" className="text-sm text-muted">
-        <Link to="/shop/" className="link-grow">Shop</Link>
+        <Link to="/shop/" className="link-grow">
+          Shop
+        </Link>
         <span aria-hidden> / </span>
-        <Link to={`/c/${product.category}/`} className="link-grow">{product.category.replace('-', ' ')}</Link>
+        <Link to={`/c/${product.category}/`} className="link-grow">
+          {product.category.replace('-', ' ')}
+        </Link>
       </nav>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-10">
@@ -39,7 +53,12 @@ export default function ProductPage() {
           {...pointerGlow(6)}
           className="spotlight tilt relative grid aspect-[4/3] place-items-center overflow-hidden sm:aspect-square rounded-card bg-primary-100 text-primary-900"
         >
-          <svg aria-hidden viewBox="0 0 100 100" className="absolute size-[85%] opacity-15" style={{ animation: 'spin-slow 80s linear infinite' }}>
+          <svg
+            aria-hidden
+            viewBox="0 0 100 100"
+            className="absolute size-[85%] opacity-15"
+            style={{ animation: 'spin-slow 80s linear infinite' }}
+          >
             <path d={STAR_PATH} fill="var(--color-accent)" />
           </svg>
           {/* Two layers: both effects use transform, so each needs its own element. */}
@@ -68,7 +87,9 @@ export default function ProductPage() {
                   <label
                     key={v.id}
                     className={`flex cursor-pointer items-center justify-between rounded-lg border-2 bg-card px-4 py-3 transition-[border-color,background-color,transform] has-checked:scale-[1.02] has-checked:border-primary-900 has-checked:bg-primary-50 has-focus-visible:outline-3 has-focus-visible:outline-accent-700 ${
-                      out ? 'cursor-not-allowed border-secondary/40 text-muted' : 'border-secondary/60 hover:-translate-y-0.5 hover:border-primary'
+                      out
+                        ? 'cursor-not-allowed border-secondary/40 text-muted'
+                        : 'border-secondary/60 hover:-translate-y-0.5 hover:border-primary'
                     }`}
                   >
                     <input
@@ -79,8 +100,13 @@ export default function ProductPage() {
                       disabled={out}
                       onChange={() => setVariantId(v.id)}
                     />
-                    <span className="font-medium">{v.label}{out && ' (sold out)'}</span>
-                    <span className="font-narrow text-xl font-bold tabular-nums">{formatPrice(v.price)}</span>
+                    <span className="font-medium">
+                      {v.label}
+                      {out && ' (sold out)'}
+                    </span>
+                    <span className="font-narrow text-xl font-bold tabular-nums">
+                      {formatPrice(v.price)}
+                    </span>
                   </label>
                 )
               })}
@@ -102,14 +128,21 @@ export default function ProductPage() {
             </Button>
             {addToCart.isSuccess && (
               <p role="status" className="animate-pop font-medium text-primary-900">
-                Added to cart. <Link to="/cart/" className="link-grow">View cart</Link>
+                Added to cart.{' '}
+                <Link to="/cart/" className="link-grow">
+                  View cart
+                </Link>
               </p>
             )}
             {addToCart.isError && (
-              <p role="alert" className="font-medium text-danger">Could not add this item. Try again.</p>
+              <p role="alert" className="font-medium text-danger">
+                Could not add this item. Try again.
+              </p>
             )}
           </div>
-          <p className="mt-6 text-sm text-muted">Pay cash when the order arrives. We call to confirm first.</p>
+          <p className="mt-6 text-sm text-muted">
+            Pay cash when the order arrives. We call to confirm first.
+          </p>
           <ButtonLink to={`/c/${product.category}/`} variant="ghost" className="mt-4 px-0">
             More in this category
           </ButtonLink>

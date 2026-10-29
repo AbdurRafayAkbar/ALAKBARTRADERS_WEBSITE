@@ -1,7 +1,13 @@
 import type { CategorySlug } from '../api/types'
 
 // Simple line drawings so each category is recognisable before product photos exist.
-export function CategoryIcon({ slug, className = 'size-10' }: { slug: CategorySlug; className?: string }) {
+export function CategoryIcon({
+  slug,
+  className = 'size-10',
+}: {
+  slug: CategorySlug
+  className?: string
+}) {
   const common = {
     className,
     viewBox: '0 0 48 48',

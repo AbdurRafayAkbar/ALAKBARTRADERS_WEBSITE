@@ -35,7 +35,9 @@ export function RateBoard() {
           Loading rates…
         </p>
       )}
-      {isError && <p className="py-8 text-primary-100">Rates did not load. Refresh the page to try again.</p>}
+      {isError && (
+        <p className="py-8 text-primary-100">Rates did not load. Refresh the page to try again.</p>
+      )}
 
       {products && (
         <ul className="divide-y divide-white/10">
@@ -45,12 +47,17 @@ export function RateBoard() {
             return (
               <li key={product.slug}>
                 {/* Phones stack the pack label under the name and drop the dotted leader. */}
-                <Link to={`/p/${product.slug}/`} className="rate-row group flex items-center gap-3 py-3 sm:items-baseline sm:py-3.5">
+                <Link
+                  to={`/p/${product.slug}/`}
+                  className="rate-row group flex items-center gap-3 py-3 sm:items-baseline sm:py-3.5"
+                >
                   <span className="min-w-0 flex-1 sm:flex sm:flex-none sm:items-baseline sm:gap-3">
                     <span className="block font-medium text-white transition-colors group-hover:text-accent">
                       {product.name}
                     </span>
-                    <span className="block whitespace-nowrap text-sm text-primary-100">{variant.label}</span>
+                    <span className="block whitespace-nowrap text-sm text-primary-100">
+                      {variant.label}
+                    </span>
                   </span>
                   <span
                     aria-hidden
