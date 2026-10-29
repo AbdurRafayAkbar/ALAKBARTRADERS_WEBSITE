@@ -51,12 +51,13 @@
 - **Concepts:** linting vs formatting, pre-commit hooks, pytest fixtures.
 - **Done (2026-10-29):** Ruff and pytest config in `backend/pyproject.toml` (dev dependency group); `.pre-commit-config.yaml` at the repo root (Ruff lint + format on `backend/`, plus merge-conflict, large-file, private-key, YAML and TOML checks); `config/settings/test.py` used by pytest; `backend/tests/test_smoke.py` checks PostgreSQL and the admin login page. Install the hook once per clone: `cd backend && uv run pre-commit install`.
 
-### [ ] T1.4 Git + GitHub + CI
+### [x] T1.4 Git + GitHub + CI
 - **Description:** `.gitignore`, first commit and push to `origin`, branch protection on `main`, GitHub Actions running Ruff + pytest with a PostgreSQL service.
 - **Depends on:** T1.3
 - **Acceptance:** a pull request shows a green CI check.
 - **Mode:** 🤝
 - **Concepts:** CI, GitHub Actions services, branch protection, Conventional Commits.
+- **Done (2026-10-29):** `.github/workflows/ci.yml` runs the `backend` job (Ruff lint + format check, `manage.py check`, `makemigrations --check`, pytest) against a `postgres:17` service on every pull request and push to `main`. setup-uv is pinned to an exact version because it has no major-version tags. `main` is protected: changes go through a pull request, the `backend` check must pass on an up-to-date branch, and force pushes and deletion are blocked. The rules do not apply to admins, so the owner can still bypass them in an emergency.
 
 ### [ ] T1.5 `core` app + DRF setup
 - **Description:** `TimeStampedModel`, `SiteSettings` singleton; install DRF + `drf-spectacular`; `/api/v1/` root, `health/` endpoint, shared error format, session auth + CSRF endpoint.
