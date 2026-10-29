@@ -5,12 +5,25 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 
+from ..models import Address
+from ..validators import normalize_pk_mobile
+
 User = get_user_model()
 
 # One message for a wrong email and a wrong password, so the form does not tell
 # a stranger which email addresses have an account.
 LOGIN_FAILED = "Email or password is wrong."
 RESET_LINK_BAD = "This reset link is wrong or has expired. Ask for a new one."
+# Enough for home, work and family; stops a script filling the table.
+MAX_ADDRESSES = 10
+TOO_MANY_ADDRESSES = f"You can save up to {MAX_ADDRESSES} addresses. Delete one to add another."
+
+
+def _phone(value):
+    try:
+        return normalize_pk_mobile(value)
+    except DjangoValidationError as error:
+        raise serializers.ValidationError(error.messages) from error
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,6 +33,44 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "email", "first_name", "last_name", "phone"]
         read_only_fields = fields
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """Name and phone the customer can change. Email stays fixed: it is the login."""
+
+    class Meta:
+        model = User
+        fields = ["id", "email", "first_name", "last_name", "phone"]
+        read_only_fields = ["id", "email"]
+
+    def validate_phone(self, value):
+        return _phone(value) if value else value
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = [
+            "id",
+            "full_name",
+            "phone",
+            "house_number",
+            "block",
+            "colony",
+            "house_name",
+            "landmark",
+            "area",
+            "is_default",
+        ]
+
+    def validate_phone(self, value):
+        return _phone(value)
+
+    def validate(self, attrs):
+        user = self.context["request"].user
+        if self.instance is None and user.addresses.count() >= MAX_ADDRESSES:
+            raise serializers.ValidationError(TOO_MANY_ADDRESSES)
+        return attrs
 
 
 class SignupSerializer(serializers.Serializer):
@@ -33,6 +84,9 @@ class SignupSerializer(serializers.Serializer):
         if User.objects.filter(email__iexact=email).exists():
             raise serializers.ValidationError("An account with this email already exists.")
         return email
+
+    def validate_phone(self, value):
+        return _phone(value) if value else value
 
     def validate(self, attrs):
         # Built but not saved, so the "too similar to your email" check can run.
