@@ -36,7 +36,7 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-28 | Domain: owner will buy (register in own name, 2FA). Hosting decided at Phase 14 | Budget; no hosting cost during development |
 | 2026-10-28 | Git repo initialised on branch `main`, remote `origin` = github.com/AbdurRafayAkbar/ALAKBARTRADERS_WEBSITE | Owner request |
 | 2026-10-28 | Frontend: React (Vite + TypeScript) SPA + Django REST Framework API at `/api/v1/`, same-origin session auth + CSRF | Owner choice over the recommended templates + HTMX. Costs and SEO mitigation recorded in Architecture.md §2.1–2.2 |
-| 2026-10-28 | Brand palette: `#9CAF88` sage (main), `#A7A7A7` grey (secondary), `#CC5500` burnt orange (third), plus darker text-safe shades | Owner colours; shades added to pass WCAG AA (design.md §1.2) |
+| 2026-10-28 | Brand palette: `#9CAF88` sage (main), `#A7A7A7` grey (secondary), `#CC5500` burnt orange (third), plus darker text-safe shades | Owner colours; shades added to pass WCAG AA. **Superseded 2026-10-30** by the logo palette |
 | 2026-10-28 | Step 2 draft documents approved by the owner (now v0.2) | Owner approval |
 | 2026-10-28 | Q1: Django 5.2 LTS | Owner accepted the default; long support window |
 | 2026-10-28 | Q12: Vite SPA, Django fills meta tags, session auth + CSRF, TypeScript strict, TanStack Query + React Router + Tailwind v4 | Owner accepted the recommended defaults |
@@ -46,7 +46,7 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-29 | Font changed to Bricolage Grotesque (variable, self-hosted); `font-wide` renamed `font-display` | Owner asked for a different font. Same rules: one family, self-hosted |
 | 2026-10-29 | Hero background is CSS/SVG (`HeroBackdrop`); three.js removed | Owner asked to change it. Lighter on cheap phones, about 490 kB less JavaScript |
 | 2026-10-29 | Header spans the full window: logo left, nav centred, search and cart right. `Container` widened to 88rem | Owner said the nav should fill the screen, not sit in the middle |
-| 2026-10-28 | Logo (green `#035A3A` + gold `#CAA753`) is used as an image; the site keeps the owner palette | Owner said to try their palette first; revisit if the two clash |
+| 2026-10-28 | Logo (green `#035A3A` + gold `#CAA753`) is used as an image; the site keeps the owner palette | Owner said to try their palette first; revisit if the two clash. **Superseded 2026-10-30:** the site now uses the logo palette |
 | 2026-10-28 | Phone layout: swipe row for featured products, compact category rows, two-row cart lines, smaller section padding below `sm` | Owner said cards looked bad on phones |
 | 2026-10-28 | Frontend preview hosted on Cloudflare Pages (Git integration: root `frontend`, build `npm run build`, output `dist`). SPA fallback via `public/_redirects`. Backend hosting still decided at Phase 14 | Owner request. Free static hosting; mock data is bundled, so no API is needed yet |
 | 2026-10-29 | Hosting: one self-managed 1 GB VPS (RackNerd or IONOS VPS XS, about $2–3/month), bought at Phase 14. No Docker on the server: Nginx, Gunicorn and PostgreSQL run as systemd services with 2 GB swap. React is built on the PC and `dist/` is uploaded. Owner maintains the server. Replaces the earlier "Docker for deploy" plan | Owner budget is $2–3/month; 1 GB RAM cannot comfortably run Docker plus the stack |
@@ -54,6 +54,7 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-29 | `/shop/` (all products) is a page URL and stays | The frontend already links to it; changing page URLs later costs search ranking |
 | 2026-10-30 | Frontend linter stays **oxlint** (not ESLint), with Prettier for formatting; both run in CI | The Vite template already set up oxlint; it is much faster and covers the rules we need |
 | 2026-10-30 | Customers order without logging in (no Google/Gmail sign-in). Checkout address: house number (e.g. "House#999"), block/category (e.g. "CAT-V"), colony name, all required; the house name written outside the house is optional; landmark optional | Owner request. Matches how addresses are written in Chashma and lets riders find the house |
+| 2026-10-30 | Site palette is the logo's green `#035A3A` and gold `#CAA753` (Emerald) on every page. The other trial palettes, per-route palettes and the palette switcher are removed. Replaces the sage palette of 2026-10-28 (design.md §1.2) | Owner chose the logo theme after the per-page trial |
 | 2026-10-28 | Work is pushed to GitHub (`AbdurRafayAkbar/ALAKBARTRADERS_WEBSITE`, branch `main`) as small, separate commits | Owner wants each change easy to review or revert |
 
 ## 3. Open questions / pending decisions
@@ -61,15 +62,18 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Still open:
 - Q11: product photos (owner will share later). Logo received.
 - Real product names, prices, delivery zones, phone, address and FAQ answers. Placeholders are marked `TODO(owner)` in `frontend/src/api/mock/data.ts`, `frontend/src/config/site.ts` and `frontend/src/pages/home/Faq.tsx`.
-- Which palette wins the per-page trial (design.md §1.2a). The owner will choose after viewing the pages.
 
 ## 4. Current position
 
 - **Phase:** 1 — Frontend first (backend next)
-- **Task:** T2.2 done. T1.6 still `[~]` (waiting for the owner to pick a palette).
+- **Task:** T2.2 done. T1.6 done (owner chose the logo palette on 2026-10-30).
 - **Step:** Customers can sign up, log in, log out and reset a password from React. Guests can still order. Next backend task is T2.3 (addresses and profile).
 
 ## 5. Last completed step
+
+- 2026-10-30: Logo palette on every page.
+  - `@theme` in `frontend/src/styles/index.css` holds the Emerald values; other palettes, `config/palettes.ts` and `PaletteSwitcher` deleted.
+  - Checks: typecheck, tests (23), build pass. Lint shows only the existing warnings.
 
 - 2026-10-30: T2.2 signup, login, logout and password reset.
   - Session-auth API under `/api/v1/auth/` with CSRF checked on every POST; React fetches the CSRF cookie before the first POST.
@@ -126,4 +130,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Next task: T2.3 addresses and profile (address fields follow the guest address format). Try the flow: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:5173/accounts/signup/. Reset emails print in the runserver terminal. Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner runs `npm run dev` in `frontend/`, reviews the pages, picks one palette (then all routes use it and the others are deleted), and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
+Next task: T2.3 addresses and profile (address fields follow the guest address format). Try the flow: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:5173/accounts/signup/. Reset emails print in the runserver terminal. Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner picks one logo intro option (1–7) from the test page and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.

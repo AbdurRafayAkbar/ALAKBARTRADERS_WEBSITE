@@ -67,13 +67,13 @@
 - **Concepts:** abstract models, DRF request/response, serializers, exception handlers, OpenAPI.
 - **Done (2026-10-29):** `apps/core` holds `TimeStampedModel` and the `SiteSettings` singleton (one row, guarded by a database check constraint; admin opens the form directly and has no add or delete). The settings values are placeholders until the owner sets them in admin: free-shipping threshold and COD limit are empty (never free, no limit), cream expiry cut-off is 2 days, pending-order timeout is 24 hours. DRF and drf-spectacular are installed. `/api/v1/` lists the endpoints, `health/` checks the database (503 when it is down), and `auth/csrf/` sets the `csrftoken` cookie. Every error uses `{"code", "message", "fields"}` with dotted field names. API views need a logged-in user unless they opt out with `AllowAny`. `CsrfSessionAuthentication` checks CSRF on unsafe requests from anonymous users too, so guest checkout and login forms are protected. Only JSON is accepted and returned (the browsable API is dev only). The schema at `schema/` and Swagger at `schema/docs/` are open in dev and staff-only in prod.
 
-### [~] T1.6 React app scaffold
+### [x] T1.6 React app scaffold
 - **Description:** Vite + React + TypeScript in `frontend/`; Tailwind with brand tokens (design.md §1.2); React Router; TanStack Query; API client sending `X-CSRFToken`; Vite proxy `/api` to Django; layout shell (header, footer), placeholder home, 404 page.
 - **Depends on:** T1.5
 - **Acceptance:** `npm run dev` shows the home page in brand colours and reads `/api/v1/health/` through the proxy; `npm run build` passes.
 - **Mode:** 🤖
 - **Concepts:** Vite dev server vs build, SPA routing, components and props, proxy, CSRF with fetch.
-- **Progress (2026-10-28):** Done ahead of the backend, on mock data: Tailwind tokens, router, TanStack Query hooks, API client with `X-CSRFToken`, layout, home, shop, product, cart, delivery areas and 404 pages, tests. Redesign done: motion, CSS hero backdrop (three.js removed 2026-10-29), hover effects, per-page palette trial (design.md §1.2a–b). Left: owner picks one palette.
+- **Progress (2026-10-28):** Done ahead of the backend, on mock data: Tailwind tokens, router, TanStack Query hooks, API client with `X-CSRFToken`, layout, home, shop, product, cart, delivery areas and 404 pages, tests. Redesign done: motion, CSS hero backdrop (three.js removed 2026-10-29), hover effects, per-page palette trial (design.md §1.2a–b). Done 2026-10-30: owner chose the logo palette; every page uses it and the switcher is removed.
 - **Proxy check (2026-10-29):** `/api/v1/health/` and `/api/v1/auth/csrf/` work through the Vite proxy on :2004. The check found that every POST failed Django's CSRF origin check, because the proxy rewrites Host to `127.0.0.1:8000` while the browser sends `Origin: http://localhost:2004`. `dev.py` now trusts the Vite origins in `CSRF_TRUSTED_ORIGINS`; a POST with the token passes and one without is refused.
 
 ### [x] T1.7 Django serves the SPA shell

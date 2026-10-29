@@ -13,59 +13,45 @@
   Example: "Premium Basmati, aged 1 year. Long grains, rich aroma. Delivered in Chashma."
 - Avoid: hype ("BEST EVER!!!"), fake urgency, stock photos of people.
 
-### 1.2 Colour tokens (owner palette, decided 2026-10-28)
+### 1.2 Colour tokens (logo palette, decided 2026-10-30)
 
-Owner brand colours: **#9CAF88 sage (main)**, **#A7A7A7 grey (secondary)**, **#CC5500 burnt orange (third)**.
+The site uses the logo's own colours: **#035A3A green** and **#CAA753 gold**. The owner chose this on 2026-10-30 after the per-page palette trial (§1.2a). It replaces the first owner palette (sage `#9CAF88`, grey `#A7A7A7`, burnt orange `#CC5500`, decided 2026-10-28).
 
-**Contrast check (WCAG AA needs 4.5:1 for normal text, 3:1 for large/bold text and UI borders):**
+Tokens live in one place: the `@theme` block in `frontend/src/styles/index.css`. Components only use token names (`bg-primary-900`, `text-accent-700`), so changing a colour is a single edit.
 
-| Colour | On white | With dark text `#1F2421` on it | Verdict |
-|---|---|---|---|
-| Sage `#9CAF88` | 2.36 | 6.68 | Use as a **background with dark text**. Never as text colour on light backgrounds. |
-| Grey `#A7A7A7` | 2.41 | 6.55 | Decoration only: borders, dividers, disabled states. Never as text. |
-| Orange `#CC5500` | 4.31 | 3.65 | White text on it passes only for **large or bold** text (≥ 18.66px bold). |
-
-So each brand colour gets darker "text-safe" shades. The brand look stays; text stays readable.
+**Contrast check (WCAG AA needs 4.5:1 for normal text, 3:1 for large/bold text and UI borders). Page background is `surface` `#F5F9F6`:**
 
 | Token | Value | Contrast | Use |
 |---|---|---|---|
-| `--color-primary` | `#9CAF88` | dark text on it 6.68 | Header band, primary buttons (dark text), category tiles, selected pack size |
-| `--color-primary-700` | `#5D6951` | 5.83 on white | Links, icons, sage text on light backgrounds |
-| `--color-primary-900` | `#464E3D` | 8.69 on white | Footer background (white text), headings accent |
-| `--color-primary-50` | `#EEF2EA` | — | Light sage tint for info boxes, hover rows |
-| `--color-secondary` | `#A7A7A7` | 2.41 | Borders, dividers, disabled buttons, skeleton loaders |
-| `--color-muted` | `#6C6C6C` | 5.25 on white | Secondary text (sizes, "per kg", timestamps) |
-| `--color-accent` | `#CC5500` | white text 4.31 | **Main call to action** ("Add to cart", "Place order") with **bold text ≥ 18px**, badges, free-delivery progress bar |
-| `--color-accent-700` | `#B74C00` | 5.19 on white | Accent at normal text size: prices, "Only 3 left", small accent buttons |
-| `--color-bg` | `#FBF8F1` | — | Page background (rice cream) |
-| `--color-surface` | `#FFFFFF` | — | Cards |
-| `--color-text` | `#1F2421` | 15.9 on white | Body text |
-| `--color-danger` | `#B3261E` | 6.5 on white | Errors, "Out of stock", expiry alerts |
-| `--color-success` | `#2E7D32` | 5.1 on white | Success messages, "Delivered" |
-| `--color-cold` | `#2B6CB0` | 5.4 on white | "Keep refrigerated" badge on creams |
+| `--color-primary` | `#4F8A6E` | 3.81 on surface; ink on it 4.03 | Surfaces and large shapes only. Never small text on light backgrounds |
+| `--color-primary-50` | `#EDF5F0` | 7.49 on `primary-900` | Light tint for info boxes, hover rows; light text on dark green |
+| `--color-primary-100` | `#D4E7DC` | — | Slightly stronger tint |
+| `--color-primary-700` | `#0B6B47` | 6.16 on surface | Links, icons, green text on light backgrounds |
+| `--color-primary-900` | `#035A3A` | 7.82 on surface | Logo green: top bar, footer, dark panels (light text), strong text |
+| `--color-ink` | `#10241A` | 15.33 on surface | Body text |
+| `--color-secondary` | `#B6C6BC` | 1.68 | Borders and dividers only. Never text |
+| `--color-muted` | `#52665A` | 5.80 on surface | Secondary text (sizes, "per kg", timestamps) |
+| `--color-accent` | `#CAA753` | ink on it 7.11 | Logo gold: **main call to action** with dark `on-accent` text, badges |
+| `--color-accent-700` | `#7D5F17` | 5.61 on surface | Gold at normal text size, focus ring, accent hover |
+| `--color-on-accent` | `#10241A` | 7.11 on accent | Text on the gold fill |
+| `--color-surface` | `#F5F9F6` | — | Page background |
+| `--color-card` | `#FFFFFF` | — | Raised panels and cards |
+| `--color-glow` | `#CAA753` | — | Hover light and particles (decoration) |
+| `--color-spark-from` / `-to` | `#E9C46A` / `#A7E3C4` | — | Heading highlight on dark surfaces only |
+| `--color-danger` | `#B42318` | 6.19 on surface | Errors, "Out of stock" |
 
 **Usage rules**
-- One orange button per screen: the main action. Everything else uses sage or outline buttons. Orange loses meaning if it is everywhere.
-- Orange `#CC5500` and danger red `#B3261E` look close. Never show them side by side. Errors always also show an icon and text.
-- Sage buttons always use dark text `#1F2421`, never white (white on sage is 2.36, fails).
-- Grey `#A7A7A7` is never used for text. Use `--color-muted` instead.
-- Tokens live in one place (Tailwind theme in `frontend/src/styles/theme.css`). Changing a colour is a single edit.
+- One gold button per screen: the main action. Everything else uses green or outline buttons. Gold loses meaning if it is everywhere.
+- Gold buttons always use dark text (`on-accent`), never white (white on gold is 2.29, fails).
+- Gold `#CAA753` is never used for text on light backgrounds. Use `accent-700` instead.
+- `secondary` is never used for text. Use `muted` instead.
+- Light text only on `primary-900` (or darker). Errors always also show an icon and text.
 
-### 1.2a Palette trial: one palette per page (2026-10-28, owner to choose)
+### 1.2a Palette trial (2026-10-28, closed 2026-10-30)
 
-The owner asked for a different palette on every page so they can pick the best one. Each palette is a block of CSS variables under `[data-palette=name]` in `frontend/src/styles/index.css`. The layout sets `data-palette` from the current route, so components never name a palette; they only use tokens (`bg-primary`, `text-accent`, and so on). When the owner picks one, every route gets that palette and the others are deleted.
+The owner asked for a different palette on every page so they could pick the best one: Emerald (the logo's green and gold), Sage (the first owner palette), Saffron, Pistachio, Indus and Date palm, with a switcher to preview any palette on any page.
 
-| Palette | Page | `primary-900` | `accent` | `primary` | `surface` | Idea |
-|---|---|---|---|---|---|---|
-| Emerald | Home `/` | `#035A3A` | `#CAA753` | `#4F8A6E` | `#F5F9F6` | The logo's own green and gold |
-| Sage | Shop, category, search | `#464E3D` | `#CC5500` | `#9CAF88` | `#FBFCFA` | The owner's first palette (§1.2) |
-| Saffron | Product | `#5B2E0E` | `#B8321F` | `#D9A441` | `#FFFBF3` | Spice market, rice sacks |
-| Pistachio | Cart | `#2D481A` | `#8E3B62` | `#93C572` | `#FAFDF7` | Dry fruits |
-| Indus | Delivery areas | `#12394A` | `#E98A3F` | `#5B9AA9` | `#F6FAFB` | The river at Chashma |
-| Date palm | 404 | `#4A2C1A` | `#2F7D6D` | `#B07D56` | — | Dates and palm leaves |
-
-- A "Palette" switcher at the bottom left previews any palette on any page. The choice is kept in `localStorage` as a UI preference only; it never changes data.
-- Every palette keeps the same contrast rules as §1.2: body text on `surface`, light text only on `primary-900`.
+**Decided 2026-10-30:** the owner chose **Emerald, the logo palette**, for every page. The other palettes, the per-route `data-palette` attribute and the palette switcher were removed. The Emerald values are now the only tokens (§1.2).
 
 ### 1.2b Motion and effects (2026-10-28)
 
@@ -92,8 +78,8 @@ The owner found the first build too plain and asked for animation, a fitting bac
 - Header: spans the full window width (not the page container). Logo left, main links centred, search and cart right on desktop. Logo at most 40px tall on mobile.
 - Page content: `Container` is at most 88rem wide, so wide screens show less empty margin.
 - Needs a version that reads on both light and dark backgrounds and a square icon for the favicon/social share.
-- The received logo is green `#035A3A` and gold `#CAA753`. It is shown as an image; site colours stay on the owner palette (§1.2). If the logo and sage look wrong together, the fallback is to move the dark shades (`primary-900`) toward the logo green.
-- Home hero signature element: the "Today's rates" board, a price list with dotted leaders like a shop's rate board. Only one orange call to action per screen.
+- The received logo is green `#035A3A` and gold `#CAA753`. It is shown as an image, and since 2026-10-30 the site colours are the same green and gold (§1.2).
+- Home hero signature element: the "Today's rates" board, a price list with dotted leaders like a shop's rate board. Only one gold call to action per screen.
 
 ---
 
