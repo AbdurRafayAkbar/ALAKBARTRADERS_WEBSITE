@@ -111,7 +111,7 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
   - Checks: typecheck, tests (6) and build pass.
 
 - 2026-10-28: Redesign after owner feedback ("too simple, add animation, background, hover effects").
-  - Home: intro curtain, three.js hero (instanced rice grains and stars, lazy chunk), word-by-word headline, marquee, scroll reveals.
+  - Home: logo intro (Option 5, about 2.5 s, once per session), three.js hero (instanced rice grains and stars, lazy chunk), word-by-word headline, marquee, scroll reveals.
   - All pages: palette per route (design.md §1.2a), hover effects and motion (design.md §1.2b), bottom-left palette switcher.
   - Checks: `npm run typecheck`, `npm test` (6 tests), `npm run build` pass. Lint shows only the existing fast-refresh warnings.
 
@@ -130,4 +130,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Next task: T2.3 addresses and profile (address fields follow the guest address format). Try the flow: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:5173/accounts/signup/. Reset emails print in the runserver terminal. Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner picks one logo intro option (1–7) from the test page and sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
+Next task: T2.3 addresses and profile (address fields follow the guest address format). Try the flow: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:5173/accounts/signup/. Reset emails print in the runserver terminal. Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.

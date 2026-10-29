@@ -55,7 +55,8 @@ Time: about 4 hours per day. Preferred start mode: mostly 🤖, moving toward �
 | SVG pattern | One small shape is defined once inside `<pattern>` and the browser tiles it to fill any area; `useId` keeps the pattern id unique on the page | frontend/src/pages/home/HeroBackdrop.tsx | 🔴 |
 | Palette as CSS variables | Components use tokens only, so one `@theme` block sets every colour. During the palette trial a `data-palette` attribute swapped blocks of variables per page (removed 2026-10-30) | frontend/src/styles/index.css | 🔴 |
 | IntersectionObserver | The browser tells us when an element scrolls into view, without listening to every scroll event | frontend/src/components/motion/Reveal.tsx | 🔴 |
-| Transform containing block | An element with `transform` becomes the reference box for `position: fixed` children, so overlays must live outside animated wrappers | Layout, IntroCurtain | 🔴 |
+| Transform containing block | An element with `transform` becomes the reference box for `position: fixed` children, so overlays must live outside animated wrappers | Layout, LogoIntro | 🔴 |
+| Sideways overflow on phones | A 3D-tilted section projects wider than the screen, so the page scrolls sideways and fixed overlays stretch past the edge. `overflow-x: clip` trims it without creating a scroll box, so `position: sticky` keeps working (`hidden` would break it) | Layout | 🔴 |
 | Accessible name of split text | Separate word spans can lose their spaces in the accessible name; keep one `sr-only` sentence and hide the animated copy | frontend/src/components/motion/SplitWords.tsx | 🔴 |
 
 ## 4. Mistakes and lessons
