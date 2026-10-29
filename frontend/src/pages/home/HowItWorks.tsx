@@ -26,9 +26,12 @@ export function HowItWorks() {
           ref={ref}
           className="group/steps relative mt-8 grid gap-6 sm:mt-12 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4"
         >
+          {/* Runs from the centre of circle 1 to the centre of circle 4 and
+              stops there. Column 4 starts at 75% + 1.5rem (three 2rem gaps
+              shared by four columns); the circle centre is 1.375rem further. */}
           <span
             aria-hidden
-            className="absolute left-[1.375rem] right-[12%] top-[1.375rem] hidden h-0.5 origin-left scale-x-0 bg-primary-900/40 transition-transform duration-[1400ms] ease-out group-[.is-visible]/steps:scale-x-100 lg:block"
+            className="absolute left-[1.375rem] right-[calc(25%-2.875rem)] top-[1.375rem] hidden h-0.5 origin-left scale-x-0 bg-primary-900/40 transition-transform duration-[1400ms] ease-out group-[.is-visible]/steps:scale-x-100 lg:block"
           />
           {steps.map((step, i) => (
             <li
