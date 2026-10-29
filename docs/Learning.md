@@ -53,7 +53,7 @@ Time: about 4 hours per day. Preferred start mode: mostly 🤖, moving toward �
 | Code splitting | `React.lazy` loads a page's code only when someone visits it, so the first load is smaller | frontend/src/routes/routes.tsx | 🔴 |
 | Prices as strings | Money comes from the server as text like `"450.00"` and is only formatted, never calculated, in the browser | frontend/src/lib/money.ts | 🔴 |
 | SVG pattern | One small shape is defined once inside `<pattern>` and the browser tiles it to fill any area; `useId` keeps the pattern id unique on the page | frontend/src/pages/home/HeroBackdrop.tsx | 🔴 |
-| Palette as CSS variables | A `data-palette` attribute swaps a block of CSS variables; components use tokens and never know which palette is active | frontend/src/styles/index.css | 🔴 |
+| Palette as CSS variables | Components use tokens only, so one `@theme` block sets every colour. During the palette trial a `data-palette` attribute swapped blocks of variables per page (removed 2026-10-30) | frontend/src/styles/index.css | 🔴 |
 | IntersectionObserver | The browser tells us when an element scrolls into view, without listening to every scroll event | frontend/src/components/motion/Reveal.tsx | 🔴 |
 | Transform containing block | An element with `transform` becomes the reference box for `position: fixed` children, so overlays must live outside animated wrappers | Layout, IntroCurtain | 🔴 |
 | Accessible name of split text | Separate word spans can lose their spaces in the accessible name; keep one `sr-only` sentence and hide the animated copy | frontend/src/components/motion/SplitWords.tsx | 🔴 |
