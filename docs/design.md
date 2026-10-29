@@ -57,7 +57,7 @@ The owner asked for a different palette on every page so they could pick the bes
 
 The owner found the first build too plain and asked for animation, a fitting background and varied hover effects.
 
-- **Intro curtain:** on the home page only, a short curtain with the gold star plays once, then lifts to show the page. It sits outside the animated page wrapper (see Learning.md: transforms create a containing block).
+- **Logo intro (2026-10-30):** on the home page only, once per browser session, `LogoIntro` plays the owner's pick from the test page (Option 5, magnetic energy pulse). The green A and gold T sit apart, a stream of particles pulls them together, they lock into the logo with a flash, the wordmark rises, then the overlay fades to show the page. It takes about 2.5 s, has a Skip intro button, and does not play with reduced motion. It sits outside the animated page wrapper (see Learning.md: transforms create a containing block). Sizes use `clamp()` and `vmin`, so it fits phones in portrait and landscape.
 - **Hero background:** `HeroBackdrop`, plain CSS and SVG: two large blurred colour fields drift slowly, a faint grid of logo stars fades in toward the right, and an SVG grain sits on top. It replaced the three.js scene on 2026-10-29 at the owner's request; no WebGL means no extra 490 kB chunk and no load on cheap phones. With reduced motion the colour fields stand still.
 - **Scroll reveal:** the `Reveal` component adds `is-visible` when an element enters the viewport (IntersectionObserver). Lists stagger by `index`.
 - **Headline:** `SplitWords` rises word by word. The full sentence is in an `sr-only` copy and the animated words are `aria-hidden`, so screen readers read one normal sentence.
