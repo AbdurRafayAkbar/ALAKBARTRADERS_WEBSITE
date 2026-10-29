@@ -129,45 +129,6 @@
     transform: scale(1);
   }
 }
-@keyframes star-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes star-fill {
-  to {
-    fill-opacity: 1;
-  }
-}
-@keyframes letter-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.6em);
-    letter-spacing: 0.4em;
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes grain-fall {
-  from {
-    transform: translateY(-10vh) rotate(0);
-  }
-  to {
-    transform: translateY(110vh) rotate(540deg);
-  }
-}
-@keyframes curtain-up {
-  to {
-    transform: translateY(-100%);
-  }
-}
-@keyframes curtain-down {
-  to {
-    transform: translateY(100%);
-  }
-}
 
 .animate-page-in {
   animation: page-in 0.7s var(--ease-out-expo) both;

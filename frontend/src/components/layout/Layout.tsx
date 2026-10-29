@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { Outlet, ScrollRestoration, useLocation } from 'react-router'
-import { IntroCurtain } from '../intro/IntroCurtain'
+import { LogoIntro } from '../intro/LogoIntro'
 import { LoadingBlock } from '../ui/StatusMessage'
 import { Container } from '../ui/Container'
 import { PageBackdrop } from './PageBackdrop'
@@ -36,7 +36,7 @@ export function Layout() {
         </Suspense>
       </main>
       <SiteFooter />
-      {pathname === '/' && <IntroCurtain />}
+      {pathname === '/' && <LogoIntro />}
       <ScrollRestoration />
     </div>
   )
