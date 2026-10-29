@@ -89,6 +89,24 @@ def test_cart_and_search_are_noindex(client, url):
     assert '<meta name="robots" content="noindex" />' in response.content.decode()
 
 
+@pytest.mark.parametrize(
+    ("url", "title"),
+    [
+        ("/accounts/login/", "Log in"),
+        ("/accounts/signup/", "Create an account"),
+        ("/accounts/password-reset/", "Reset your password"),
+        ("/accounts/password-reset/MQ/abc-123/", "Choose a new password"),
+    ],
+)
+def test_account_pages_load_the_app_and_are_noindex(client, url, title):
+    response = client.get(url)
+
+    html = response.content.decode()
+    assert response.status_code == 200
+    assert f"<title>{title} | " in html
+    assert '<meta name="robots" content="noindex" />' in html
+
+
 def test_search_query_is_escaped(client):
     response = client.get("/search/", {"q": '<script>alert("x")</script>'})
     html = response.content.decode()
