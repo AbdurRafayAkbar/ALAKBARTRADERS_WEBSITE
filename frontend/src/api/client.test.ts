@@ -3,7 +3,10 @@ import { setupServer } from 'msw/node'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { apiFetch, ApiRequestError } from './client'
 
-const server = setupServer()
+// Tests without a csrftoken cookie still get past the CSRF bootstrap.
+const server = setupServer(
+  http.get('/api/v1/auth/csrf/', () => new HttpResponse(null, { status: 204 })),
+)
 
 beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
 afterEach(() => {
@@ -32,6 +35,24 @@ describe('apiFetch', () => {
     await apiFetch('cart/items/', { method: 'POST', body: JSON.stringify({ variant: 1 }) })
 
     expect(token).toBe('abc123')
+  })
+
+  it('asks Django for a CSRF cookie before the first POST', async () => {
+    let token: string | null = null
+    server.use(
+      http.get('/api/v1/auth/csrf/', () => {
+        document.cookie = 'csrftoken=fresh'
+        return new HttpResponse(null, { status: 204 })
+      }),
+      http.post('/api/v1/auth/logout/', ({ request }) => {
+        token = request.headers.get('X-CSRFToken')
+        return new HttpResponse(null, { status: 204 })
+      }),
+    )
+
+    await apiFetch('auth/logout/', { method: 'POST' })
+
+    expect(token).toBe('fresh')
   })
 
   it('returns undefined for 204 No Content', async () => {

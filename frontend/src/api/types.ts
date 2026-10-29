@@ -63,6 +63,15 @@ export interface Cart {
   subtotal: Money
 }
 
+// The logged-in customer (auth/me/). Accounts are optional; guests can order.
+export interface User {
+  id: number
+  email: string
+  first_name: string
+  last_name: string
+  phone: string
+}
+
 // One error shape for the whole API (rules.md §4).
 export interface ApiError {
   code: string

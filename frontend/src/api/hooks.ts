@@ -1,4 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  confirmPasswordReset,
+  fetchMe,
+  login,
+  logout,
+  requestPasswordReset,
+  signup,
+  type PasswordResetConfirmInput,
+  type SignupInput,
+} from './auth'
 import { addCartItem, fetchCart, updateCartItem } from './cart'
 import {
   fetchCategories,
@@ -16,6 +26,7 @@ export const queryKeys = {
   product: (slug: string) => ['product', slug] as const,
   delivery: ['delivery'] as const,
   cart: ['cart'] as const,
+  me: ['me'] as const,
 }
 
 export const useCategories = () =>
@@ -49,3 +60,37 @@ export function useUpdateCartItem() {
     onSuccess: (cart) => client.setQueryData(queryKeys.cart, cart),
   })
 }
+
+// The logged-in user, or null for a guest.
+export const useMe = () => useQuery({ queryKey: queryKeys.me, queryFn: fetchMe })
+
+export function useLogin() {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) =>
+      login(email, password),
+    onSuccess: (user) => client.setQueryData(queryKeys.me, user),
+  })
+}
+
+export function useSignup() {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: (input: SignupInput) => signup(input),
+    onSuccess: (user) => client.setQueryData(queryKeys.me, user),
+  })
+}
+
+export function useLogout() {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: () => client.setQueryData(queryKeys.me, null),
+  })
+}
+
+export const usePasswordReset = () =>
+  useMutation({ mutationFn: (email: string) => requestPasswordReset(email) })
+
+export const usePasswordResetConfirm = () =>
+  useMutation({ mutationFn: (input: PasswordResetConfirmInput) => confirmPasswordReset(input) })

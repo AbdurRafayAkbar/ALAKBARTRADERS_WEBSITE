@@ -1,6 +1,6 @@
 import type { ApiError } from './types'
 
-// Thin fetch wrapper for /api/v1/. Used once the Django API exists (Phase 1+).
+// Thin fetch wrapper for /api/v1/.
 // Session cookie + X-CSRFToken header; no tokens in localStorage (rules.md §7).
 
 const BASE = '/api/v1/'
@@ -21,12 +21,20 @@ function csrfToken(): string {
   return match ? decodeURIComponent(match[1]) : ''
 }
 
+// Django sets the cookie on auth/csrf/. Ask for it once, before the first POST.
+async function ensureCsrfToken(): Promise<string> {
+  if (!csrfToken()) await fetch(BASE + 'auth/csrf/', { credentials: 'same-origin' })
+  return csrfToken()
+}
+
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const method = (init.method ?? 'GET').toUpperCase()
   const headers = new Headers(init.headers)
   headers.set('Accept', 'application/json')
   if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
-  if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) headers.set('X-CSRFToken', csrfToken())
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+    headers.set('X-CSRFToken', await ensureCsrfToken())
+  }
 
   const response = await fetch(BASE + path, {
     ...init,
