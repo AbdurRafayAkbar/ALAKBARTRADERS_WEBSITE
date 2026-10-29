@@ -44,7 +44,7 @@ ALAKBARTRADERS_Website/
 │   └── tsconfig.json
 ├── media/                  # uploads (never committed)
 ├── docs/                   # these design files
-├── deploy/                 # Dockerfile, compose, nginx config (Phase 14)
+├── deploy/                 # systemd units, gunicorn and nginx config (Phase 14)
 ├── .env.example            # all env vars with dummy values
 ├── pyproject.toml          # dependencies + Ruff + pytest config
 └── manage.py

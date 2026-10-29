@@ -382,13 +382,14 @@ flowchart TB
 | prod | VPS | Real shop |
 
 - **Settings:** `config/settings/base.py`, `dev.py`, `prod.py`; all values that change between environments come from env vars.
-- **Docker** is used for deploy (from Phase 14), not required for dev.
-- **Frontend build:** a multi-stage Docker build runs `npm ci && npm run build` in a Node stage and copies `frontend/dist/` into the Nginx image. Node is not installed on the running server.
+- **No Docker** in dev or prod. The 1 GB server cannot spare the memory, and `systemd` services are simpler to run on one box.
+- **Frontend build:** `npm ci && npm run build` runs on the developer PC (or in CI), and only `frontend/dist/` is uploaded to the server. Node is not installed on the running server.
 - **Dev:** two terminals. `python manage.py runserver` (port 8000) and `npm run dev` (Vite, port 2004, proxies `/api` to 8000).
 - **Backups:** daily database dump + media copied off-site, 14-day retention, **restore tested** before go-live.
-- **Logging:** Django logging to stdout, collected by Docker; Nginx access/error logs; Sentry for exceptions.
+- **Logging:** Django logging to stdout, collected by `journald` through systemd; Nginx access/error logs; Sentry for exceptions.
 - **Monitoring:** uptime check + Sentry alerts + daily email reports from cron.
-- **Hosting decision [PENDING]:** small VPS (about $5–7/month, recommended) vs Oracle Always Free. Decide at Phase 14.
+- **Hosting decision (2026-10-29):** option A, one self-managed budget VPS with 1 GB RAM (RackNerd or IONOS VPS XS, about $2–3/month). The owner maintains the server. The VPS is bought at Phase 14; Cloudflare Pages hosts the frontend preview until then.
+- **1 GB adjustments:** no Docker on the server. Nginx, Gunicorn (2 workers) and PostgreSQL run as `systemd` services, 2 GB swap is enabled, and Postgres is tuned for low memory. Where the diagram above shows containers, read them as systemd services on the same host.
 
 ---
 
@@ -406,5 +407,5 @@ flowchart TB
 | Q7 | Pending-order timeout (hours) | Phase 6 |
 | Q8 | Email provider | Phase 9 |
 | Q9 | Staging environment: keep or skip | Phase 14 |
-| Q10 | Hosting provider | Phase 14 |
+| Q10 | ~~Hosting provider~~ **Decided: budget 1 GB VPS, self-managed, no Docker in prod** (2026-10-29) | — |
 | Q11 | Logo and product photos (owner will share). **Colours decided** 2026-10-28 (design.md §1.2) | Phase 3 / design |

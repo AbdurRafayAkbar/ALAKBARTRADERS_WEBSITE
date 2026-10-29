@@ -423,15 +423,15 @@
 
 ## Phase 14 — Deployment & go-live
 
-### [ ] T14.1 Dockerise
-- **Description:** Multi-stage Dockerfile (Node stage builds React, Python stage runs Django), docker-compose (web, db, nginx serving the React build), production settings.
+### [ ] T14.1 Production config
+- **Description:** Production settings, Gunicorn config, `systemd` unit files, Nginx site config (serves `frontend/dist/`, proxies `/api` and `/admin` to Gunicorn) and a deploy script. No Docker (see Architecture §9).
 - **Depends on:** T13.2
-- **Acceptance:** `docker compose up` runs the prod-like stack on the laptop.
+- **Acceptance:** `check --deploy` passes with prod settings; config files live in `deploy/`.
 - **Mode:** 🤝
-- **Concepts:** images vs containers, volumes, multi-stage builds.
+- **Concepts:** systemd services, reverse proxy, static vs dynamic files.
 
 ### [ ] T14.2 Server setup
-- **Description:** Choose hosting (Q10); create VPS; SSH keys, firewall, non-root user, automatic security updates.
+- **Description:** Buy the 1 GB VPS (Q10 decided); create 2 GB swap; SSH keys, firewall, non-root user, automatic security updates.
 - **Depends on:** T14.1
 - **Acceptance:** SSH by key only; only ports 22/80/443 open.
 - **Mode:** 🤝

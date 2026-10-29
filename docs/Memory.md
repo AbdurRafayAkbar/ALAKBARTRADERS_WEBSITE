@@ -49,11 +49,12 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-28 | Logo (green `#035A3A` + gold `#CAA753`) is used as an image; the site keeps the owner palette | Owner said to try their palette first; revisit if the two clash |
 | 2026-10-28 | Phone layout: swipe row for featured products, compact category rows, two-row cart lines, smaller section padding below `sm` | Owner said cards looked bad on phones |
 | 2026-10-28 | Frontend preview hosted on Cloudflare Pages (Git integration: root `frontend`, build `npm run build`, output `dist`). SPA fallback via `public/_redirects`. Backend hosting still decided at Phase 14 | Owner request. Free static hosting; mock data is bundled, so no API is needed yet |
+| 2026-10-29 | Hosting: one self-managed 1 GB VPS (RackNerd or IONOS VPS XS, about $2–3/month), bought at Phase 14. No Docker on the server: Nginx, Gunicorn and PostgreSQL run as systemd services with 2 GB swap. React is built on the PC and `dist/` is uploaded. Owner maintains the server. Replaces the earlier "Docker for deploy" plan | Owner budget is $2–3/month; 1 GB RAM cannot comfortably run Docker plus the stack |
 | 2026-10-28 | Work is pushed to GitHub (`AbdurRafayAkbar/ALAKBARTRADERS_WEBSITE`, branch `main`) as small, separate commits | Owner wants each change easy to review or revert |
 
 ## 3. Open questions / pending decisions
 
-See `Architecture.md` §10. Q1 and Q12 are decided (see the log above). Still open:
+See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Still open:
 - Q11: product photos (owner will share later). Logo received.
 - Real product names, prices, delivery zones, phone, address and FAQ answers. Placeholders are marked `TODO(owner)` in `frontend/src/api/mock/data.ts`, `frontend/src/config/site.ts` and `frontend/src/pages/home/Faq.tsx`.
 - Which palette wins the per-page trial (design.md §1.2a). The owner will choose after viewing the pages.
