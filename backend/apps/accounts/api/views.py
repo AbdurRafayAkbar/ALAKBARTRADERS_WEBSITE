@@ -9,19 +9,23 @@ from django.conf import settings
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from drf_spectacular.utils import extend_schema
-from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework import status, viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ..models import Address
 from .serializers import (
+    AddressSerializer,
     LoginSerializer,
     PasswordResetConfirmSerializer,
     PasswordResetRequestSerializer,
+    ProfileSerializer,
     SignupSerializer,
     UserSerializer,
 )
@@ -117,6 +121,72 @@ class PasswordResetConfirmView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProfileView(APIView):
+    """The logged-in customer's name and phone."""
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(responses={200: ProfileSerializer})
+    def get(self, request):
+        return Response(ProfileSerializer(request.user).data)
+
+    @extend_schema(request=ProfileSerializer, responses={200: ProfileSerializer})
+    def patch(self, request):
+        serializer = ProfileSerializer(request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+class AddressViewSet(viewsets.ModelViewSet):
+    """
+    The logged-in customer's saved addresses.
+
+    The queryset holds only the customer's own rows, so another user's id
+    answers 404, the same as an id that does not exist (rules.md §7).
+    """
+
+    serializer_class = AddressSerializer
+    permission_classes = [IsAuthenticated]
+    # PATCH only: a partial edit is all the React form sends.
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            # The schema generator has no logged-in user.
+            return Address.objects.none()
+        return Address.objects.filter(user=self.request.user)
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        user = self.request.user
+        # The first address is the default, so checkout always has one to fill in.
+        make_default = serializer.validated_data.get("is_default") or not user.addresses.exists()
+        if make_default:
+            user.addresses.update(is_default=False)
+        serializer.save(user=user, is_default=make_default)
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        is_default = serializer.validated_data.get("is_default")
+        if is_default:
+            self.get_queryset().exclude(pk=serializer.instance.pk).update(is_default=False)
+        elif is_default is False and serializer.instance.is_default:
+            # A default can only move to another address, never disappear.
+            serializer.validated_data.pop("is_default")
+        serializer.save()
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        was_default = instance.is_default
+        instance.delete()
+        if was_default:
+            newest = self.get_queryset().order_by("-created_at").first()
+            if newest is not None:
+                newest.is_default = True
+                newest.save(update_fields=["is_default", "updated_at"])
 
 
 def _send_reset_email(request, user):

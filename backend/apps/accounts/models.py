@@ -36,3 +36,41 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Address(models.Model):
+    """
+    A saved delivery address. Chashma only, so there is no city or province.
+
+    Written the way people here write it: "House#999, CAT-V, <colony name>"
+    (Architecture.md §4). `area` is free text until Phase 8 adds DeliveryZone;
+    then a zone foreign key replaces it.
+    """
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
+    full_name = models.CharField(max_length=150)
+    phone = models.CharField(max_length=20)
+    house_number = models.CharField(max_length=30)
+    block = models.CharField("block or category", max_length=50)
+    colony = models.CharField(max_length=100)
+    house_name = models.CharField("house name", max_length=100, blank=True)
+    landmark = models.CharField(max_length=150, blank=True)
+    area = models.CharField(max_length=100, blank=True)
+    is_default = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "addresses"
+        ordering = ["-is_default", "-created_at"]
+        constraints = [
+            # At most one default per user; the API moves the flag, never doubles it.
+            models.UniqueConstraint(
+                fields=["user"],
+                condition=models.Q(is_default=True),
+                name="address_one_default_per_user",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.house_number}, {self.block}, {self.colony}"
