@@ -146,7 +146,7 @@ The owner found the first build too plain and asked for animation, a fitting bac
 
 ### Checkout (single page)
 1. Contact: name, phone (required, Pakistan format), email (optional for guests, needed for email updates).
-2. Delivery: zone dropdown (Chashma areas), house/street, landmark, delivery notes.
+2. Delivery: zone dropdown (Chashma areas), house number (required, e.g. "House#999"), block or category (required, e.g. "CAT-V"), colony name (required), house name as written outside the house (optional), landmark (optional), delivery notes. No login or Google sign-in is needed to order.
 3. Payment: Cash on Delivery (only option at launch, pre-selected).
 4. Order summary with delivery fee and total.
 5. "Place order" button; note: "Our team will call you to confirm your order."
