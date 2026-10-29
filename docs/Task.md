@@ -57,7 +57,7 @@
 - **Acceptance:** a pull request shows a green CI check.
 - **Mode:** 🤝
 - **Concepts:** CI, GitHub Actions services, branch protection, Conventional Commits.
-- **Done (2026-10-29):** `.github/workflows/ci.yml` runs the `backend` job (Ruff lint + format check, `manage.py check`, `makemigrations --check`, pytest) against a `postgres:17` service on every pull request and push to `main`. setup-uv is pinned to an exact version because it has no major-version tags. `main` is protected: changes go through a pull request, the `backend` check must pass on an up-to-date branch, and force pushes and deletion are blocked. Admins are not exempt-enforced, so the owner can still merge in an emergency.
+- **Done (2026-10-29):** `.github/workflows/ci.yml` runs the `backend` job (Ruff lint + format check, `manage.py check`, `makemigrations --check`, pytest) against a `postgres:17` service on every pull request and push to `main`. setup-uv is pinned to an exact version because it has no major-version tags. `main` is protected: changes go through a pull request, the `backend` check must pass on an up-to-date branch, and force pushes and deletion are blocked. The rules do not apply to admins, so the owner can still bypass them in an emergency.
 
 ### [ ] T1.5 `core` app + DRF setup
 - **Description:** `TimeStampedModel`, `SiteSettings` singleton; install DRF + `drf-spectacular`; `/api/v1/` root, `health/` endpoint, shared error format, session auth + CSRF endpoint.
