@@ -61,7 +61,7 @@ class HealthView(APIView):
 @method_decorator(ensure_csrf_cookie, name="get")
 class CsrfView(APIView):
     """
-    Sets the `csrftoken` cookie. React calls this once on start-up, then sends
+    Sets the `csrftoken` cookie. React calls this before its first POST, then sends
     the cookie value in the X-CSRFToken header on every POST, PATCH and DELETE.
     """
 

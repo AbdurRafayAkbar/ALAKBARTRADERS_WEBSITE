@@ -107,8 +107,12 @@ WHITENOISE_ROOT = FRONTEND_DIST_DIR if FRONTEND_DIST_DIR.is_dir() else None
 WHITENOISE_IMMUTABLE_FILE_TEST = r"^/assets/"
 
 # Origin for canonical and og:url links, e.g. https://alakbartraders.pk.
-# Empty means the origin the request came in on, which is fine in dev.
+# Also the start of the link in password reset emails.
+# Empty means the origin the request came in on.
 SITE_URL = env("DJANGO_SITE_URL", default="")
+
+# Sender of account emails (password reset now, order emails later).
+DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="ALAKBARTRADERS <noreply@localhost>")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -126,6 +130,14 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     # Money goes out as strings ("1250.00") so JavaScript never turns it into a float.
     "COERCE_DECIMAL_TO_STRING": True,
+    # Views opt in with `throttle_scope`. Counts live in the cache (local memory
+    # per Gunicorn worker, which is enough at this size). Over the limit: 429.
+    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.ScopedRateThrottle"],
+    "DEFAULT_THROTTLE_RATES": {
+        "login": "5/min",
+        "signup": "10/hour",
+        "password_reset": "5/hour",
+    },
 }
 
 SPECTACULAR_SETTINGS = {
