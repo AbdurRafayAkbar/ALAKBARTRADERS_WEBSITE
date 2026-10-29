@@ -59,12 +59,13 @@
 - **Concepts:** CI, GitHub Actions services, branch protection, Conventional Commits.
 - **Done (2026-10-29):** `.github/workflows/ci.yml` runs the `backend` job (Ruff lint + format check, `manage.py check`, `makemigrations --check`, pytest) against a `postgres:17` service on every pull request and push to `main`. setup-uv is pinned to an exact version because it has no major-version tags. `main` is protected: changes go through a pull request, the `backend` check must pass on an up-to-date branch, and force pushes and deletion are blocked. The rules do not apply to admins, so the owner can still bypass them in an emergency.
 
-### [ ] T1.5 `core` app + DRF setup
+### [x] T1.5 `core` app + DRF setup
 - **Description:** `TimeStampedModel`, `SiteSettings` singleton; install DRF + `drf-spectacular`; `/api/v1/` root, `health/` endpoint, shared error format, session auth + CSRF endpoint.
 - **Depends on:** T1.2
 - **Acceptance:** `GET /api/v1/health/` returns JSON; error shape test passes; `SiteSettings` editable in admin.
 - **Mode:** 🤖
 - **Concepts:** abstract models, DRF request/response, serializers, exception handlers, OpenAPI.
+- **Done (2026-10-29):** `apps/core` holds `TimeStampedModel` and the `SiteSettings` singleton (one row, guarded by a database check constraint; admin opens the form directly and has no add or delete). The settings values are placeholders until the owner sets them in admin: free-shipping threshold and COD limit are empty (never free, no limit), cream expiry cut-off is 2 days, pending-order timeout is 24 hours. DRF and drf-spectacular are installed. `/api/v1/` lists the endpoints, `health/` checks the database (503 when it is down), and `auth/csrf/` sets the `csrftoken` cookie. Every error uses `{"code", "message", "fields"}` with dotted field names. API views need a logged-in user unless they opt out with `AllowAny`. `CsrfSessionAuthentication` checks CSRF on unsafe requests from anonymous users too, so guest checkout and login forms are protected. Only JSON is accepted and returned (the browsable API is dev only). The schema at `schema/` and Swagger at `schema/docs/` are open in dev and staff-only in prod.
 
 ### [~] T1.6 React app scaffold
 - **Description:** Vite + React + TypeScript in `frontend/`; Tailwind with brand tokens (design.md §1.2); React Router; TanStack Query; API client sending `X-CSRFToken`; Vite proxy `/api` to Django; layout shell (header, footer), placeholder home, 404 page.
