@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # Our apps
     "apps.core",
     "apps.accounts",
+    "apps.catalog",
 ]
 
 MIDDLEWARE = [
