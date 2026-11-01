@@ -42,6 +42,13 @@ describe('home page', () => {
       (await screen.findAllByRole('link', { name: /Super Kernel Basmati/i })).length,
     ).toBeGreaterThan(0)
   })
+
+  it('opens WhatsApp from the header contact link', () => {
+    renderAt('/')
+    const link = screen.getByRole('link', { name: /WhatsApp 0333-6839509/ })
+    expect(link).toHaveAttribute('href', 'https://wa.me/923336839509')
+    expect(link).toHaveAttribute('target', '_blank')
+  })
 })
 
 describe('product page', () => {

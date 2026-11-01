@@ -1,10 +1,11 @@
 // Shop contact details shown in the header, footer and FAQ.
-// TODO(owner): replace placeholders with real details before launch.
+// TODO(owner): replace the remaining placeholders (address, hours, email) before launch.
 export const site = {
   name: 'ALAKBARTRADERS',
   city: 'Chashma',
-  phone: '0300-0000000',
-  whatsapp: '923000000000',
+  phone: '0333-6839509',
+  // International form for wa.me links: country code 92, then the number without the 0.
+  whatsapp: '923336839509',
   address: 'Main Bazaar, Chashma',
   hours: 'Every day, 9 am to 9 pm',
   email: 'orders@example.com',
