@@ -1,6 +1,5 @@
 import { useParams, useSearchParams } from 'react-router'
 import { useCategories, useProducts } from '../api/hooks'
-import type { CategorySlug } from '../api/types'
 import { Reveal } from '../components/motion/Reveal'
 import { ProductCard } from '../components/ProductCard'
 import { Button } from '../components/ui/Button'
@@ -18,7 +17,7 @@ export default function ShopPage({ mode }: { mode: 'all' | 'category' | 'search'
   const category = mode === 'category' ? categories?.find((c) => c.slug === slug) : undefined
 
   const products = useProducts({
-    category: mode === 'category' ? (slug as CategorySlug) : undefined,
+    category: mode === 'category' ? slug : undefined,
     q: q || undefined,
   })
 
@@ -54,7 +53,7 @@ export default function ShopPage({ mode }: { mode: 'all' | 'category' | 'search'
             name="q"
             type="search"
             defaultValue={q}
-            placeholder="Basmati, almonds, cream…"
+            placeholder="Rice, ghee, honey…"
             className="min-h-11 min-w-0 flex-1 rounded-lg border border-secondary bg-card px-4 transition-[border-color,box-shadow] focus:border-primary-900 focus:shadow-lg"
           />
           <Button type="submit">Search</Button>
@@ -66,7 +65,7 @@ export default function ShopPage({ mode }: { mode: 'all' | 'category' | 'search'
         {products.isError && <ErrorBlock onRetry={() => products.refetch()} />}
         {products.data?.length === 0 && (
           <MessageBlock title={q ? `Nothing matches "${q}"` : 'No products here yet'}>
-            Try a shorter word, or browse rice, dry fruits and milk cream from the menu.
+            Try a shorter word, or see everything we sell on the shop page.
           </MessageBlock>
         )}
         {products.data && products.data.length > 0 && (

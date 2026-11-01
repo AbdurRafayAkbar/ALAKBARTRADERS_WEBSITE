@@ -38,8 +38,8 @@ export function Hero() {
             className="mt-6 max-w-xl text-primary-100 sm:mt-7 sm:text-lg"
             style={{ animation: 'fade-up 0.9s var(--ease-out-expo) 0.9s both' }}
           >
-            Basmati rice, dry fruits and fresh milk cream, delivered in {site.city}. Order online
-            and pay cash when it arrives.
+            Rice, oil and ghee, fresh milk cream, desi ghee and honey, delivered in {site.city}.
+            Order online and pay cash when it arrives.
           </p>
           <div
             className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 sm:mt-9"

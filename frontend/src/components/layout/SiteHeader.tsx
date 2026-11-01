@@ -5,8 +5,9 @@ import logo from '../../assets/brand/logo-full.png'
 import { site, whatsappLink } from '../../config/site'
 
 const nav = [
+  { to: '/shop/', label: 'Shop all' },
   { to: '/c/rice/', label: 'Rice' },
-  { to: '/c/dry-fruits/', label: 'Dry fruits' },
+  { to: '/c/oil-ghee/', label: 'Oil & ghee' },
   { to: '/c/milk-cream/', label: 'Milk cream' },
   { to: '/delivery-areas/', label: 'Delivery areas' },
 ]

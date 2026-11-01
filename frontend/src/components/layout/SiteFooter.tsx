@@ -21,8 +21,8 @@ export function SiteFooter() {
         <div className="lg:col-span-2">
           <p className="font-display text-xl font-bold text-white">{site.name}</p>
           <p className="mt-3 max-w-sm">
-            Family shop in {site.city} selling rice, dry fruits and fresh milk cream. Delivered by
-            our own riders, paid in cash at your door.
+            Family shop in {site.city} selling rice, oil and ghee, Anmol revery, milk cream, desi
+            ghee and honey. Delivered by our own riders, paid in cash at your door.
           </p>
         </div>
 
@@ -35,13 +35,18 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link to="/c/dry-fruits/" className="link-wipe">
-                Dry fruits
+              <Link to="/c/oil-ghee/" className="link-wipe">
+                Oil & ghee
               </Link>
             </li>
             <li>
               <Link to="/c/milk-cream/" className="link-wipe">
                 Milk cream
+              </Link>
+            </li>
+            <li>
+              <Link to="/shop/" className="link-wipe">
+                Everything we sell
               </Link>
             </li>
             <li>
