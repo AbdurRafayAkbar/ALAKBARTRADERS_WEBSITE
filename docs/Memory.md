@@ -53,6 +53,11 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-29 | SEO goal: income comes from **sales** driven by Google Search and free Google Merchant Center listings. No ads (AdSense) on the shop. The site follows Google Search Essentials: Django puts the real page content and meta tags in the HTML it sends (the same content React shows, so no cloaking), URLs stay stable with canonical tags, and there is no hidden text, keyword stuffing or fake reviews. Details in design.md §8 | Owner wants SEO and income "according to Google's rules". Ads on a small shop earn little and slow the pages; Merchant Center listings are free and show products with price in Google |
 | 2026-10-29 | `/shop/` (all products) is a page URL and stays | The frontend already links to it; changing page URLs later costs search ranking |
 | 2026-10-30 | Frontend linter stays **oxlint** (not ESLint), with Prettier for formatting; both run in CI | The Vite template already set up oxlint; it is much faster and covers the rules we need |
+| 2026-11-02 | Product range at launch: 7 categories and 15 products. Rice: Kianat Kacha, Steam Kianat 1121, Steam Kianat 1509, Short Grain Steam, Kianat Adhwar, Kianat Sela. Oil & Ghee: Dalda Oil, Dalda Ghee, Mezan Classic Oil, Mezan Classic Ghee. Anmol Revery: Revery Regular, Revery Special. Milk Cream. Desi Ghee. Honey. Dry Fruits stays as a category with no items yet | Owner list. Loaded by `uv run python manage.py seed_catalog` |
+| 2026-11-02 | No prices yet: products without a priced pack size show "Price coming soon" and no cart button. Owner sends prices separately | Owner will share prices later |
+| 2026-11-02 | Shop phone 0333-6839509 (Pakistan, `+92 333 6839509`). The header link opens WhatsApp; there is no WhatsApp button on each product | Owner request (PR #16) |
+| 2026-11-02 | Product pictures are drawn stand-ins with no brand logos, made by the seed command. The owner swaps them for real photos in admin | Owner agreed to free stand-ins |
+| 2026-11-02 | Featured on the home page: Kianat Kacha, Dalda Oil, Revery Regular, Milk Cream, Desi Ghee, Honey (the developer's pick; owner can change "Is featured" in admin) | One item per main category |
 | 2026-10-30 | Customers order without logging in (no Google/Gmail sign-in). Checkout address: house number (e.g. "House#999"), block/category (e.g. "CAT-V"), colony name, all required; the house name written outside the house is optional; landmark optional | Owner request. Matches how addresses are written in Chashma and lets riders find the house |
 | 2026-10-30 | Site palette is the logo's green `#035A3A` and gold `#CAA753` (Emerald) on every page. The other trial palettes, per-route palettes and the palette switcher are removed. Replaces the sage palette of 2026-10-28 (design.md §1.2) | Owner chose the logo theme after the per-page trial |
 | 2026-10-28 | Work is pushed to GitHub (`AbdurRafayAkbar/ALAKBARTRADERS_WEBSITE`, branch `main`) as small, separate commits | Owner wants each change easy to review or revert |
@@ -60,16 +65,27 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 ## 3. Open questions / pending decisions
 
 See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Still open:
-- Q11: product photos (owner will share later). Logo received.
-- Real product names, prices, delivery zones, phone, address and FAQ answers. Placeholders are marked `TODO(owner)` in `frontend/src/api/mock/data.ts`, `frontend/src/config/site.ts` and `frontend/src/pages/home/Faq.tsx`.
+- Q11: product photos (owner will share later; drawn stand-ins until then). Logo received.
+- Prices and pack sizes for all 15 products (owner will send them separately).
+- Spelling: "Kianat" (as the owner wrote it) or "Kainat" (as in §1)? The site uses "Kianat" for now.
+- What "Anmol Revery" is, so the category text and picture can describe it properly (the site shows a plate of sesame sweets for now).
+- Delivery zones, address, opening hours, email and FAQ answers. Placeholders are marked `TODO(owner)` in `frontend/src/api/mock/data.ts`, `frontend/src/config/site.ts` and `frontend/src/pages/home/Faq.tsx`.
 
 ## 4. Current position
 
-- **Phase:** 1 — Frontend first (backend next)
-- **Task:** T2.3 done. T1.6 done (owner chose the logo palette on 2026-10-30).
-- **Step:** Customers can sign up, log in, edit their profile and keep up to 5 saved addresses from React. Guests can still order. Next backend task is T2.4 (Owner and Staff roles).
+- **Phase:** 3 — Catalog & variants
+- **Task:** T3.1, T3.2 and T3.3 done. T2.4 (Owner and Staff roles) is still open.
+- **Step:** The shop front loads the owner's 15 real products from the Django API. Prices are not set yet, so every product shows "Price coming soon". Waiting for the owner's prices.
 
 ## 5. Last completed step
+
+- 2026-11-02: T3.1–T3.3 catalog, real product range and API.
+  - `apps/catalog`: `Category`, `Product`, `ProductVariant`, `ProductImage`, with admin inlines for pack sizes and pictures.
+  - `seed_catalog` command adds 7 categories, 15 products and a drawn picture for each. Safe to run again; it keeps the owner's edits.
+  - Read-only API: `/api/v1/categories/`, `/api/v1/products/` (filters `category`, `q`, `featured`) and `/api/v1/products/<slug>/`.
+  - React loads the catalog from the API; shop copy covers the full range. Category and product page tags come from the database, and product pages are indexable.
+  - The Word commands guide (local file, not in Git) has a new section 10 on adding items.
+  - Checks: pytest (114), vitest (41), lint and build pass; CI green on PR #19.
 
 - 2026-10-30: T2.3 saved addresses and profile.
   - API under `/api/v1/account/`: `profile/` and `addresses/`. Each user sees only their own addresses; another user's address returns 404.
@@ -131,9 +147,10 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 - Checkout button is a placeholder until the orders API exists (Phase 6).
 - Mock cart lives in memory and resets on page reload.
-- Page text for crawlers in `backend/apps/core/pages.py` is a hand copy of the React page text. Change both together until T3.3 / T12.1 read it from the database.
+- Page text for crawlers in `backend/apps/core/pages.py` is a hand copy of the React page text for the fixed pages (home, shop, delivery). Category and product tags come from the database since T3.3. Change the fixed pages in both places until T12.1.
+- Product pictures are drawn stand-ins until the owner uploads real photos.
 - Watch: WeasyPrint needs GTK on Windows. PDF development may need WSL or Docker (decide at T10.2).
 
 ## 7. Next step
 
-Next task: T2.4 Owner and Staff roles. Try the flow: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:5173/accounts/signup/ and, after signing up, http://localhost:5173/account/addresses/. Reset emails print in the runserver terminal. Owner creates their own admin account with `uv run python manage.py createsuperuser` in `backend/`. Owner sends real content and photos. Then the backend phase starts: T0.2 (tools install), T1.1 (Django project), and the real API behind `frontend/src/api/`.
+Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Owner also answers the open questions in §3 (Kianat or Kainat, what Revery is). Next build task: T3.4 search, filters and sorting, or T2.4 Owner and Staff roles. Try the flow: run `uv run python manage.py seed_catalog` and `uv run python manage.py runserver` in `backend/`, and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/.
