@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { useAddToCart, useProduct } from '../api/hooks'
+import { useAddToCart, useCategories, useProduct } from '../api/hooks'
 import { CategoryIcon } from '../components/CategoryIcon'
 import { Button, ButtonLink } from '../components/ui/Button'
 import { Container } from '../components/ui/Container'
@@ -16,6 +16,7 @@ export default function ProductPage() {
   const { data: product, isPending, isError, refetch } = useProduct(slug)
   const [variantId, setVariantId] = useState<number>()
   const addToCart = useAddToCart()
+  const { data: categories } = useCategories()
   useDocumentTitle(product?.name ?? 'Product')
 
   if (isPending)
@@ -34,6 +35,9 @@ export default function ProductPage() {
 
   const firstSellable = product.variants.find((v) => v.stock_state !== 'out_of_stock')
   const variant = product.variants.find((v) => v.id === (variantId ?? firstSellable?.id))
+  const categoryName = categories?.find((c) => c.slug === product.category)?.name ?? 'Category'
+  const image = product.images[0]
+  const priced = product.variants.length > 0
 
   return (
     <Container className="py-10 sm:py-14">
@@ -43,31 +47,43 @@ export default function ProductPage() {
         </Link>
         <span aria-hidden> / </span>
         <Link to={`/c/${product.category}/`} className="link-grow">
-          {product.category.replace('-', ' ')}
+          {categoryName}
         </Link>
       </nav>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-10">
-        {/* Image stand-in: tilts toward the pointer, icon floats in front. */}
-        <div
-          {...pointerGlow(6)}
-          className="spotlight tilt relative grid aspect-[4/3] place-items-center overflow-hidden sm:aspect-square rounded-card bg-primary-100 text-primary-900"
-        >
-          <svg
-            aria-hidden
-            viewBox="0 0 100 100"
-            className="absolute size-[85%] opacity-15"
-            style={{ animation: 'spin-slow 80s linear infinite' }}
+        {image ? (
+          <div className="overflow-hidden rounded-card bg-primary-50">
+            <img
+              src={image.url}
+              alt={image.alt_text}
+              width={800}
+              height={800}
+              className="aspect-[4/3] w-full object-cover sm:aspect-square"
+            />
+          </div>
+        ) : (
+          /* Image stand-in: tilts toward the pointer, icon floats in front. */
+          <div
+            {...pointerGlow(6)}
+            className="spotlight tilt relative grid aspect-[4/3] place-items-center overflow-hidden sm:aspect-square rounded-card bg-primary-100 text-primary-900"
           >
-            <path d={STAR_PATH} fill="var(--color-accent)" />
-          </svg>
-          {/* Two layers: both effects use transform, so each needs its own element. */}
-          <div className="tilt-pop">
-            <div className="animate-float">
-              <CategoryIcon slug={product.category} className="size-28 sm:size-40" />
+            <svg
+              aria-hidden
+              viewBox="0 0 100 100"
+              className="absolute size-[85%] opacity-15"
+              style={{ animation: 'spin-slow 80s linear infinite' }}
+            >
+              <path d={STAR_PATH} fill="var(--color-accent)" />
+            </svg>
+            {/* Two layers: both effects use transform, so each needs its own element. */}
+            <div className="tilt-pop">
+              <div className="animate-float">
+                <CategoryIcon slug={product.category} className="size-28 sm:size-40" />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="animate-page-in">
           <h1 className="font-display text-3xl font-bold sm:text-4xl">{product.name}</h1>
@@ -78,68 +94,74 @@ export default function ProductPage() {
           )}
           <p className="mt-4 text-lg text-ink/80">{product.description}</p>
 
-          <fieldset className="mt-8">
-            <legend className="font-semibold">Pack size</legend>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              {product.variants.map((v) => {
-                const out = v.stock_state === 'out_of_stock'
-                return (
-                  <label
-                    key={v.id}
-                    className={`flex cursor-pointer items-center justify-between rounded-lg border-2 bg-card px-4 py-3 transition-[border-color,background-color,transform] has-checked:scale-[1.02] has-checked:border-primary-900 has-checked:bg-primary-50 has-focus-visible:outline-3 has-focus-visible:outline-accent-700 ${
-                      out
-                        ? 'cursor-not-allowed border-secondary/40 text-muted'
-                        : 'border-secondary/60 hover:-translate-y-0.5 hover:border-primary'
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="variant"
-                      className="sr-only"
-                      checked={v.id === variant?.id}
-                      disabled={out}
-                      onChange={() => setVariantId(v.id)}
-                    />
-                    <span className="font-medium">
-                      {v.label}
-                      {out && ' (sold out)'}
-                    </span>
-                    <span className="font-narrow text-xl font-bold tabular-nums">
-                      {formatPrice(v.price)}
-                    </span>
-                  </label>
-                )
-              })}
-            </div>
-          </fieldset>
+          {priced ? (
+            <>
+              <fieldset className="mt-8">
+                <legend className="font-semibold">Pack size</legend>
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  {product.variants.map((v) => {
+                    const out = v.stock_state === 'out_of_stock'
+                    return (
+                      <label
+                        key={v.id}
+                        className={`flex cursor-pointer items-center justify-between rounded-lg border-2 bg-card px-4 py-3 transition-[border-color,background-color,transform] has-checked:scale-[1.02] has-checked:border-primary-900 has-checked:bg-primary-50 has-focus-visible:outline-3 has-focus-visible:outline-accent-700 ${
+                          out
+                            ? 'cursor-not-allowed border-secondary/40 text-muted'
+                            : 'border-secondary/60 hover:-translate-y-0.5 hover:border-primary'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="variant"
+                          className="sr-only"
+                          checked={v.id === variant?.id}
+                          disabled={out}
+                          onChange={() => setVariantId(v.id)}
+                        />
+                        <span className="font-medium">
+                          {v.label}
+                          {out && ' (sold out)'}
+                        </span>
+                        <span className="font-narrow text-xl font-bold tabular-nums">
+                          {formatPrice(v.price)}
+                        </span>
+                      </label>
+                    )
+                  })}
+                </div>
+              </fieldset>
 
-          {variant?.stock_state === 'low_stock' && (
-            <p className="mt-3 font-medium text-accent-700">Only a few left in this size.</p>
+              {variant?.stock_state === 'low_stock' && (
+                <p className="mt-3 font-medium text-accent-700">Only a few left in this size.</p>
+              )}
+
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <Button
+                  variant="primary"
+                  className="w-full px-8 sm:w-auto"
+                  disabled={!variant || addToCart.isPending}
+                  onClick={() => variant && addToCart.mutate({ variantId: variant.id })}
+                >
+                  {addToCart.isPending ? 'Adding…' : 'Add to cart'}
+                </Button>
+                {addToCart.isSuccess && (
+                  <p role="status" className="animate-pop font-medium text-primary-900">
+                    Added to cart.{' '}
+                    <Link to="/cart/" className="link-grow">
+                      View cart
+                    </Link>
+                  </p>
+                )}
+                {addToCart.isError && (
+                  <p role="alert" className="font-medium text-danger">
+                    Could not add this item. Try again.
+                  </p>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="mt-8 text-xl font-semibold">Price coming soon</p>
           )}
-
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Button
-              variant="primary"
-              className="w-full px-8 sm:w-auto"
-              disabled={!variant || addToCart.isPending}
-              onClick={() => variant && addToCart.mutate({ variantId: variant.id })}
-            >
-              {addToCart.isPending ? 'Adding…' : 'Add to cart'}
-            </Button>
-            {addToCart.isSuccess && (
-              <p role="status" className="animate-pop font-medium text-primary-900">
-                Added to cart.{' '}
-                <Link to="/cart/" className="link-grow">
-                  View cart
-                </Link>
-              </p>
-            )}
-            {addToCart.isError && (
-              <p role="alert" className="font-medium text-danger">
-                Could not add this item. Try again.
-              </p>
-            )}
-          </div>
           <p className="mt-6 text-sm text-muted">
             Pay cash when the order arrives. We call to confirm first.
           </p>

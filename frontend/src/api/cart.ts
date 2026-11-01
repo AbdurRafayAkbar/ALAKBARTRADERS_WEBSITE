@@ -1,9 +1,9 @@
-import { products } from './mock/data'
+import { findSeenVariant } from './catalog'
 import type { Cart, CartLine } from './types'
 
 // Cart endpoints. The real cart lives in the Django session (Phase 5).
-// This in-memory stand-in plays the server: it reads prices from the catalogue
-// and returns line totals, so React never adds up money itself (rules.md §3.1).
+// This in-memory stand-in plays the server: it reads prices from the products
+// the shop front has loaded and returns line totals, so React never adds up money itself (rules.md §3.1).
 
 let lines: { id: number; variant_id: number; quantity: number }[] = []
 let nextLineId = 1
@@ -12,19 +12,11 @@ let nextLineId = 1
 const toPaisa = (m: string) => Math.round(Number(m) * 100)
 const fromPaisa = (p: number) => (p / 100).toFixed(2)
 
-function findVariant(variantId: number) {
-  for (const product of products) {
-    const variant = product.variants.find((v) => v.id === variantId)
-    if (variant) return { product, variant }
-  }
-  return null
-}
-
 function snapshot(): Cart {
   const items: CartLine[] = []
   let subtotal = 0
   for (const line of lines) {
-    const found = findVariant(line.variant_id)
+    const found = findSeenVariant(line.variant_id)
     if (!found) continue
     const lineTotal = toPaisa(found.variant.price) * line.quantity
     subtotal += lineTotal
