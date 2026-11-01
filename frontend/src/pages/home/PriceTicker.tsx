@@ -6,11 +6,15 @@ import { STAR_PATH } from '../../lib/star'
 // shop counter. Decoration only: the same rates are on the rate board.
 export function PriceTicker() {
   const { data: products } = useProducts({ featured: true })
-  const items = (products ?? []).flatMap((product) => {
+  // Products with no pack sizes yet still run along the strip, without a price.
+  const items = (products ?? []).map((product) => {
     const variant = product.variants[0]
-    return variant
-      ? [{ key: product.slug, name: product.name, label: variant.label, price: variant.price }]
-      : []
+    return {
+      key: product.slug,
+      name: product.name,
+      label: variant?.label ?? '',
+      price: variant ? formatPrice(variant.price) : 'Price coming soon',
+    }
   })
   if (items.length === 0) return null
 
@@ -22,10 +26,8 @@ export function PriceTicker() {
           <path d={STAR_PATH} fill="var(--color-accent)" />
         </svg>
         <span className="font-semibold">{item.name}</span>
-        <span className="text-primary-100">{item.label}</span>
-        <span className="font-narrow text-lg font-bold tabular-nums text-accent">
-          {formatPrice(item.price)}
-        </span>
+        {item.label && <span className="text-primary-100">{item.label}</span>}
+        <span className="font-narrow text-lg font-bold tabular-nums text-accent">{item.price}</span>
       </span>
     ))
 

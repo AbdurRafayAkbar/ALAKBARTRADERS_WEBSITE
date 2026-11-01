@@ -3,14 +3,13 @@
 
 export type Money = string
 
-export type CategorySlug = 'rice' | 'dry-fruits' | 'milk-cream'
+// Categories live in the database, so the owner can add one in admin.
+export type CategorySlug = string
 
 export interface Category {
   slug: CategorySlug
   name: string
   summary: string
-  pack_sizes: string
-  is_perishable: boolean
 }
 
 export type StockState = 'in_stock' | 'low_stock' | 'out_of_stock'
@@ -24,6 +23,12 @@ export interface ProductVariant {
   stock_state: StockState
 }
 
+export interface ProductImage {
+  url: string
+  alt_text: string
+}
+
+// variants is empty until the owner sets pack sizes and prices in admin.
 export interface Product {
   slug: string
   name: string
@@ -32,6 +37,7 @@ export interface Product {
   is_perishable: boolean
   is_featured: boolean
   variants: ProductVariant[]
+  images: ProductImage[]
 }
 
 export interface DeliveryZone {

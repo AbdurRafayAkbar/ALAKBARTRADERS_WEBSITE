@@ -43,7 +43,6 @@ export function RateBoard() {
         <ul className="divide-y divide-white/10">
           {products.map((product) => {
             const variant = product.variants[0]
-            if (!variant) return null
             return (
               <li key={product.slug}>
                 {/* Phones stack the pack label under the name and drop the dotted leader. */}
@@ -55,17 +54,25 @@ export function RateBoard() {
                     <span className="block font-medium text-white transition-colors group-hover:text-accent">
                       {product.name}
                     </span>
-                    <span className="block whitespace-nowrap text-sm text-primary-100">
-                      {variant.label}
-                    </span>
+                    {variant && (
+                      <span className="block whitespace-nowrap text-sm text-primary-100">
+                        {variant.label}
+                      </span>
+                    )}
                   </span>
                   <span
                     aria-hidden
                     className="leader hidden min-w-6 flex-1 translate-y-[-0.3em] border-b-2 border-dotted border-white/30 sm:block"
                   />
-                  <span className="price shrink-0 whitespace-nowrap font-narrow text-xl font-bold tabular-nums text-white sm:text-2xl">
-                    {formatPrice(variant.price)}
-                  </span>
+                  {variant ? (
+                    <span className="price shrink-0 whitespace-nowrap font-narrow text-xl font-bold tabular-nums text-white sm:text-2xl">
+                      {formatPrice(variant.price)}
+                    </span>
+                  ) : (
+                    <span className="shrink-0 whitespace-nowrap text-sm font-medium text-primary-100">
+                      Price coming soon
+                    </span>
+                  )}
                 </Link>
               </li>
             )
