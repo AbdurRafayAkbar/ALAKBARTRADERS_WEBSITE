@@ -8,6 +8,7 @@ app_name = "api"
 urlpatterns = [
     path("", include("apps.core.urls")),
     path("", include("apps.accounts.api.urls")),
+    path("", include("apps.catalog.api.urls")),
     # OpenAPI schema. Open to all in dev, staff only in prod (SPECTACULAR_SETTINGS).
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("schema/docs/", SpectacularSwaggerView.as_view(url_name="api:schema"), name="docs"),
