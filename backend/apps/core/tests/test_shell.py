@@ -2,6 +2,8 @@
 
 import pytest
 
+from apps.catalog.tests.factories import CategoryFactory, ProductFactory
+
 # ATOMIC_REQUESTS opens a transaction for every request, page views included.
 pytestmark = pytest.mark.django_db
 
@@ -36,7 +38,7 @@ def test_home_has_server_filled_title_heading_and_canonical(client):
     html = response.content.decode()
 
     assert response.status_code == 200
-    assert "<title>ALAKBARTRADERS | Rice, dry fruits and fresh cream in Chashma</title>" in html
+    assert "<title>ALAKBARTRADERS | Rice, ghee, cream and honey in Chashma</title>" in html
     assert "Old title" not in html
     assert "Old description." not in html
     assert "<h1>Fresh from the farm. Ready for your table.</h1>" in html
@@ -46,12 +48,20 @@ def test_home_has_server_filled_title_heading_and_canonical(client):
 
 
 def test_category_page_uses_category_name(client):
+    CategoryFactory(name="Rice", summary="Kacha, steam and sela rice")
     response = client.get("/c/rice/")
     html = response.content.decode()
 
     assert response.status_code == 200
     assert "<title>Rice | ALAKBARTRADERS</title>" in html
     assert "<h1>Rice</h1>" in html
+    assert "Kacha, steam and sela rice" in html
+
+
+def test_hidden_category_is_404(client):
+    CategoryFactory(name="Honey", is_active=False)
+
+    assert client.get("/c/honey/").status_code == 404
 
 
 def test_unknown_category_is_404(client):
@@ -61,14 +71,31 @@ def test_unknown_category_is_404(client):
     assert '<meta name="robots" content="noindex" />' in response.content.decode()
 
 
-def test_product_deep_link_loads_the_app(client):
-    response = client.get("/p/test/")
+def test_product_page_uses_product_name(client):
+    ProductFactory(name="Kianat Kacha", description="Long grain kacha rice.")
+    response = client.get("/p/kianat-kacha/")
     html = response.content.decode()
 
     assert response.status_code == 200
     assert '<script type="module" src="/assets/index.js"></script>' in html
-    # No product data until T3.3, so keep it out of Google for now.
-    assert '<meta name="robots" content="noindex" />' in html
+    assert "<title>Kianat Kacha | ALAKBARTRADERS</title>" in html
+    assert "<h1>Kianat Kacha</h1>" in html
+    assert "Long grain kacha rice." in html
+    assert 'name="robots"' not in html
+
+
+@pytest.mark.parametrize("hidden", ["product", "category"])
+def test_unknown_or_hidden_product_is_404(client, hidden):
+    product = ProductFactory(name="Honey")
+    if hidden == "product":
+        product.is_active = False
+        product.save()
+    else:
+        product.category.is_active = False
+        product.category.save()
+
+    assert client.get("/p/honey/").status_code == 404
+    assert client.get("/p/no-such-thing/").status_code == 404
 
 
 def test_unknown_page_returns_404_with_the_app(client):

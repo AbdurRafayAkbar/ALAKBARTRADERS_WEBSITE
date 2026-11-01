@@ -7,20 +7,14 @@ treats different content for crawlers and people as cloaking.
 
 from dataclasses import dataclass
 
+from apps.catalog import selectors
+
 # Same values as frontend/src/config/site.ts.
 SITE_NAME = "ALAKBARTRADERS"
 CITY = "Chashma"
 
-# Same as frontend/src/api/mock/data.ts until the catalog app exists (T3.1).
-# TODO(T3.3): read the Category table instead, so new categories need no code change.
-CATEGORIES = {
-    "rice": ("Rice", "Basmati, Sella and everyday rice, cleaned and packed in the shop."),
-    "dry-fruits": ("Dry fruits", "Almonds, cashews, pistachios and walnuts, sold by weight."),
-    "milk-cream": ("Milk cream", "Fresh dairy cream from dated batches. Delivered chilled."),
-}
-
 DEFAULT_DESCRIPTION = (
-    f"Order rice, dry fruits and fresh milk cream online in {CITY}. "
+    f"Order rice, oil and ghee, milk cream, desi ghee and honey online in {CITY}. "
     "Pay cash on delivery. Our own riders deliver to your door."
 )
 
@@ -38,7 +32,7 @@ class Page:
     @property
     def full_title(self):
         if not self.title:
-            return f"{SITE_NAME} | Rice, dry fruits and fresh cream in {CITY}"
+            return f"{SITE_NAME} | Rice, ghee, cream and honey in {CITY}"
         return f"{self.title} | {SITE_NAME}"
 
 
@@ -46,7 +40,7 @@ HOME = Page(
     title="",
     heading="Fresh from the farm. Ready for your table.",
     text=(
-        f"Basmati rice, dry fruits and fresh milk cream, delivered in {CITY}. "
+        f"Rice, oil and ghee, fresh milk cream, desi ghee and honey, delivered in {CITY}. "
         "Order online and pay cash when it arrives."
     ),
 )
@@ -106,12 +100,17 @@ NOT_FOUND = Page(
 )
 
 
+# Categories and products come from the database, so the owner can add one in
+# admin without a code change. Hidden ones get the 404 page, like the API.
 def category_page(slug):
-    if slug not in CATEGORIES:
+    category = selectors.active_categories().filter(slug=slug).first()
+    if category is None:
         return NOT_FOUND
-    name, summary = CATEGORIES[slug]
-    description = f"{summary} {DEFAULT_DESCRIPTION}"
-    return Page(title=name, heading=name, text=summary, description=description)
+    lead = category.summary or category.name
+    description = f"{lead.rstrip('.')}. {DEFAULT_DESCRIPTION}"
+    return Page(
+        title=category.name, heading=category.name, text=category.summary, description=description
+    )
 
 
 def search_page(query):
@@ -121,7 +120,11 @@ def search_page(query):
 
 
 def product_page(slug):
-    # TODO(T3.3): look the product up, return NOT_FOUND for unknown or inactive
-    # slugs, and fill in its name, price and description. Until then the page
-    # stays out of Google, because it has no product content to show.
-    return Page(title="Product", heading="Product", index=False)
+    product = selectors.active_products().filter(slug=slug).first()
+    if product is None:
+        return NOT_FOUND
+    text = product.description
+    description = (
+        f"{text} {DEFAULT_DESCRIPTION}" if text else f"{product.name}. {DEFAULT_DESCRIPTION}"
+    )
+    return Page(title=product.name, heading=product.name, text=text, description=description)
