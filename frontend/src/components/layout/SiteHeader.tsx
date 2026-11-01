@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
 import { useCart, useMe } from '../../api/hooks'
 import logo from '../../assets/brand/logo-full.png'
-import { site } from '../../config/site'
+import { site, whatsappLink } from '../../config/site'
 
 const nav = [
   { to: '/c/rice/', label: 'Rice' },
@@ -76,8 +76,14 @@ export function SiteHeader() {
           <span className="truncate">
             Cash on delivery<span className="hidden sm:inline"> across {site.city}</span>
           </span>
-          <a href={`tel:${site.phone}`} className="link-wipe shrink-0 font-medium">
-            <span className="hidden sm:inline">Call </span>
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`WhatsApp ${site.phone}`}
+            className="link-wipe shrink-0 font-medium"
+          >
+            <span className="hidden sm:inline">WhatsApp </span>
             {site.phone}
           </a>
         </div>
