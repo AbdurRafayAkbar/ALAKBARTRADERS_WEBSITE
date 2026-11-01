@@ -82,7 +82,7 @@
 - **Acceptance:** "View page source" on `/` shows the server-filled title and heading; deep link `/p/test/` loads React, not a Django 404; an unknown page returns status 404; `/cart/` and `/search/` send `noindex`; unknown `/api/` URLs do not return the page shell.
 - **Mode:** 🤝
 - **Concepts:** SPA fallback routing, static files, why crawlers and WhatsApp need server HTML.
-- **Done (2026-10-30):** `apps/core/page_urls.py` mirrors the React routes and is included last in `config/urls.py`. `apps/core/shell.py` reads `FRONTEND_DIST_DIR/index.html` on each request and fills in the title, description, canonical (from `DJANGO_SITE_URL`, query string dropped), robots and Open Graph tags, plus a header, nav and the page heading and text inside `#root`. Page text lives in `apps/core/pages.py` and must match the React pages. Unknown pages and unknown category slugs return the app with status 404; cart, search, 404 and (until T3.3) product pages are `noindex`. Unknown `/api/` URLs keep Django's plain 404. A missing build returns 503 with the fix. WhiteNoise serves the build, with a one-year immutable cache for the hashed `/assets/` files. Tests in `apps/core/tests/test_shell.py` also check that `frontend/index.html` still has the markers the shell needs.
+- **Done (2026-10-30):** `apps/core/page_urls.py` mirrors the React routes and is included last in `config/urls.py`. `apps/core/shell.py` reads `FRONTEND_DIST_DIR/index.html` on each request and fills in the title, description, canonical (from `DJANGO_SITE_URL`, query string dropped), robots and Open Graph tags, plus a header, nav and the page heading and text inside `#root`. Page text lives in `apps/core/pages.py` and must match the React pages. Unknown pages and unknown category slugs return the app with status 404; cart, search and 404 pages are `noindex`; product pages became indexable in T3.3 (2026-11-02). Unknown `/api/` URLs keep Django's plain 404. A missing build returns 503 with the fix. WhiteNoise serves the build, with a one-year immutable cache for the hashed `/assets/` files. Tests in `apps/core/tests/test_shell.py` also check that `frontend/index.html` still has the markers the shell needs.
 
 ### [x] T1.8 Frontend tooling in CI
 - **Description:** Linter (oxlint, chosen over ESLint) + Prettier, Vitest + React Testing Library + MSW, first component test; add `tsc`, lint, test, build jobs to GitHub Actions.
@@ -131,26 +131,29 @@
 
 ## Phase 3 — Catalog & variants
 
-### [ ] T3.1 Category + Product models
+### [x] T3.1 Category + Product models
 - **Description:** Models, slugs, `is_active`, `is_perishable`; admin.
 - **Depends on:** T1.5
 - **Acceptance:** owner creates Rice / Dry Fruits / Dairy Creams in admin; tests for slug uniqueness.
 - **Mode:** 🧑‍💻
 - **Concepts:** models, migrations, `SlugField`, ForeignKey + `on_delete`.
+- **Done (2026-11-02):** `apps/catalog` with `Category` (name, slug, summary, optional parent, sort order, `is_active`) and `Product` (category with `PROTECT`, description, `is_perishable`, `is_featured`). Slugs are made from the name when left empty and are unique. Admin lists, filters and searches both. The `seed_catalog` command adds the owner's 7 categories (Rice, Oil & Ghee, Anmol Revery, Milk Cream, Desi Ghee, Honey, Dry Fruits with no items yet) and 15 products. It is safe to run again and never overwrites the owner's edits.
 
-### [ ] T3.2 ProductVariant + ProductImage
+### [x] T3.2 ProductVariant + ProductImage
 - **Description:** Pack-size variants with SKU, price (Decimal), weight; images with alt text; inline admin.
 - **Depends on:** T3.1
 - **Acceptance:** a product with 4 sizes created in one admin screen; price is Decimal; constraint tests.
 - **Mode:** 🤝
 - **Concepts:** DecimalField, `UniqueConstraint`, `CheckConstraint`, admin inlines, `ImageField` + Pillow.
+- **Done (2026-11-02):** `ProductVariant` (label, weight in grams, unique SKU, `DecimalField(12, 2)` price that cannot be negative, optional `compare_at_price` that must be above the price, stock, low-stock threshold, `is_active`) with one label per product. `ProductImage` with alt text, uploaded to `media/products/`. Both are inlines on the product admin page. No prices are set yet: products without a priced pack size show "Price coming soon" and no cart button. The seed command adds a drawn stand-in picture (from `apps/catalog/artwork.py`, no brand logos) to each product until the owner uploads real photos.
 
-### [ ] T3.3 Category listing + product detail (API + React pages)
+### [x] T3.3 Category listing + product detail (API + React pages)
 - **Description:** Selectors, serializers, read-only API endpoints; React listing and detail pages; pack-size selector updating price from loaded variant data; server-filled meta tags for product URLs.
 - **Depends on:** T3.2, T1.7
 - **Acceptance:** pages work on mobile; at most 10 queries per API call (test); inactive products return 404; page source shows the product title.
 - **Mode:** 🤝
 - **Concepts:** DRF generic views, serializers, selectors, `select_related`/`prefetch_related`, React state, `useQuery`.
+- **Done (2026-11-02):** Read-only API at `/api/v1/categories/`, `/api/v1/products/?category=&q=&featured=1` and `/api/v1/products/<slug>/`, built on `active_categories()` and `active_products()` in `apps/catalog/selectors.py`. Inactive products and products in inactive categories return 404. Query counts are capped in tests. React now loads the catalog from the API instead of mock data; the cart is still an in-memory stand-in (it reads prices from the loaded products) until the real cart API in Phase 5. `apps/core/pages.py` reads category and product titles and descriptions from the database, and product pages are now indexable. The header phone number is 0333-6839509 with a WhatsApp link (PR #16).
 
 ### [ ] T3.4 Search + filters + sorting
 - **Description:** PostgreSQL full-text search; filters by size, price, in stock; sorting; pagination; filters stored in the URL query string in React.

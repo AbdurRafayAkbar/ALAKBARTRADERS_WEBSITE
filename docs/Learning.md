@@ -57,6 +57,10 @@ Time: about 4 hours per day. Preferred start mode: mostly 🤖, moving toward �
 | IntersectionObserver | The browser tells us when an element scrolls into view, without listening to every scroll event | frontend/src/components/motion/Reveal.tsx | 🔴 |
 | Transform containing block | An element with `transform` becomes the reference box for `position: fixed` children, so overlays must live outside animated wrappers | Layout, LogoIntro | 🔴 |
 | Sideways overflow on phones | A 3D-tilted section projects wider than the screen, so the page scrolls sideways and fixed overlays stretch past the edge. `overflow-x: clip` trims it without creating a scroll box, so `position: sticky` keeps working (`hidden` would break it) | Layout | 🔴 |
+| Idempotent seed command | A management command that uses `get_or_create` by slug adds only what is missing, so it is safe to run again and never overwrites what the owner changed in admin | backend/apps/catalog/management/commands/seed_catalog.py | 🔴 |
+| Selectors | Read-only queries live in one place (`active_products()`), so the API, page tags and tests all agree on what "visible" means | backend/apps/catalog/selectors.py | 🔴 |
+| N+1 queries | Loading each product's pack sizes one by one makes one query per product; `prefetch_related` loads them in one go, and a test caps the query count | backend/apps/catalog/tests/test_catalog_api.py | 🔴 |
+| `on_delete=PROTECT` | Django refuses to delete a category that still has products, so the owner hides it with `is_active` instead | backend/apps/catalog/models.py | 🔴 |
 | Accessible name of split text | Separate word spans can lose their spaces in the accessible name; keep one `sr-only` sentence and hide the animated copy | frontend/src/components/motion/SplitWords.tsx | 🔴 |
 
 ## 4. Mistakes and lessons
