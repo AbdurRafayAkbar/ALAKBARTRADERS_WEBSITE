@@ -17,13 +17,13 @@ export function CategoryGrid() {
             What <span className="text-duo">we sell</span>
           </h2>
           <p className="mt-3 max-w-xl text-lg text-muted">
-            Three things, bought fresh and packed in the shop.
+            Rice, oil and ghee, sweets, cream and honey, bought fresh for the shop.
           </p>
         </Reveal>
         {isPending && <LoadingBlock />}
         {isError && <ErrorBlock onRetry={() => refetch()} />}
         {categories && (
-          <ul className="mt-8 grid gap-3 sm:mt-10 sm:gap-5 md:grid-cols-3">
+          <ul className="mt-8 grid gap-3 sm:mt-10 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
             {categories.map((category, i) => (
               <Reveal as="li" key={category.slug} index={i}>
                 {/* Phones: icon beside the text in a short row. Wider screens: tall card. */}
@@ -45,7 +45,7 @@ export function CategoryGrid() {
                     {category.summary}
                   </span>
                   <span className="mt-3 flex items-center justify-between gap-3 text-sm font-semibold text-primary-900 md:mt-auto md:pt-6">
-                    <span>Packs: {category.pack_sizes}</span>
+                    <span>Shop {category.name.toLowerCase()}</span>
                     <span
                       aria-hidden
                       className="grid size-9 place-items-center rounded-full border border-primary-900/30 transition-[transform,background-color,color] duration-300 group-hover:translate-x-1 group-hover:bg-accent group-hover:text-on-accent"
