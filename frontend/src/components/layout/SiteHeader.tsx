@@ -49,11 +49,14 @@ function AccountControl() {
       </Link>
     )
   }
-  // Log out lives on the account page.
+  // Greet the customer by first name; "Account" until they add one on the
+  // account page. Log out lives there too.
+  const name = me.first_name.trim()
   return (
     <Link to="/account/" className={iconButton} title={me.email}>
       <PersonIcon />
-      <span className="max-lg:sr-only">Account</span> <span className="sr-only">{me.email}</span>
+      <span className="max-w-32 truncate max-lg:sr-only">{name || 'Account'}</span>
+      {name && <span className="sr-only">, your account</span>}
     </Link>
   )
 }

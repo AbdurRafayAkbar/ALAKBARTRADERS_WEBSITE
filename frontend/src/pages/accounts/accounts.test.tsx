@@ -218,13 +218,24 @@ describe('header account control', () => {
     )
   })
 
-  it('links a logged-in customer to their account', async () => {
+  it('greets a logged-in customer by name and links to their account', async () => {
     server.use(http.get('/api/v1/auth/me/', () => HttpResponse.json(ali)))
     renderAt('/delivery-areas/')
 
     const header = screen.getByRole('banner')
-    expect(
-      await within(header).findByRole('link', { name: /account ali@example.com/i }),
-    ).toHaveAttribute('href', '/account/')
+    const link = await within(header).findByRole('link', { name: 'Ali, your account' })
+    expect(link).toHaveAttribute('href', '/account/')
+    expect(within(link).getByText('Ali')).toBeInTheDocument()
+  })
+
+  it('shows Account when the customer has no first name yet', async () => {
+    server.use(http.get('/api/v1/auth/me/', () => HttpResponse.json({ ...ali, first_name: '' })))
+    renderAt('/delivery-areas/')
+
+    const header = screen.getByRole('banner')
+    expect(await within(header).findByRole('link', { name: 'Account' })).toHaveAttribute(
+      'href',
+      '/account/',
+    )
   })
 })
