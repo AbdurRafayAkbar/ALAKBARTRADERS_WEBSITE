@@ -72,14 +72,14 @@ def test_unknown_category_is_404(client):
 
 
 def test_product_page_uses_product_name(client):
-    ProductFactory(name="Kianat Kacha", description="Long grain kacha rice.")
-    response = client.get("/p/kianat-kacha/")
+    ProductFactory(name="Kainat Kacha", description="Long grain kacha rice.")
+    response = client.get("/p/kainat-kacha/")
     html = response.content.decode()
 
     assert response.status_code == 200
     assert '<script type="module" src="/assets/index.js"></script>' in html
-    assert "<title>Kianat Kacha | ALAKBARTRADERS</title>" in html
-    assert "<h1>Kianat Kacha</h1>" in html
+    assert "<title>Kainat Kacha | ALAKBARTRADERS</title>" in html
+    assert "<h1>Kainat Kacha</h1>" in html
     assert "Long grain kacha rice." in html
     assert 'name="robots"' not in html
 

@@ -45,14 +45,14 @@ def test_hidden_category_is_not_found(client):
 
 
 def test_product_shows_prices_as_strings_and_stock_state(client):
-    product = ProductFactory(name="Kianat Sela")
+    product = ProductFactory(name="Kainat Sela")
     ProductVariantFactory(product=product, label="1 kg", price=Decimal("450.00"), stock_quantity=3)
     ProductVariantFactory(
         product=product, label="5 kg", price=Decimal("2150.00"), stock_quantity=0, sort_order=1
     )
     ProductVariantFactory(product=product, label="10 kg", is_active=False)
 
-    body = client.get(f"{PRODUCTS}kianat-sela/").json()
+    body = client.get(f"{PRODUCTS}kainat-sela/").json()
 
     assert body["category"] == product.category.slug
     assert [(v["label"], v["price"], v["stock_state"]) for v in body["variants"]] == [
@@ -95,16 +95,16 @@ def test_products_hide_inactive_products_and_products_in_hidden_categories(clien
 
 def test_products_filter_by_category_search_and_featured(client):
     rice = CategoryFactory(name="Rice")
-    ProductFactory(name="Kianat Kacha", category=rice, is_featured=True)
-    ProductFactory(name="Kianat Sela", category=rice, description="Golden parboiled rice")
+    ProductFactory(name="Kainat Kacha", category=rice, is_featured=True)
+    ProductFactory(name="Kainat Sela", category=rice, description="Golden parboiled rice")
     ProductFactory(name="Honey", is_featured=True)
 
     def slugs(query):
         return [p["slug"] for p in client.get(PRODUCTS, query).json()]
 
-    assert slugs({"category": "rice"}) == ["kianat-kacha", "kianat-sela"]
-    assert slugs({"q": "golden"}) == ["kianat-sela"]
-    assert slugs({"featured": "true"}) == ["honey", "kianat-kacha"]
+    assert slugs({"category": "rice"}) == ["kainat-kacha", "kainat-sela"]
+    assert slugs({"q": "golden"}) == ["kainat-sela"]
+    assert slugs({"featured": "true"}) == ["honey", "kainat-kacha"]
 
 
 def test_product_list_query_count_does_not_grow(client, django_assert_max_num_queries):

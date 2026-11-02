@@ -19,7 +19,7 @@ from apps.catalog.models import Category, Product, ProductImage
 CATEGORIES = [
     ("rice", "Rice", "Kacha, steam and sela rice"),
     ("oil-ghee", "Oil & Ghee", "Cooking oil and banaspati ghee"),
-    ("anmol-revery", "Anmol Revery", "Anmol revery"),
+    ("anmol-revery", "Anmol Revery", "Sesame sweets made with pure ghee and green cardamom"),
     ("milk-cream", "Milk Cream", "Fresh milk cream"),
     ("desi-ghee", "Desi Ghee", "Pure desi ghee"),
     ("honey", "Honey", "Pure honey"),
@@ -28,12 +28,12 @@ CATEGORIES = [
 
 # (category slug, product name, picture, perishable, featured)
 PRODUCTS = [
-    ("rice", "Kianat Kacha", lambda: artwork.rice("#fbfaf4", seed=1), False, True),
-    ("rice", "Steam Kianat 1121", lambda: artwork.rice("#f4ecd6", seed=2), False, False),
-    ("rice", "Steam Kianat 1509", lambda: artwork.rice("#f1e6c9", seed=3), False, False),
+    ("rice", "Kainat Kacha", lambda: artwork.rice("#fbfaf4", seed=1), False, True),
+    ("rice", "Steam Kainat 1121", lambda: artwork.rice("#f4ecd6", seed=2), False, False),
+    ("rice", "Steam Kainat 1509", lambda: artwork.rice("#f1e6c9", seed=3), False, False),
     ("rice", "Short Grain Steam", lambda: artwork.rice("#f6efdc", seed=4), False, False),
-    ("rice", "Kianat Adhwar", lambda: artwork.rice("#efe7d4", seed=5), False, False),
-    ("rice", "Kianat Sela", lambda: artwork.rice("#e8c97a", seed=6), False, False),
+    ("rice", "Kainat Adhwar", lambda: artwork.rice("#efe7d4", seed=5), False, False),
+    ("rice", "Kainat Sela", lambda: artwork.rice("#e8c97a", seed=6), False, False),
     ("oil-ghee", "Dalda Oil", lambda: artwork.bottle("#e8b923"), False, True),
     ("oil-ghee", "Dalda Ghee", lambda: artwork.tin("#2f6b3a"), False, False),
     (
