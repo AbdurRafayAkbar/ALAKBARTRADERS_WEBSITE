@@ -27,8 +27,8 @@ const categories: Category[] = [
 // One product with a price, and one still waiting for the owner to set it.
 const products: Product[] = [
   {
-    slug: 'kianat-kacha',
-    name: 'Kianat Kacha',
+    slug: 'kainat-kacha',
+    name: 'Kainat Kacha',
     category: 'rice',
     description: '',
     is_perishable: false,
@@ -83,7 +83,7 @@ describe('home page', () => {
       'href',
       '/shop/',
     )
-    expect((await screen.findAllByRole('link', { name: /Kianat Kacha/i })).length).toBeGreaterThan(
+    expect((await screen.findAllByRole('link', { name: /Kainat Kacha/i })).length).toBeGreaterThan(
       0,
     )
   })
@@ -99,8 +99,8 @@ describe('home page', () => {
 describe('product page', () => {
   it('adds the selected pack to the cart and updates the header count', async () => {
     const user = userEvent.setup()
-    renderAt('/p/kianat-kacha/')
-    await screen.findByRole('heading', { level: 1, name: 'Kianat Kacha' })
+    renderAt('/p/kainat-kacha/')
+    await screen.findByRole('heading', { level: 1, name: 'Kainat Kacha' })
 
     await user.click(screen.getByRole('button', { name: 'Add to cart' }))
 
