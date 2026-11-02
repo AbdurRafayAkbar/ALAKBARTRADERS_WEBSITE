@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 
 def test_slug_is_made_from_the_name():
     assert CategoryFactory(name="Oil & Ghee").slug == "oil-ghee"
-    assert ProductFactory(name="Steam Kianat 1121").slug == "steam-kianat-1121"
+    assert ProductFactory(name="Steam Kainat 1121").slug == "steam-kainat-1121"
 
 
 def test_a_given_slug_is_kept():
