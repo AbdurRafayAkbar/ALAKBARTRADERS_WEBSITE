@@ -120,12 +120,13 @@
 - **Concepts:** ModelSerializer, `IsAuthenticated`, filtering querysets by `request.user`, object-level access.
 - **Done (2026-10-30):** `Address` model in `apps/accounts` (name, phone, house number, block, colony, optional house name and landmark, `area` text until the zone FK in Phase 8, `is_default`). API under `/api/v1/account/`: `profile/` (PATCH name and phone) and `addresses/` (list, add, PATCH, delete). The queryset is filtered by `request.user`, so another user's address returns 404. A user can save at most 5 addresses, and saving one as default clears the old default. Django's `Http404` now uses the standard `{code, message, fields}` shape. React: "Your account" at `/account/` (name, phone, log out) and "Saved addresses" at `/account/addresses/` (add, edit, delete with a confirm step, make default); guests go to the login page with `?next=`; the header account control links to `/account/`. Django serves both shell pages. Tests: pytest 93, vitest 38.
 
-### [ ] T2.4 Roles: Owner and Staff
+### [x] T2.4 Roles: Owner and Staff
 - **Description:** Data migration creating `Owner`/`Staff` groups + permissions; DRF permission classes `IsStaff`, `IsOwner`; `auth/me/` returns the role so React shows the right menu.
 - **Depends on:** T2.1
 - **Acceptance:** permission tests: customer 403, staff allowed, staff blocked from owner-only endpoints.
 - **Mode:** 🤝
 - **Concepts:** Groups, permissions, data migrations, DRF permission classes.
+- **Done (2026-11-06):** Migration `accounts 0003` creates the `Owner` group (all catalog and accounts permissions) and the `Staff` group (none yet; order and stock permissions come with those models). `user_role()` in `apps/accounts/selectors.py` reads the groups, and a superuser counts as the owner. `IsStaff` and `IsOwner` live in `apps/accounts/permissions.py`. `auth/me/` returns `role` (customer, staff or owner), and the React `User` type has it. Tests: a customer gets 403, staff and owner get in, staff get 403 on owner-only views. pytest 130, vitest 41.
 
 ---
 
