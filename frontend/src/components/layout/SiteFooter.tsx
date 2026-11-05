@@ -21,7 +21,7 @@ export function SiteFooter() {
         <div className="lg:col-span-2">
           <p className="font-display text-xl font-bold text-white">{site.name}</p>
           <p className="mt-3 max-w-sm">
-            Family shop in {site.city} selling rice, oil and ghee, Anmol revery, milk cream, desi
+            Family shop in {site.city} selling rice, oil and ghee, Anmol Rewari, milk cream, desi
             ghee and honey. Delivered by our own riders, paid in cash at your door.
           </p>
         </div>
