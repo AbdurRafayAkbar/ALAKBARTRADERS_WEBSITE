@@ -74,12 +74,19 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 4. Current position
 
-- **Phase:** 3 — Catalog & variants
-- **Task:** Phase 3 done (T3.1 to T3.4), plus T2.4 Owner and Staff roles.
-- **Step:** The shop has search, filters, sorting and pages. Prices are not set yet, so every product shows "Price coming soon" and the price filter and price sorts have nothing to work on. Waiting for the owner's prices.
+- **Phase:** 4 — Inventory
+- **Task:** T4.1 done. Next: T4.2 cream batches and FEFO.
+- **Step:** Every stock change now goes through `apps/inventory/services.py` and writes a stock movement. Prices are still not set, so products show "Price coming soon". Waiting for the owner's prices and for the Ghibli-style product pictures.
 
 ## 5. Last completed step
 
+- 2026-11-06: T4.1 stock movements and stock services (built by the developer; the design calls below are the developer's).
+  - New app `apps/inventory`: `StockMovement` log (variant, change, reason, stock_after, note, user, created_at). Rows are only added. A database CHECK stops a change of 0; the positive stock column keeps stock at 0 or more.
+  - `services.py`: `receive_stock`, `deduct_stock` (sold, expired), `restore_stock` (cancelled, returned) and `adjust_stock` (shelf-count correction, note required). Each locks the pack size row with `select_for_update`, updates with `F()` and writes one movement in one transaction. Too little stock raises `InsufficientStock`.
+  - Admin: Inventory > Stock movements. Owner and Staff record deliveries and corrections there; old rows cannot be edited or deleted. Stock is read-only on the product page, so a new pack size starts at 0 and gets stock through a delivery.
+  - Migration `inventory 0002` gives the Owner and Staff groups view and add on stock movements.
+  - Known gap until T4.3: if two people use the admin form at the same moment, the second may see an error page instead of a form message. The stock stays correct.
+  - pytest 176.
 - 2026-11-06: Real starter photos. 15 free Unsplash photos (800 x 800 JPEG, no logos or text) in `backend/apps/catalog/seed_images/`, one per product slug, with a README listing each source. `seed_catalog` loads them; `--replace-images` swaps pictures an earlier seed added (alt text "Picture of <name>", including old spellings such as Kianat and Revery) and keeps owner uploads. `artwork.py` removed. Run `uv run python manage.py seed_catalog --replace-images` once on any database seeded before this. pytest 146.
 - 2026-11-06: T3.4 search, filters, sorting and pages (built by the developer; the design calls are the developer's). Backend: full-text search ranked by `SearchRank`, with a `pg_trgm` word-similarity fallback (threshold 0.3) for typos; filters `size`, `min_price`, `max_price`, `in_stock`, all matched against one pack size; `sort` with products that have no price listed last; `PageNumberPagination` of 24; `/api/v1/pack-sizes/`. Frontend: `ShopFilters` panel in `src/pages/shop/`, sort menu, Previous/Next, filters in the URL, the old page stays visible while the next one loads, and a page past the end offers page 1. pytest 143, vitest 45.
 
@@ -160,4 +167,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Then the price filter and the price sorts have data. Next build task: Phase 4, T4.1 stock movements and stock services. Try the shop: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/ and try a search such as "basmti".
+Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Then the price filter and the price sorts have data. Next build task: T4.2 cream batches with FEFO (oldest valid batch sold first). To add stock now: Django Admin, Inventory, Stock movements, Add, pick the pack size, choose Received and type how many arrived. Try the shop: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/ and try a search such as "basmti".
