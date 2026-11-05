@@ -86,7 +86,7 @@ def test_products_hide_inactive_products_and_products_in_hidden_categories(clien
     ProductFactory(name="Old Oil", is_active=False)
     ProductFactory(name="Secret Oil", category=CategoryFactory(is_active=False))
 
-    slugs = [p["slug"] for p in client.get(PRODUCTS).json()]
+    slugs = [p["slug"] for p in client.get(PRODUCTS).json()["results"]]
 
     assert slugs == ["dalda-oil"]
     assert client.get(f"{PRODUCTS}old-oil/").status_code == 404
@@ -100,7 +100,7 @@ def test_products_filter_by_category_search_and_featured(client):
     ProductFactory(name="Honey", is_featured=True)
 
     def slugs(query):
-        return [p["slug"] for p in client.get(PRODUCTS, query).json()]
+        return [p["slug"] for p in client.get(PRODUCTS, query).json()["results"]]
 
     assert slugs({"category": "rice"}) == ["kainat-kacha", "kainat-sela"]
     assert slugs({"q": "golden"}) == ["kainat-sela"]
@@ -110,6 +110,6 @@ def test_products_filter_by_category_search_and_featured(client):
 def test_product_list_query_count_does_not_grow(client, django_assert_max_num_queries):
     for _ in range(5):
         ProductVariantFactory()
-    # Products, pack sizes and pictures, plus the request's savepoint and release.
-    with django_assert_max_num_queries(5):
+    # Count, products, pack sizes and pictures, plus the savepoint and release.
+    with django_assert_max_num_queries(6):
         client.get(PRODUCTS)

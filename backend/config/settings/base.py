@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # SearchVector, trigram lookups and the pg_trgm migration (T3.4).
+    "django.contrib.postgres",
     # Third party
     "rest_framework",
     "drf_spectacular",
