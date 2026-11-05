@@ -7,7 +7,8 @@ import { STAR_PATH } from '../../lib/star'
 // The shop's price board: featured items with their smallest pack and price.
 // Frosted glass over the hero; rows react on hover.
 export function RateBoard() {
-  const { data: products, isPending, isError } = useProducts({ featured: true })
+  const { data: page, isPending, isError } = useProducts({ featured: true })
+  const products = page?.results
 
   return (
     <section

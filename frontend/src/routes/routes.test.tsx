@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { resetMockCart } from '../api/cart'
 import type { Category, Product } from '../api/types'
 import { routes } from './routes'
@@ -57,11 +57,26 @@ const products: Product[] = [
   },
 ]
 
+// The last product list query the page sent, so tests can check its filters.
+let lastProductQuery = new URLSearchParams()
+
+const page = (results: Product[], extra: object = {}) => ({
+  count: results.length,
+  next: null,
+  previous: null,
+  results,
+  ...extra,
+})
+
 // The cart is still a mock; the catalog and login check come from the API.
 const server = setupServer(
   http.get('/api/v1/auth/me/', () => new HttpResponse(null, { status: 204 })),
   http.get('/api/v1/categories/', () => HttpResponse.json(categories)),
-  http.get('/api/v1/products/', () => HttpResponse.json(products)),
+  http.get('/api/v1/products/', ({ request }) => {
+    lastProductQuery = new URL(request.url).searchParams
+    return HttpResponse.json(page(products))
+  }),
+  http.get('/api/v1/pack-sizes/', () => HttpResponse.json(['5 kg'])),
   http.get('/api/v1/products/:slug/', ({ params }) => {
     const product = products.find((p) => p.slug === params.slug)
     return product ? HttpResponse.json(product) : new HttpResponse(null, { status: 404 })
@@ -121,5 +136,65 @@ describe('product page', () => {
     expect(
       await screen.findByRole('heading', { name: 'This page does not exist' }),
     ).toBeInTheDocument()
+  })
+})
+
+describe('shop filters', () => {
+  it('sends the ticked pack size to the API', async () => {
+    const user = userEvent.setup()
+    renderAt('/shop/')
+    await screen.findByText('2 products')
+
+    await user.click(await screen.findByRole('checkbox', { name: '5 kg' }))
+
+    await vi.waitFor(() => expect(lastProductQuery.getAll('size')).toEqual(['5 kg']))
+    expect(screen.getByRole('checkbox', { name: '5 kg' })).toBeChecked()
+  })
+
+  it('sorts by price when the sort changes', async () => {
+    const user = userEvent.setup()
+    renderAt('/shop/')
+    await screen.findByText('2 products')
+
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Sort by' }), 'price_asc')
+
+    await vi.waitFor(() => expect(lastProductQuery.get('sort')).toBe('price_asc'))
+  })
+
+  it('moves to the next page and back', async () => {
+    server.use(
+      http.get('/api/v1/products/', ({ request }) => {
+        lastProductQuery = new URL(request.url).searchParams
+        const second = lastProductQuery.get('page') === '2'
+        return HttpResponse.json(
+          page(second ? [products[1]] : [products[0]], {
+            count: 30,
+            next: second ? null : '/api/v1/products/?page=2',
+            previous: second ? '/api/v1/products/' : null,
+          }),
+        )
+      }),
+    )
+    const user = userEvent.setup()
+    renderAt('/shop/')
+    expect(await screen.findByText('Page 1 of 2')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled()
+
+    await user.click(screen.getByRole('button', { name: 'Next' }))
+
+    expect(await screen.findByText('Page 2 of 2')).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: /Honey/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
+  })
+
+  it('offers the first page when a bookmarked page is gone', async () => {
+    server.use(
+      http.get('/api/v1/products/', () =>
+        HttpResponse.json({ detail: 'Invalid page.' }, { status: 404 }),
+      ),
+    )
+    renderAt('/shop/?page=9')
+    expect(await screen.findByText('This page is empty')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Go to the first page' })).toBeInTheDocument()
   })
 })

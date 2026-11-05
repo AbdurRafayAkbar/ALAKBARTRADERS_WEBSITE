@@ -40,6 +40,14 @@ export interface Product {
   images: ProductImage[]
 }
 
+// One page of the product list. next and previous are full URLs or null.
+export interface ProductPage {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Product[]
+}
+
 export interface DeliveryZone {
   id: number
   name: string

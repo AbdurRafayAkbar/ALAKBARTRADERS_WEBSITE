@@ -6,7 +6,8 @@ import { Container } from '../../components/ui/Container'
 import { ErrorBlock, LoadingBlock } from '../../components/ui/StatusMessage'
 
 export function FeaturedProducts() {
-  const { data: products, isPending, isError, refetch } = useProducts({ featured: true })
+  const { data: page, isPending, isError, refetch } = useProducts({ featured: true })
+  const products = page?.results
 
   return (
     <section aria-labelledby="featured-title" className="py-14 sm:py-20">
