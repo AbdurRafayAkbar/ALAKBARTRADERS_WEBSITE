@@ -59,6 +59,7 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-11-02 | Product pictures are drawn stand-ins with no brand logos, made by the seed command. The owner swaps them for real photos in admin | Owner agreed to free stand-ins |
 | 2026-11-02 | Featured on the home page: Kainat Kacha, Dalda Oil, Rewari Regular, Milk Cream, Desi Ghee, Honey (the developer's pick; owner can change "Is featured" in admin) | One item per main category |
 | 2026-11-06 | The Anmol sesame sweets are spelled "Rewari", as on the pack: category Anmol Rewari, products Rewari Regular and Rewari Special. Replaces "Revery" | Owner answer. Migration `catalog 0003` renames rows already in the database |
+| 2026-11-06 | Starter product pictures are free Unsplash photos (no brand logos or text, no credit shown; sources in `backend/apps/catalog/seed_images/README.md`). They replace the drawn stand-ins and are still generic, not the real packs | User request. The Unsplash License needs no credit |
 | 2026-11-02 | Rice brand is spelled "Kainat". Anmol Revery is the Anmol sesame sweets (rewari) from Master Foods, Chakwal, made with pure ghee and green cardamom | Owner answer and pack photo. Migration `catalog 0002` renames rows already in the database |
 | 2026-10-30 | Customers order without logging in (no Google/Gmail sign-in). Checkout address: house number (e.g. "House#999"), block/category (e.g. "CAT-V"), colony name, all required; the house name written outside the house is optional; landmark optional | Owner request. Matches how addresses are written in Chashma and lets riders find the house |
 | 2026-10-30 | Site palette is the logo's green `#035A3A` and gold `#CAA753` (Emerald) on every page. The other trial palettes, per-route palettes and the palette switcher are removed. Replaces the sage palette of 2026-10-28 (design.md §1.2) | Owner chose the logo theme after the per-page trial |
@@ -67,7 +68,7 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 ## 3. Open questions / pending decisions
 
 See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Still open:
-- Q11: product photos (owner will share later; drawn stand-ins until then). Logo received.
+- Q11: product photos (owner will share later; free Unsplash stand-ins until then). Logo received.
 - Prices and pack sizes for all 15 products (owner will send them separately).
 - Delivery zones, address, opening hours, email and FAQ answers. Placeholders are marked `TODO(owner)` in `frontend/src/api/mock/data.ts`, `frontend/src/config/site.ts` and `frontend/src/pages/home/Faq.tsx`.
 
@@ -79,6 +80,7 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 5. Last completed step
 
+- 2026-11-06: Real starter photos. 15 free Unsplash photos (800 x 800 JPEG, no logos or text) in `backend/apps/catalog/seed_images/`, one per product slug, with a README listing each source. `seed_catalog` loads them; `--replace-images` swaps pictures an earlier seed added (alt text "Picture of <name>", including old spellings such as Kianat and Revery) and keeps owner uploads. `artwork.py` removed. Run `uv run python manage.py seed_catalog --replace-images` once on any database seeded before this. pytest 146.
 - 2026-11-06: T3.4 search, filters, sorting and pages (built by the developer; the design calls are the developer's). Backend: full-text search ranked by `SearchRank`, with a `pg_trgm` word-similarity fallback (threshold 0.3) for typos; filters `size`, `min_price`, `max_price`, `in_stock`, all matched against one pack size; `sort` with products that have no price listed last; `PageNumberPagination` of 24; `/api/v1/pack-sizes/`. Frontend: `ShopFilters` panel in `src/pages/shop/`, sort menu, Previous/Next, filters in the URL, the old page stays visible while the next one loads, and a page past the end offers page 1. pytest 143, vitest 45.
 
 - 2026-11-06: T2.4 Owner and Staff roles. Migration `accounts 0003` creates the `Owner` group (every catalog and accounts permission, for Django Admin) and the `Staff` group (no model permissions until orders and stock exist). `apps/accounts/selectors.py` has `user_role()`: "owner", "staff" or "customer"; a superuser counts as the owner. `apps/accounts/permissions.py` has `IsStaff` (staff and owner) and `IsOwner`. `auth/me/` and login now return `role`, and the React `User` type has it. To make someone staff: Django Admin, Users, pick the person, add them to the Staff group, and tick "Staff status" only if they also need Django Admin. pytest 130, vitest 41.
@@ -86,7 +88,7 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 - 2026-11-02: Spelling fix. "Kianat" became "Kainat" in the seed list, tests and the database (migration `catalog 0002`, which skips names the owner changed). Anmol Revery got its real description. pytest 117, vitest 41.
 - 2026-11-02: T3.1–T3.3 catalog, real product range and API.
   - `apps/catalog`: `Category`, `Product`, `ProductVariant`, `ProductImage`, with admin inlines for pack sizes and pictures.
-  - `seed_catalog` command adds 7 categories, 15 products and a drawn picture for each. Safe to run again; it keeps the owner's edits.
+  - `seed_catalog` command adds 7 categories, 15 products and a starter photo for each (from `apps/catalog/seed_images/`). Safe to run again; it keeps the owner's edits.
   - Read-only API: `/api/v1/categories/`, `/api/v1/products/` (filters `category`, `q`, `featured`) and `/api/v1/products/<slug>/`.
   - React loads the catalog from the API; shop copy covers the full range. Category and product page tags come from the database, and product pages are indexable.
   - The Word commands guide (local file, not in Git) has a new section 10 on adding items.
@@ -153,7 +155,7 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 - Checkout button is a placeholder until the orders API exists (Phase 6).
 - Mock cart lives in memory and resets on page reload.
 - Page text for crawlers in `backend/apps/core/pages.py` is a hand copy of the React page text for the fixed pages (home, shop, delivery). Category and product tags come from the database since T3.3. Change the fixed pages in both places until T12.1.
-- Product pictures are drawn stand-ins until the owner uploads real photos.
+- Product pictures are generic Unsplash stand-ins until the owner uploads real pack photos. Replace them before using Google Merchant Center, which needs accurate product images.
 - Watch: WeasyPrint needs GTK on Windows. PDF development may need WSL or Docker (decide at T10.2).
 
 ## 7. Next step
