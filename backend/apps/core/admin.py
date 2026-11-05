@@ -13,7 +13,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ),
         (
             "Stock and orders",
-            {"fields": ["cream_expiry_cutoff_days", "pending_order_timeout_hours"]},
+            {"fields": ["pending_order_timeout_hours"]},
         ),
         (
             "Store contact",

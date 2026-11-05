@@ -45,7 +45,6 @@ def test_owner_can_edit_settings_in_admin(admin_client):
         {
             "free_shipping_threshold": "5000.00",
             "max_cod_order_value": "",
-            "cream_expiry_cutoff_days": "3",
             "pending_order_timeout_hours": "24",
             "store_name": "ALAKBARTRADERS",
             "store_phone": "",
