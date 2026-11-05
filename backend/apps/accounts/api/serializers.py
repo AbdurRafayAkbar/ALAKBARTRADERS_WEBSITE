@@ -3,9 +3,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from ..models import Address
+from ..selectors import user_role
 from ..validators import normalize_pk_mobile
 
 User = get_user_model()
@@ -27,12 +29,18 @@ def _phone(value):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """The logged-in user, as React sees it (auth/me/)."""
+    """The logged-in user, as React sees it (auth/me/). `role` picks the menu."""
+
+    role = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["id", "email", "first_name", "last_name", "phone"]
+        fields = ["id", "email", "first_name", "last_name", "phone", "role"]
         read_only_fields = fields
+
+    @extend_schema_field(serializers.ChoiceField(choices=["customer", "staff", "owner"]))
+    def get_role(self, user):
+        return user_role(user)
 
 
 class ProfileSerializer(serializers.ModelSerializer):

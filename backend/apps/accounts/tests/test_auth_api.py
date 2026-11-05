@@ -112,6 +112,7 @@ def test_login_starts_a_session(api, user):
         "first_name": "Ali",
         "last_name": "",
         "phone": "",
+        "role": "customer",
     }
     assert api.get("/api/v1/auth/me/").json()["id"] == user.pk
 
