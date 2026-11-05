@@ -50,7 +50,7 @@ export function CategoryIcon({
       </svg>
     )
   }
-  if (slug === 'anmol-revery') {
+  if (slug === 'anmol-rewari') {
     // plate of sweets
     return (
       <svg {...common}>
