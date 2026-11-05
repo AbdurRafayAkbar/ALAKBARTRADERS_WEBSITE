@@ -116,7 +116,7 @@ The owner found the first build too plain and asked for animation, a fitting bac
 - Name, short description, **pack-size selector as buttons** (1 kg | 5 kg | 10 kg | 25 kg), not a dropdown, so all options are visible.
 - Price updates instantly when a size is picked (React state; variant data already loaded with the product); price per kg shown for comparison.
 - Stock state: "In stock", "Only 3 left", "Out of stock".
-- Creams: "Keep refrigerated" badge, "Best before" date of the batch that will be sent, delivery-zone note.
+- Creams: "Keep refrigerated" badge, delivery-zone note.
 - Quantity stepper + "Add to cart" (sticky on mobile).
 - Details: origin, grain length, storage tips. Related products.
 
@@ -159,11 +159,10 @@ The owner found the first build too plain and asked for animation, a fitting bac
 
 ## 4. Staff dashboard screens
 
-- **Dashboard home:** counters for today (new orders, to confirm, out for delivery, delivered, revenue), alert cards (low stock, creams near expiry).
+- **Dashboard home:** counters for today (new orders, to confirm, out for delivery, delivered, revenue), alert cards (low stock).
 - **Order queue:** tabs by status; each row shows number, customer, phone (tap to call), zone, total, age. Oldest first.
 - **Order detail:** items, address, notes, status history, action buttons for **only** the allowed next statuses, "Print invoice", "Block this phone".
-- **Stock screen:** variants with stock levels, low-stock highlight; receive a cream batch (code, quantity, expiry date); stock adjustment with reason.
-- **Expiry screen:** cream batches sorted by expiry, colour-coded (expired / within cut-off / OK).
+- **Stock screen:** variants with stock levels, low-stock highlight; record a delivery; stock adjustment with reason.
 - **Reports (owner):** sales by day/week/month, top products, orders by status, revenue by zone; CSV export.
 
 Staff screens are **desktop and tablet first**, but must work on a phone for the owner.
