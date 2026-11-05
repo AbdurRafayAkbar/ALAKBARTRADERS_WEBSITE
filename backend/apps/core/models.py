@@ -39,10 +39,6 @@ class SiteSettings(TimeStampedModel):
         validators=[MinValueValidator(Decimal("0.00"))],
         help_text="Largest order total (PKR) accepted for cash on delivery. Empty means no limit.",
     )
-    cream_expiry_cutoff_days = models.PositiveSmallIntegerField(
-        default=2,
-        help_text="Cream batches expiring within this many days are no longer sold.",
-    )
     pending_order_timeout_hours = models.PositiveSmallIntegerField(
         default=24,
         help_text="Unconfirmed orders are flagged after this many hours.",
