@@ -4,7 +4,7 @@ import pytest
 from django.core.files.base import ContentFile
 from rest_framework.test import APIClient
 
-from apps.catalog import artwork
+from apps.catalog.management.commands.seed_catalog import SEED_IMAGES
 from apps.catalog.models import ProductImage
 
 from .factories import CategoryFactory, ProductFactory, ProductVariantFactory
@@ -71,7 +71,7 @@ def test_image_url_is_absolute(client):
     product = ProductFactory(name="Honey")
     ProductImage.objects.create(
         product=product,
-        image=ContentFile(artwork.to_jpeg(artwork.jar("#c97a12")), name="honey.jpg"),
+        image=ContentFile((SEED_IMAGES / "honey.jpg").read_bytes(), name="honey.jpg"),
         alt_text="Picture of Honey",
     )
 
