@@ -64,7 +64,11 @@ def test_migration_creates_both_groups():
 def test_owner_can_edit_the_catalog_and_staff_cannot():
     owner_perms = Group.objects.get(name="Owner").permissions.values_list("codename", flat=True)
     assert {"change_product", "change_category", "change_user"} <= set(owner_perms)
-    assert not Group.objects.get(name="Staff").permissions.exists()
+    # Staff only get stock permissions (inventory 0002), never catalog or prices.
+    staff_apps = Group.objects.get(name="Staff").permissions.values_list(
+        "content_type__app_label", flat=True
+    )
+    assert set(staff_apps) == {"inventory"}
 
 
 def test_role_comes_from_the_group(customer, staff, owner):

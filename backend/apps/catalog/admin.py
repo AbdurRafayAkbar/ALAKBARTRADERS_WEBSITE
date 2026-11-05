@@ -15,6 +15,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductVariantInline(admin.TabularInline):
     model = ProductVariant
     extra = 1
+    # Stock changes only through Inventory > Stock movements, so each one is logged.
+    readonly_fields = ["stock_quantity"]
     fields = [
         "label",
         "weight_grams",
