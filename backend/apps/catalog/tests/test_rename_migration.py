@@ -39,3 +39,27 @@ def test_revery_gets_its_description():
 
     category = Category.objects.get()
     assert category.summary == "Sesame sweets made with pure ghee and green cardamom"
+
+
+rewari_migration = importlib.import_module("apps.catalog.migrations.0003_rename_revery_to_rewari")
+
+
+def test_revery_is_renamed_rewari_with_its_slug():
+    category = CategoryFactory(name="Anmol Revery", slug="anmol-revery")
+    ProductFactory(name="Revery Regular", category=category)
+
+    rewari_migration.rename_revery(apps, None)
+
+    category.refresh_from_db()
+    assert (category.name, category.slug) == ("Anmol Rewari", "anmol-rewari")
+    product = Product.objects.get()
+    assert (product.name, product.slug) == ("Rewari Regular", "rewari-regular")
+
+
+def test_a_revery_name_the_owner_changed_is_kept():
+    ProductFactory(name="Revery Special Box", slug="revery-special")
+
+    rewari_migration.rename_revery(apps, None)
+
+    product = Product.objects.get()
+    assert (product.name, product.slug) == ("Revery Special Box", "revery-special")
