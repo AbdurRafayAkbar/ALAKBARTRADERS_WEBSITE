@@ -65,7 +65,7 @@
 - **Acceptance:** `GET /api/v1/health/` returns JSON; error shape test passes; `SiteSettings` editable in admin.
 - **Mode:** 🤖
 - **Concepts:** abstract models, DRF request/response, serializers, exception handlers, OpenAPI.
-- **Done (2026-10-29):** `apps/core` holds `TimeStampedModel` and the `SiteSettings` singleton (one row, guarded by a database check constraint; admin opens the form directly and has no add or delete). The settings values are placeholders until the owner sets them in admin: free-shipping threshold and COD limit are empty (never free, no limit), cream expiry cut-off is 2 days, pending-order timeout is 24 hours. DRF and drf-spectacular are installed. `/api/v1/` lists the endpoints, `health/` checks the database (503 when it is down), and `auth/csrf/` sets the `csrftoken` cookie. Every error uses `{"code", "message", "fields"}` with dotted field names. API views need a logged-in user unless they opt out with `AllowAny`. `CsrfSessionAuthentication` checks CSRF on unsafe requests from anonymous users too, so guest checkout and login forms are protected. Only JSON is accepted and returned (the browsable API is dev only). The schema at `schema/` and Swagger at `schema/docs/` are open in dev and staff-only in prod.
+- **Done (2026-10-29):** `apps/core` holds `TimeStampedModel` and the `SiteSettings` singleton (one row, guarded by a database check constraint; admin opens the form directly and has no add or delete). The settings values are placeholders until the owner sets them in admin: free-shipping threshold and COD limit are empty (never free, no limit), pending-order timeout is 24 hours. DRF and drf-spectacular are installed. `/api/v1/` lists the endpoints, `health/` checks the database (503 when it is down), and `auth/csrf/` sets the `csrftoken` cookie. Every error uses `{"code", "message", "fields"}` with dotted field names. API views need a logged-in user unless they opt out with `AllowAny`. `CsrfSessionAuthentication` checks CSRF on unsafe requests from anonymous users too, so guest checkout and login forms are protected. Only JSON is accepted and returned (the browsable API is dev only). The schema at `schema/` and Swagger at `schema/docs/` are open in dev and staff-only in prod.
 
 ### [x] T1.6 React app scaffold
 - **Description:** Vite + React + TypeScript in `frontend/`; Tailwind with brand tokens (design.md §1.2); React Router; TanStack Query; API client sending `X-CSRFToken`; Vite proxy `/api` to Django; layout shell (header, footer), placeholder home, 404 page.
@@ -166,7 +166,7 @@
 
 ---
 
-## Phase 4 — Inventory (stock, batches, expiry)
+## Phase 4 — Inventory (stock and reports)
 
 ### [x] T4.1 StockMovement + stock services
 - **Description:** `inventory.services.receive_stock / adjust_stock / deduct_stock / restore_stock`; append-only movements; `CHECK stock >= 0`.
@@ -175,23 +175,19 @@
 - **Mode:** 🤖
 - **Concepts:** service layer, `transaction.atomic`, audit logs, DB constraints.
 
-### [ ] T4.2 StockBatch + FEFO for creams
-- **Description:** Batch model, receive batch, FEFO allocation, sellable stock = batches outside cut-off (Q6).
-- **Depends on:** T4.1
-- **Acceptance:** tests: oldest valid batch used first; expired and cut-off batches never sold.
-- **Mode:** 🤝
-- **Concepts:** FEFO, aggregate queries (`Sum`), date logic, timezones.
+### [-] T4.2 StockBatch + FEFO for creams (dropped 2026-11-06)
+- **Dropped:** The owner confirmed that the milk cream keeps until mid-2027, so the shop does not need batches, expiry dates or a cut-off. Creams use the plain stock count, like rice. The `cream_expiry_cutoff_days` setting was removed (migration `core 0002`). If a short-life product arrives later, add expiry tracking then as a new task.
 
 ### [ ] T4.3 Concurrency-safe deduction
 - **Description:** `select_for_update` in sorted order; a test with two threads buying the last unit.
-- **Depends on:** T4.2
+- **Depends on:** T4.1
 - **Acceptance:** concurrency test passes: exactly one buyer succeeds.
 - **Mode:** 🤖
 - **Concepts:** race conditions, row locks, deadlocks, `TransactionTestCase`.
 
-### [ ] T4.4 Low-stock and expiry reports
-- **Description:** Management commands `low_stock_report` and `expiry_report`; staff stock and expiry API + React screens.
-- **Depends on:** T4.2, T2.4
+### [ ] T4.4 Low-stock report
+- **Description:** Management command `low_stock_report`; staff stock API + React screen.
+- **Depends on:** T4.1, T2.4
 - **Acceptance:** command output correct with test data; screens visible to staff only.
 - **Mode:** 🧑‍💻
 - **Concepts:** management commands, cron, reports.
@@ -201,8 +197,8 @@
 ## Phase 5 — Cart
 
 ### [ ] T5.1 Cart models + services
-- **Description:** Cart for user or session; add, update, remove; quantity limited by sellable stock.
-- **Depends on:** T4.2
+- **Description:** Cart for user or session; add, update, remove; quantity limited by stock.
+- **Depends on:** T4.3
 - **Acceptance:** guest cart survives page reloads; tests for each service.
 - **Mode:** 🤝
 - **Concepts:** sessions, session keys, `get_or_create`.
@@ -233,7 +229,7 @@
 - **Concepts:** denormalisation (snapshots), `PROTECT`, unique order numbers.
 
 ### [ ] T6.2 `place_order` service
-- **Description:** Validate, lock, deduct stock (FEFO), calculate totals, create order + payment, idempotency token, `on_commit` email hook.
+- **Description:** Validate, lock, deduct stock, calculate totals, create order + payment, idempotency token, `on_commit` email hook.
 - **Depends on:** T6.1, T4.3
 - **Acceptance:** tests: success, out of stock, blocked phone, over max COD (Q5), double-submit creates one order.
 - **Mode:** 🤖

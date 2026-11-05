@@ -28,7 +28,7 @@ Time: about 4 hours per day. Preferred start mode: mostly ðŸ¤–, moving toward ðŸ
 | 1 Skeleton | Project vs app, settings split, env vars, pytest, Ruff, CI, DRF basics, Vite + React + TypeScript, Tailwind tokens, dev proxy, SPA shell |
 | 2 Auth | Custom User, session login via API, CSRF with an SPA, password hashing, Groups/permissions, DRF permission classes, data migrations |
 | 3 Catalog | Models, migrations, ForeignKey/`on_delete`, DecimalField, constraints, admin inlines, serializers, `select_related`, PostgreSQL search, `useQuery` |
-| 4 Inventory | Service layer, `transaction.atomic`, `select_for_update`, race conditions, deadlocks, FEFO, aggregates, management commands |
+| 4 Inventory | Service layer, `transaction.atomic`, `select_for_update`, race conditions, deadlocks, aggregates, management commands |
 | 5 Cart | Sessions, cart merge, TanStack Query mutations, cache invalidation, optimistic updates |
 | 6 Orders | Snapshots, idempotency keys, `on_commit`, state machines, controlled forms, API error mapping, object-level permissions |
 | 7 Payments | Payment vs order status, refunds, Decimal invariants, webhooks + HMAC (later) |
@@ -74,7 +74,6 @@ _None yet._
 | Monolith | One application and one deploy containing all features |
 | Variant | One sellable version of a product, e.g. "Basmati 5 kg" |
 | SKU | Stock Keeping Unit: a unique code for one variant |
-| FEFO | First Expired, First Out: sell the batch that expires soonest first |
 | COD | Cash on Delivery |
 | Snapshot | Copying data (price, address) into the order so later changes don't alter it |
 | Idempotency | Doing the same request twice has the same effect as doing it once |

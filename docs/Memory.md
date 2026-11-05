@@ -18,7 +18,7 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-28 | B2C only; no wholesale at launch | Owner choice; keeps pricing simple |
 | 2026-10-28 | Fixed pack sizes only; each size is a `ProductVariant` with its own SKU, price, stock | Matches how stock is bought and sold |
 | 2026-10-28 | About 20–50 variants at launch; no options beyond size | Owner estimate |
-| 2026-10-28 | Creams tracked by batch + expiry, sold FEFO, stop selling N days before expiry; no batches for rice/dry fruits | Food safety for perishables only |
+| 2026-10-28 | ~~Creams tracked by batch + expiry, sold FEFO~~ Replaced 2026-11-06 (see below) | — |
 | 2026-10-28 | Mixed orders (creams + dry goods) allowed | Owner choice |
 | 2026-10-28 | Delivery only in Chashma; zone-based flat fee + free-shipping threshold | Single city |
 | 2026-10-28 | Own riders; staff update statuses; no rider login at launch | Simplicity |
@@ -59,6 +59,7 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-11-02 | Product pictures are drawn stand-ins with no brand logos, made by the seed command. The owner swaps them for real photos in admin | Owner agreed to free stand-ins |
 | 2026-11-02 | Featured on the home page: Kainat Kacha, Dalda Oil, Rewari Regular, Milk Cream, Desi Ghee, Honey (the developer's pick; owner can change "Is featured" in admin) | One item per main category |
 | 2026-11-06 | The Anmol sesame sweets are spelled "Rewari", as on the pack: category Anmol Rewari, products Rewari Regular and Rewari Special. Replaces "Revery" | Owner answer. Migration `catalog 0003` renames rows already in the database |
+| 2026-11-06 | No cream batches or expiry tracking. Creams use the plain stock count, like rice. T4.2 dropped; the `cream_expiry_cutoff_days` setting removed (Q6 not needed). Add expiry tracking later only if a short-life product arrives | Owner: the milk cream keeps until mid-2027 |
 | 2026-11-06 | Starter product pictures are free Unsplash photos (no brand logos or text, no credit shown; sources in `backend/apps/catalog/seed_images/README.md`). They replace the drawn stand-ins and are still generic, not the real packs | User request. The Unsplash License needs no credit |
 | 2026-11-02 | Rice brand is spelled "Kainat". Anmol Revery is the Anmol sesame sweets (rewari) from Master Foods, Chakwal, made with pure ghee and green cardamom | Owner answer and pack photo. Migration `catalog 0002` renames rows already in the database |
 | 2026-10-30 | Customers order without logging in (no Google/Gmail sign-in). Checkout address: house number (e.g. "House#999"), block/category (e.g. "CAT-V"), colony name, all required; the house name written outside the house is optional; landmark optional | Owner request. Matches how addresses are written in Chashma and lets riders find the house |
@@ -75,11 +76,12 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 ## 4. Current position
 
 - **Phase:** 4 — Inventory
-- **Task:** T4.1 done. Next: T4.2 cream batches and FEFO.
+- **Task:** T4.1 done; T4.2 dropped (no cream batches). Next: T4.3 concurrency-safe deduction.
 - **Step:** Every stock change now goes through `apps/inventory/services.py` and writes a stock movement. Prices are still not set, so products show "Price coming soon". Waiting for the owner's prices and for the Ghibli-style product pictures.
 
 ## 5. Last completed step
 
+- 2026-11-06: Dropped T4.2 cream batches. The owner said the cream keeps until mid-2027, so the unmerged batch work was deleted and the cream expiry cut-off setting was removed (migration `core 0002`). Creams use `stock_quantity` and the T4.1 stock services like every other product. `is_perishable` stays for the "Keep refrigerated" badge. pytest 176.
 - 2026-11-06: T4.1 stock movements and stock services (built by the developer; the design calls below are the developer's).
   - New app `apps/inventory`: `StockMovement` log (variant, change, reason, stock_after, note, user, created_at). Rows are only added. A database CHECK stops a change of 0; the positive stock column keeps stock at 0 or more.
   - `services.py`: `receive_stock`, `deduct_stock` (sold, expired), `restore_stock` (cancelled, returned) and `adjust_stock` (shelf-count correction, note required). Each locks the pack size row with `select_for_update`, updates with `F()` and writes one movement in one transaction. Too little stock raises `InsufficientStock`.
@@ -167,4 +169,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Then the price filter and the price sorts have data. Next build task: T4.2 cream batches with FEFO (oldest valid batch sold first). To add stock now: Django Admin, Inventory, Stock movements, Add, pick the pack size, choose Received and type how many arrived. Try the shop: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/ and try a search such as "basmti".
+Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Then the price filter and the price sorts have data. Next build task: T4.3 concurrency-safe deduction (a test where two buyers try to take the last bag at once; exactly one succeeds). To add stock now: Django Admin, Inventory, Stock movements, Add, pick the pack size, choose Received and type how many arrived. Try the shop: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/ and try a search such as "basmti".

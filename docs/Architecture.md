@@ -91,13 +91,13 @@ Each app that exposes data has an `api/` package (`serializers.py`, `views.py`, 
 | `core` | Base models (timestamps), `SiteSettings` (shop-wide settings), phone utilities, home/about/contact/policy pages | Yes |
 | `accounts` | Custom `User` (email login), profile, addresses, roles (Owner/Staff groups) | Yes |
 | `catalog` | Category, Product, ProductVariant (pack size, SKU, price), images, search, filters | Yes |
-| `inventory` | Stock quantity, cream batches + expiry (FEFO), stock movements (audit log), low-stock and expiry alerts | Yes |
+| `inventory` | Stock quantity, stock movements (audit log), low-stock alerts | Yes |
 | `cart` | Session/user cart, merge on login, price re-check | Yes |
 | `orders` | Checkout, Order/OrderItem with price snapshot, status state machine, cancellation, refunds, PDF invoice | Yes |
 | `shipping` | Chashma delivery zones, fees, free-shipping threshold, cream-allowed flag per zone | Yes |
 | `payments` | Payment records (COD now); gateway adapters + webhooks later | Yes (COD) |
 | `notifications` | Email templates and sending; later SMS/WhatsApp | Yes (email) |
-| `dashboard` | Staff API: order queue, COD confirmation, stock and expiry alerts, sales report (screens are in React) | Yes |
+| `dashboard` | Staff API: order queue, COD confirmation, low-stock alerts, sales report (screens are in React) | Yes |
 | `promotions` | Coupons | Later |
 | `reviews` | Product reviews and ratings | Later |
 | `wishlist` | Saved products | Later |
@@ -119,7 +119,6 @@ erDiagram
     CATEGORY ||--o{ PRODUCT : contains
     PRODUCT ||--o{ PRODUCT_IMAGE : shows
     PRODUCT ||--|{ PRODUCT_VARIANT : "sold as"
-    PRODUCT_VARIANT ||--o{ STOCK_BATCH : "creams only"
     PRODUCT_VARIANT ||--o{ STOCK_MOVEMENT : "audit log"
 
     CART ||--o{ CART_ITEM : holds
@@ -128,8 +127,6 @@ erDiagram
 
     ORDER ||--|{ ORDER_ITEM : contains
     PRODUCT_VARIANT ||--o{ ORDER_ITEM : "snapshot of"
-    ORDER_ITEM ||--o{ BATCH_ALLOCATION : "picked from"
-    STOCK_BATCH ||--o{ BATCH_ALLOCATION : "used by"
     ORDER ||--o{ ORDER_STATUS_HISTORY : logs
     ORDER ||--o{ PAYMENT : "paid by"
     ORDER ||--o{ REFUND : "refunded by"
@@ -144,20 +141,18 @@ erDiagram
 | `Address` | user, full_name, phone, zone, house_number, block, colony, house_name (optional), landmark (optional), is_default | Chashma only, so the zone replaces city/province. Matches how people in Chashma write addresses, e.g. "House#999, CAT-V, <colony name>". |
 | `DeliveryZone` | name (e.g. a colony or sector), fee, cream_allowed, is_active, sort_order | **[PENDING]** list of Chashma areas + fees. |
 | `Category` | name, slug, parent (optional), is_active | Rice, Dry Fruits, Dairy Creams. |
-| `Product` | category, name, slug, description, is_perishable, is_active | `is_perishable=True` turns on batch tracking. |
+| `Product` | category, name, slug, description, is_perishable, is_active | `is_perishable=True` shows the "Keep refrigerated" badge. No batch or expiry tracking (owner, 2026-11-06: cream keeps until mid-2027). |
 | `ProductVariant` | product, label ("5 kg"), weight_grams, sku (unique), price, compare_at_price, stock_quantity, low_stock_threshold, is_active | One row per pack size. `stock_quantity` is used for non-perishables. |
 | `ProductImage` | product, image, alt_text, sort_order | `alt_text` for accessibility + SEO. |
-| `StockBatch` | variant, batch_code, quantity_received, quantity_remaining, received_on, expiry_date | Creams only. Sellable stock = sum of `quantity_remaining` where expiry_date > today + cut-off days. |
-| `StockMovement` | variant, batch (optional, T4.2), change (+/-, never 0), reason (RECEIVED, SOLD, CANCELLED, RETURNED, EXPIRED, ADJUSTED), stock_after, note, order (optional, Phase 6), user, created_at | Append-only. Answers "where did 3 bags go?" Written only by `apps/inventory/services.py`. `stock_after` (developer's call) records the stock right after the change, so the log reads like a bank statement. Owner and Staff can view and add (deliveries and shelf-count corrections, which need a note); nobody can edit or delete. |
+| `StockMovement` | variant, change (+/-, never 0), reason (RECEIVED, SOLD, CANCELLED, RETURNED, EXPIRED, ADJUSTED), stock_after, note, order (optional, Phase 6), user, created_at | Append-only. Answers "where did 3 bags go?" Written only by `apps/inventory/services.py`. `stock_after` (developer's call) records the stock right after the change, so the log reads like a bank statement. Owner and Staff can view and add (deliveries and shelf-count corrections, which need a note); nobody can edit or delete. |
 | `Cart` / `CartItem` | cart: user or session_key; item: variant, quantity | No price stored; price is always read live. |
 | `Order` | number (e.g. `AKT-000123`), user (optional), customer name/phone/email, address snapshot (house number, block, colony, house name, landmark), zone, subtotal, shipping_fee, total, currency="PKR", status, payment_method, refund_status, notes, placed_at | Address and totals are **copied** so later edits never change past orders. |
 | `OrderItem` | order, variant (`PROTECT`), product_name, variant_label, sku, unit_price, quantity, line_total | Price **snapshot** at order time. |
-| `BatchAllocation` | order_item, batch, quantity | Which cream batch each item came from (FEFO). Needed for recalls and returns. |
 | `OrderStatusHistory` | order, from_status, to_status, user, note, created_at | Full audit trail. |
 | `Payment` | order, method (COD), amount, status (PENDING, COLLECTED, FAILED), collected_by, collected_at, reference | Online gateways later add provider fields + a unique `provider_txn_id`. |
 | `Refund` | order, order_item (optional), amount, reason, method (cash / bank transfer), processed_by, created_at | Supports partial refunds per item. |
 | `BlockedPhone` | phone, reason, created_by | COD abuse control. |
-| `SiteSettings` | free_shipping_threshold, max_cod_order_value, cream_expiry_cutoff_days, pending_order_timeout_hours, store contact info | Singleton (one row) so the owner can edit settings without a deploy. |
+| `SiteSettings` | free_shipping_threshold, max_cod_order_value, pending_order_timeout_hours, store contact info | Singleton (one row) so the owner can edit settings without a deploy. |
 
 All money fields: `DecimalField(max_digits=12, decimal_places=2)`. Order stores `currency="PKR"` explicitly.
 
@@ -187,7 +182,7 @@ sequenceDiagram
     C->>W: Checkout (name, phone, zone, address)
     W->>W: Validate: phone format, not blocked, zone active,<br/>creams allowed in zone, total ≤ max COD
     W->>DB: BEGIN; lock variants (select_for_update)
-    W->>DB: Check stock, deduct, allocate cream batches (FEFO)
+    W->>DB: Check stock, deduct
     W->>DB: Create Order(PENDING_CONFIRMATION), OrderItems, Payment(PENDING)
     W->>DB: COMMIT
     W-->>C: Thank-you page + order number
@@ -232,7 +227,6 @@ Rules:
 
 - **When:** stock is deducted at **order placement**, not when items are added to the cart. A cart is not a promise.
 - **How:** inside `transaction.atomic()`, lock the variant rows with `select_for_update()` (always in sorted id order, which avoids deadlocks), re-check availability, deduct, and write `StockMovement` rows.
-- **Creams (FEFO):** pick batches ordered by `expiry_date`, skipping batches inside the expiry cut-off, and record `BatchAllocation`s.
 - **Why the lock:** two customers buying the last 25 kg bag at the same second must not both succeed.
 - **Database guard:** a `CHECK (stock_quantity >= 0)` constraint is a second safety net.
 
@@ -269,7 +263,6 @@ Design rules are written now so COD code does not block gateways later:
 | Command | Frequency | Purpose |
 |---|---|---|
 | `cancel_stale_orders` | hourly | Auto-cancel unconfirmed orders; release stock |
-| `expiry_report` | daily 08:00 | Email staff the cream batches near expiry; mark expired batches |
 | `low_stock_report` | daily 08:00 | Email staff the variants below threshold |
 | `backup_db` | daily 02:00 | `pg_dump` + media, copied off-site |
 
@@ -304,7 +297,7 @@ The page URLs below are **React Router routes**. For each customer page route, D
 |---|---|---|
 | `/staff/` | Dashboard home (today's orders, alerts) | Staff, Owner |
 | `/staff/orders/` and `/staff/orders/<number>/` | Order queue, detail, status actions, invoice PDF | Staff, Owner |
-| `/staff/stock/` | Low stock + expiry alerts, receive batch, adjust stock | Staff, Owner |
+| `/staff/stock/` | Low-stock alerts, receive stock, adjust stock | Staff, Owner |
 | `/staff/reports/` | Sales report | Owner |
 | `/<secret-admin-path>/` | Django Admin (catalog, zones, settings, users) | Owner |
 
@@ -320,7 +313,7 @@ The page URLs below are **React Router routes**. For each customer page route, D
 | `checkout/quote/` (fee + totals), `checkout/` (place order, idempotency token) | POST | Session or user |
 | `orders/track/` (number + phone) | POST | Anyone, rate limited |
 | `account/orders/`, `account/orders/<number>/`, `account/orders/<number>/invoice.pdf`, `account/addresses/` | GET / POST / PATCH / DELETE | Logged-in owner of the data |
-| `staff/summary/`, `staff/orders/`, `staff/orders/<number>/`, `staff/orders/<number>/transition/`, `staff/stock/`, `staff/batches/`, `staff/blocked-phones/` | GET / POST | Staff, Owner |
+| `staff/summary/`, `staff/orders/`, `staff/orders/<number>/`, `staff/orders/<number>/transition/`, `staff/stock/`, `staff/blocked-phones/` | GET / POST | Staff, Owner |
 | `staff/reports/sales/` (JSON + CSV) | GET | Owner |
 | `schema/` (OpenAPI) | GET | Dev only, or staff in prod |
 
@@ -404,7 +397,7 @@ flowchart TB
 | Q3 | List of Chashma delivery zones + fee for each; which zones accept creams | Phase 8 |
 | Q4 | Free-shipping threshold (PKR) | Phase 8 |
 | Q5 | Max COD order value (PKR) | Phase 6 |
-| Q6 | Cream expiry cut-off (days before expiry to stop selling) | Phase 4 |
+| Q6 | ~~Cream expiry cut-off~~ **Not needed: cream keeps until mid-2027, no expiry tracking** (2026-11-06) | — |
 | Q7 | Pending-order timeout (hours) | Phase 6 |
 | Q8 | Email provider | Phase 9 |
 | Q9 | Staging environment: keep or skip | Phase 14 |
