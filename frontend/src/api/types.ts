@@ -69,13 +69,17 @@ export interface Cart {
   subtotal: Money
 }
 
-// The logged-in customer (auth/me/). Accounts are optional; guests can order.
+// Who is logged in. Staff and the owner also see the staff menu (T2.4).
+export type Role = 'customer' | 'staff' | 'owner'
+
+// The logged-in user (auth/me/). Accounts are optional; guests can order.
 export interface User {
   id: number
   email: string
   first_name: string
   last_name: string
   phone: string
+  role: Role
 }
 
 // A saved delivery address (account/addresses/). Chashma addresses are a

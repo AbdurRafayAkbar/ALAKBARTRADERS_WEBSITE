@@ -8,7 +8,14 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 import type { Address, User } from '../../api/types'
 import { routes } from '../../routes/routes'
 
-const ali: User = { id: 1, email: 'ali@example.com', first_name: 'Ali', last_name: '', phone: '' }
+const ali: User = {
+  id: 1,
+  email: 'ali@example.com',
+  first_name: 'Ali',
+  last_name: '',
+  phone: '',
+  role: 'customer',
+}
 
 const home: Address = {
   id: 7,
