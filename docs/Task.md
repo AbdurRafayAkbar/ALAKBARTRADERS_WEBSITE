@@ -168,7 +168,7 @@
 
 ## Phase 4 — Inventory (stock, batches, expiry)
 
-### [ ] T4.1 StockMovement + stock services
+### [x] T4.1 StockMovement + stock services
 - **Description:** `inventory.services.receive_stock / adjust_stock / deduct_stock / restore_stock`; append-only movements; `CHECK stock >= 0`.
 - **Depends on:** T3.2
 - **Acceptance:** every stock change writes a movement; negative stock impossible (test).
