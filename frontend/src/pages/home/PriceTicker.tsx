@@ -5,7 +5,8 @@ import { STAR_PATH } from '../../lib/star'
 // A moving strip of today's rates under the hero, like the board behind a
 // shop counter. Decoration only: the same rates are on the rate board.
 export function PriceTicker() {
-  const { data: products } = useProducts({ featured: true })
+  const { data: page } = useProducts({ featured: true })
+  const products = page?.results
   // Products with no pack sizes yet still run along the strip, without a price.
   const items = (products ?? []).map((product) => {
     const variant = product.variants[0]

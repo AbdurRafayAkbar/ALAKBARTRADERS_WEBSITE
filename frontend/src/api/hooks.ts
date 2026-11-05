@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   createAddress,
   deleteAddress,
@@ -22,6 +22,7 @@ import { addCartItem, fetchCart, updateCartItem } from './cart'
 import {
   fetchCategories,
   fetchDeliveryInfo,
+  fetchPackSizes,
   fetchProduct,
   fetchProducts,
   type ProductFilters,
@@ -33,6 +34,7 @@ export const queryKeys = {
   categories: ['categories'] as const,
   products: (filters: ProductFilters) => ['products', filters] as const,
   product: (slug: string) => ['product', slug] as const,
+  packSizes: (category?: string) => ['pack-sizes', category ?? 'all'] as const,
   delivery: ['delivery'] as const,
   cart: ['cart'] as const,
   me: ['me'] as const,
@@ -42,8 +44,17 @@ export const queryKeys = {
 export const useCategories = () =>
   useQuery({ queryKey: queryKeys.categories, queryFn: fetchCategories })
 
+// keepPreviousData: the old page stays on screen while the next one loads,
+// so changing a filter does not flash a spinner over the grid.
 export const useProducts = (filters: ProductFilters = {}) =>
-  useQuery({ queryKey: queryKeys.products(filters), queryFn: () => fetchProducts(filters) })
+  useQuery({
+    queryKey: queryKeys.products(filters),
+    queryFn: () => fetchProducts(filters),
+    placeholderData: keepPreviousData,
+  })
+
+export const usePackSizes = (category?: string) =>
+  useQuery({ queryKey: queryKeys.packSizes(category), queryFn: () => fetchPackSizes(category) })
 
 export const useProduct = (slug: string) =>
   useQuery({ queryKey: queryKeys.product(slug), queryFn: () => fetchProduct(slug) })
