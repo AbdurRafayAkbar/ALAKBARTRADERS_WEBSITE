@@ -74,10 +74,12 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 ## 4. Current position
 
 - **Phase:** 3 — Catalog & variants
-- **Task:** T3.1, T3.2, T3.3 and T2.4 (Owner and Staff roles) done.
-- **Step:** The shop front loads the owner's 15 real products from the Django API. Prices are not set yet, so every product shows "Price coming soon". Waiting for the owner's prices.
+- **Task:** Phase 3 done (T3.1 to T3.4), plus T2.4 Owner and Staff roles.
+- **Step:** The shop has search, filters, sorting and pages. Prices are not set yet, so every product shows "Price coming soon" and the price filter and price sorts have nothing to work on. Waiting for the owner's prices.
 
 ## 5. Last completed step
+
+- 2026-11-06: T3.4 search, filters, sorting and pages (built by the developer; the design calls are the developer's). Backend: full-text search ranked by `SearchRank`, with a `pg_trgm` word-similarity fallback (threshold 0.3) for typos; filters `size`, `min_price`, `max_price`, `in_stock`, all matched against one pack size; `sort` with products that have no price listed last; `PageNumberPagination` of 24; `/api/v1/pack-sizes/`. Frontend: `ShopFilters` panel in `src/pages/shop/`, sort menu, Previous/Next, filters in the URL, the old page stays visible while the next one loads, and a page past the end offers page 1. pytest 143, vitest 45.
 
 - 2026-11-06: T2.4 Owner and Staff roles. Migration `accounts 0003` creates the `Owner` group (every catalog and accounts permission, for Django Admin) and the `Staff` group (no model permissions until orders and stock exist). `apps/accounts/selectors.py` has `user_role()`: "owner", "staff" or "customer"; a superuser counts as the owner. `apps/accounts/permissions.py` has `IsStaff` (staff and owner) and `IsOwner`. `auth/me/` and login now return `role`, and the React `User` type has it. To make someone staff: Django Admin, Users, pick the person, add them to the Staff group, and tick "Staff status" only if they also need Django Admin. pytest 130, vitest 41.
 - 2026-11-06: "Revery" became "Rewari" in the seed list, the site footer, the category icon and the database (migration `catalog 0003`, which skips names the owner changed). The category slug is now `anmol-rewari`. pytest 119, vitest 41.
@@ -156,4 +158,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Next build task: T3.4 search, filters and sorting. Try the flow: run `uv run python manage.py seed_catalog` and `uv run python manage.py runserver` in `backend/`, and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/.
+Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Then the price filter and the price sorts have data. Next build task: Phase 4, T4.1 stock movements and stock services. Try the shop: run `uv run python manage.py runserver` in `backend/` and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/ and try a search such as "basmti".

@@ -156,12 +156,13 @@
 - **Concepts:** DRF generic views, serializers, selectors, `select_related`/`prefetch_related`, React state, `useQuery`.
 - **Done (2026-11-02):** Read-only API at `/api/v1/categories/`, `/api/v1/products/?category=&q=&featured=1` and `/api/v1/products/<slug>/`, built on `active_categories()` and `active_products()` in `apps/catalog/selectors.py`. Inactive products and products in inactive categories return 404. Query counts are capped in tests. React now loads the catalog from the API instead of mock data; the cart is still an in-memory stand-in (it reads prices from the loaded products) until the real cart API in Phase 5. `apps/core/pages.py` reads category and product titles and descriptions from the database, and product pages are now indexable. The header phone number is 0333-6839509 with a WhatsApp link (PR #16).
 
-### [ ] T3.4 Search + filters + sorting
+### [x] T3.4 Search + filters + sorting
 - **Description:** PostgreSQL full-text search; filters by size, price, in stock; sorting; pagination; filters stored in the URL query string in React.
 - **Depends on:** T3.3
 - **Acceptance:** "basmti" typo and "basmati" both find Basmati (trigram); filters combine correctly.
 - **Mode:** 🧑‍💻
 - **Concepts:** `SearchVector`, trigram similarity, query params, pagination.
+- **Done (2026-11-06):** Built by the developer (the user handed this one over). Search ranks by PostgreSQL full-text search (name counts more than description) and falls back to `pg_trgm` word similarity, so "basmti" finds Basmati. `/api/v1/products/` takes `size` (repeatable), `min_price`, `max_price`, `in_stock=1` and `sort` (`popular`, `price_asc`, `price_desc`, `newest`); size, price and stock must all match the same pack size. Bad values return 400. The list is paged, 24 per page, as `{count, next, previous, results}`. `/api/v1/pack-sizes/?category=` lists the pack sizes for the filter. React: filter panel (folds away on phones), sort menu, Previous/Next pages, all stored in the URL (`size`, `min`, `max`, `stock`, `sort`, `page`). pytest 143, vitest 45.
 
 ---
 
