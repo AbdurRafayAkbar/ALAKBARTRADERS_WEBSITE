@@ -137,7 +137,7 @@
 - **Acceptance:** owner creates Rice / Dry Fruits / Dairy Creams in admin; tests for slug uniqueness.
 - **Mode:** 🧑‍💻
 - **Concepts:** models, migrations, `SlugField`, ForeignKey + `on_delete`.
-- **Done (2026-11-02):** `apps/catalog` with `Category` (name, slug, summary, optional parent, sort order, `is_active`) and `Product` (category with `PROTECT`, description, `is_perishable`, `is_featured`). Slugs are made from the name when left empty and are unique. Admin lists, filters and searches both. The `seed_catalog` command adds the owner's 7 categories (Rice, Oil & Ghee, Anmol Revery, Milk Cream, Desi Ghee, Honey, Dry Fruits with no items yet) and 15 products. It is safe to run again and never overwrites the owner's edits.
+- **Done (2026-11-02):** `apps/catalog` with `Category` (name, slug, summary, optional parent, sort order, `is_active`) and `Product` (category with `PROTECT`, description, `is_perishable`, `is_featured`). Slugs are made from the name when left empty and are unique. Admin lists, filters and searches both. The `seed_catalog` command adds the owner's 7 categories (Rice, Oil & Ghee, Anmol Rewari, Milk Cream, Desi Ghee, Honey, Dry Fruits with no items yet) and 15 products. It is safe to run again and never overwrites the owner's edits.
 
 ### [x] T3.2 ProductVariant + ProductImage
 - **Description:** Pack-size variants with SKU, price (Decimal), weight; images with alt text; inline admin.

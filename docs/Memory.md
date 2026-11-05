@@ -53,11 +53,12 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 | 2026-10-29 | SEO goal: income comes from **sales** driven by Google Search and free Google Merchant Center listings. No ads (AdSense) on the shop. The site follows Google Search Essentials: Django puts the real page content and meta tags in the HTML it sends (the same content React shows, so no cloaking), URLs stay stable with canonical tags, and there is no hidden text, keyword stuffing or fake reviews. Details in design.md §8 | Owner wants SEO and income "according to Google's rules". Ads on a small shop earn little and slow the pages; Merchant Center listings are free and show products with price in Google |
 | 2026-10-29 | `/shop/` (all products) is a page URL and stays | The frontend already links to it; changing page URLs later costs search ranking |
 | 2026-10-30 | Frontend linter stays **oxlint** (not ESLint), with Prettier for formatting; both run in CI | The Vite template already set up oxlint; it is much faster and covers the rules we need |
-| 2026-11-02 | Product range at launch: 7 categories and 15 products. Rice: Kainat Kacha, Steam Kainat 1121, Steam Kainat 1509, Short Grain Steam, Kainat Adhwar, Kainat Sela. Oil & Ghee: Dalda Oil, Dalda Ghee, Mezan Classic Oil, Mezan Classic Ghee. Anmol Revery: Revery Regular, Revery Special. Milk Cream. Desi Ghee. Honey. Dry Fruits stays as a category with no items yet | Owner list. Loaded by `uv run python manage.py seed_catalog` |
+| 2026-11-02 | Product range at launch: 7 categories and 15 products. Rice: Kainat Kacha, Steam Kainat 1121, Steam Kainat 1509, Short Grain Steam, Kainat Adhwar, Kainat Sela. Oil & Ghee: Dalda Oil, Dalda Ghee, Mezan Classic Oil, Mezan Classic Ghee. Anmol Rewari: Rewari Regular, Rewari Special. Milk Cream. Desi Ghee. Honey. Dry Fruits stays as a category with no items yet | Owner list. Loaded by `uv run python manage.py seed_catalog` |
 | 2026-11-02 | No prices yet: products without a priced pack size show "Price coming soon" and no cart button. Owner sends prices separately | Owner will share prices later |
 | 2026-11-02 | Shop phone 0333-6839509 (Pakistan, `+92 333 6839509`). The header link opens WhatsApp; there is no WhatsApp button on each product | Owner request (PR #16) |
 | 2026-11-02 | Product pictures are drawn stand-ins with no brand logos, made by the seed command. The owner swaps them for real photos in admin | Owner agreed to free stand-ins |
-| 2026-11-02 | Featured on the home page: Kainat Kacha, Dalda Oil, Revery Regular, Milk Cream, Desi Ghee, Honey (the developer's pick; owner can change "Is featured" in admin) | One item per main category |
+| 2026-11-02 | Featured on the home page: Kainat Kacha, Dalda Oil, Rewari Regular, Milk Cream, Desi Ghee, Honey (the developer's pick; owner can change "Is featured" in admin) | One item per main category |
+| 2026-11-06 | The Anmol sesame sweets are spelled "Rewari", as on the pack: category Anmol Rewari, products Rewari Regular and Rewari Special. Replaces "Revery" | Owner answer. Migration `catalog 0003` renames rows already in the database |
 | 2026-11-02 | Rice brand is spelled "Kainat". Anmol Revery is the Anmol sesame sweets (rewari) from Master Foods, Chakwal, made with pure ghee and green cardamom | Owner answer and pack photo. Migration `catalog 0002` renames rows already in the database |
 | 2026-10-30 | Customers order without logging in (no Google/Gmail sign-in). Checkout address: house number (e.g. "House#999"), block/category (e.g. "CAT-V"), colony name, all required; the house name written outside the house is optional; landmark optional | Owner request. Matches how addresses are written in Chashma and lets riders find the house |
 | 2026-10-30 | Site palette is the logo's green `#035A3A` and gold `#CAA753` (Emerald) on every page. The other trial palettes, per-route palettes and the palette switcher are removed. Replaces the sage palette of 2026-10-28 (design.md §1.2) | Owner chose the logo theme after the per-page trial |
@@ -68,7 +69,6 @@ with the AI as architect and mentor following the teaching rules in `rules.md` �
 See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Still open:
 - Q11: product photos (owner will share later; drawn stand-ins until then). Logo received.
 - Prices and pack sizes for all 15 products (owner will send them separately).
-- The Anmol pack spells it "Rewari" (Master Foods, Chakwal). Should the site say "Revery" (as the owner wrote it) or "Rewari"? The site uses "Revery" for now.
 - Delivery zones, address, opening hours, email and FAQ answers. Placeholders are marked `TODO(owner)` in `frontend/src/api/mock/data.ts`, `frontend/src/config/site.ts` and `frontend/src/pages/home/Faq.tsx`.
 
 ## 4. Current position
@@ -79,6 +79,7 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 5. Last completed step
 
+- 2026-11-06: "Revery" became "Rewari" in the seed list, the site footer, the category icon and the database (migration `catalog 0003`, which skips names the owner changed). The category slug is now `anmol-rewari`. pytest 119, vitest 41.
 - 2026-11-02: Spelling fix. "Kianat" became "Kainat" in the seed list, tests and the database (migration `catalog 0002`, which skips names the owner changed). Anmol Revery got its real description. pytest 117, vitest 41.
 - 2026-11-02: T3.1–T3.3 catalog, real product range and API.
   - `apps/catalog`: `Category`, `Product`, `ProductVariant`, `ProductImage`, with admin inlines for pack sizes and pictures.
@@ -154,4 +155,4 @@ See `Architecture.md` §10. Q1, Q10 and Q12 are decided (see the log above). Sti
 
 ## 7. Next step
 
-Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Owner also answers the open question in §3 ("Revery" or "Rewari"). Next build task: T3.4 search, filters and sorting, or T2.4 Owner and Staff roles. Try the flow: run `uv run python manage.py seed_catalog` and `uv run python manage.py runserver` in `backend/`, and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/.
+Owner sends prices and pack sizes; they go in admin (Products, then the pack size rows at the bottom of each product). Next build task: T3.4 search, filters and sorting, or T2.4 Owner and Staff roles. Try the flow: run `uv run python manage.py seed_catalog` and `uv run python manage.py runserver` in `backend/`, and `npm run dev` in `frontend/`, then open http://localhost:2004/shop/.
